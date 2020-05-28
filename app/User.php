@@ -46,13 +46,13 @@ class User extends Authenticatable
         return $this->belongsTo('App\Kelompok');
     }
 
-    // public function isKetua(){
-    //     if($this->role->name == 'Ketua'){
-    //         return true;
-    //     }
-    //     return false;    
+    public function isKetua(){
+        if($this->role->name == 'Ketua Kelompok'){
+            return true;
+        }
+        return false;    
         
-    // }
+    }
 
     public function isPj(){
         if($this->role->name == 'Penanggung Jawab'){

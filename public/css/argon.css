@@ -29838,3 +29838,14 @@ input.datetimepicker[data-color='yellow'] + .bootstrap-datetimepicker-widget.dro
 {
     background: transparent;
 }
+
+/* tambahan */
+
+#dashboard-title{
+    font-size: 30pt;
+}
+
+.brand{
+    font-size: 20pt;
+    color: orange;
+}

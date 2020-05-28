@@ -59,14 +59,14 @@
           <div class="card bg-secondary border-0">
             <div class="card-body px-lg-5 py-lg-5">
 
-            <form role="form" action="/pj/store" method="post">
+            <form role="form" action="/pj/uploadkelompok" method="post">
               {{ csrf_field() }}
                 <div class="form-group">
                   <div class="input-group input-group-merge input-group-alternative mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
                     </div>
-                    <input id="name" type="text" class="form-control" name="name" required autocomplete="name" autofocus>
+                    <input id="name" placeholder="Team Name" type="text" class="form-control" name="name" required autocomplete="name" autofocus>
                   </div>
                 </div>
                 <div class="form-group">
@@ -74,7 +74,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-pin-3"></i></span>
                     </div>
-                    <textarea id="address" type="text" class="form-control" name="address" required autocomplete="address" autofocus></textarea>
+                    <textarea id="address" placeholder="Team Address" type="text" class="form-control" name="address" required autocomplete="address" autofocus></textarea>
                   </div>
                 </div>
                 <div class="text-center">

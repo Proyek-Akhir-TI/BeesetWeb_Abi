@@ -56,7 +56,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url('/pj/tambah') }}">
+              <a class="nav-link" href="{{ url('/pj/tambahkelompok') }}">
                 <i class="ni ni-circle-08 text-pink"></i>
                 <span class="nav-link-text">Add Community</span>
               </a>
