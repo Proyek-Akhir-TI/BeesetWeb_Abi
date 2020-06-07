@@ -19,6 +19,15 @@ class KetuaController extends Controller
     public function index()
     {
         //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
         $roles = Role::pluck('name','id');
         $kelompoks = Kelompok::pluck('name','id');
 
@@ -29,16 +38,6 @@ class KetuaController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -46,6 +45,7 @@ class KetuaController extends Controller
      */
     public function store(Request $request)
     {
+        $no = 1;
         $input = new User();
         $input['name'] = $request->name;
         $input['email'] = $request->email;
@@ -56,8 +56,8 @@ class KetuaController extends Controller
         $input['telp'] = $request->telp;
         if($request->file('photo')){
             $image = $request->file('photo');
-            $images = 'user_photo'.$request->file('photo')->getClientOriginalName().'.'.$request->file('photo')->extension();
-            Image::make($image)->resize(300, 300)->save(storage_path('app/uploads/' . $images));
+            $images = 'user_photo'.$no++.'.'.$request->file('photo')->extension();
+            Image::make($image)->resize(300, 300)->save(storage_path('app/public/uploads/' . $images));
             $input['photo'] = $images;
             $images = $request->photo;
         }

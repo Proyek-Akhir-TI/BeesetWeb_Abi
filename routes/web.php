@@ -33,17 +33,22 @@ Route::get('/home', function(){
 });
 
 // Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/pj/tambahkelompok', 'KelompokController@index');
-Route::post('/pj/uploadkelompok', 'KelompokController@store');
-Route::get('/pj/tambahketua', 'KetuaController@index');
-Route::post('/pj/uploadketua', 'KetuaController@store');
 
+
+// role : penanggung jawab
+Route::get('/pj/tambahkelompok', 'KelompokController@create');
+Route::post('/pj/uploadkelompok', 'KelompokController@store');
+Route::get('/pj/tambahketua', 'KetuaController@create');
+Route::post('/pj/uploadketua', 'KetuaController@store');
 Route::get('/pj/index', function () {
     return view('pj.index');
 });
 
+
+// role : ketua
 Route::get('/ketua/index', function () {
     return view('ketua.index');
 });
-
-Route::get('/ketua/listpeternak', 'ListPeternakController@index');
+Route::get('/ketua/listpeternak', 'PeternakController@index');
+Route::get('/ketua/edit/{id}', 'PeternakController@edit');
+Route::get('/ketua/explore/{id}', 'PeternakController@explore');

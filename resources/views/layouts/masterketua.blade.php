@@ -1,18 +1,3 @@
-<!--
-=========================================================
-* Argon Dashboard - v1.2.0
-=========================================================
-* Product Page: https://www.creative-tim.com/product/argon-dashboard
-
-
-* Copyright  Creative Tim (http://www.creative-tim.com)
-* Coded by www.creative-tim.com
-
-
-
-=========================================================
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html>
 
@@ -21,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
   <meta name="author" content="Creative Tim">
-  <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
+  @yield('title')
   <!-- Favicon -->
   <link rel="icon" href="{{ asset('/img/brand/favicon.png') }}" type="image/png">
   <!-- Fonts -->
@@ -52,22 +37,22 @@
         <div class="collapse navbar-collapse" id="sidenav-collapse-main">
           <!-- Nav items -->
           <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="examples/dashboard.html">
+            <li class="nav-item {{ Request::segment(1) === '/ketua/index' ? 'active' : null }}">
+              <a class="nav-link active" href="/ketua/index">
                 <i class="ni ni-tv-2 text-orange"></i>
                 <span class="nav-link-text">Dashboard</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/ketua/listpeternak">
+            <li class="nav-item {{ Request::segment(1) === '' ? 'active' : null }}">
+              <a class="nav-link" href="">
                 <i class="ni ni-bell-55 text-orange"></i>
                 <span class="nav-link-text">Un-Verify Farmer</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="/ketua/listpeternak">
+            <li class="nav-item {{ Request::segment(1) === '/ketua/listpeternak' ? 'active' : null }}">
+              <a class="nav-link" href="/ketua/listpeternak">
                 <i class="ni ni-planet text-orange"></i>
-                <span class="nav-link-text">Farmer Lists</span>
+                <span class="nav-link-text">Farmer List</span>
               </a>
             </li>
           </ul>
@@ -134,76 +119,10 @@
         </div>
       </div>
     </nav>
-    <!-- Header -->
-    <!-- Header -->
-    
-    <!-- content -->
-    <div>
-    <div class="container-fluid mt-5">
-      <div class="row">
-        <div class="col-xl-12">
-          <div class="card">
-            <div class="card-header border-0">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h3 class="mb-0">Farmer List</h3>
-                </div>
-                <div class="col text-right">
-                  <a href="#!" class="btn btn-sm btn-primary">See all</a>
-                </div>
-              </div>
-            </div>
-            <div class="table-responsive">
-              <!-- Projects table -->
-              <table class="table align-items-center table-flush">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Team</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                @php
-                  $no = 1;
-                @endphp
-                @foreach($peternaks as $peternak)
-                  <tr>
-                    <td>
-                      {{$no++}}
-                    </td>
-                    <td>
-                      {{$peternak->name}}
-                    </td>
-                    <td>
-                      {{$peternak->email}}
-                    </td>
-                    <td>
-                      {{$peternak->kelompok_id}}
-                    </td>
-                    <td>
-                      {{$peternak->address}}
-                    </td>
-                    <td>
-                    <a href="#!" class="btn btn-sm btn-primary">Explore</a>
-                    <a href="#!" class="btn btn-sm btn-danger">Delete</a>
-                    </td>
-                  </tr>
-                @endforeach
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div>
-  </div>
-  
-  <!-- Argon Scripts -->
+
+    @yield('content')
+
+    <!-- Argon Scripts -->
   
   <!-- Core -->
   <script src="{{ asset('/vendor/jquery/dist/jquery.min.js') }}"></script>

@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Kelompok extends Model
 {
     //
-    protected $fillable = ['id_kelompok','name','address'];
+    protected $fillable = ['id','name','address'];
+
+    public function user()
+    {
+        return $this->hasMany('App\User');
+    }
 }

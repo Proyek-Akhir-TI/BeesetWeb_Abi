@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Kandang extends Model
 {
     //
-    protected $fillable = ['id','name'];
 }

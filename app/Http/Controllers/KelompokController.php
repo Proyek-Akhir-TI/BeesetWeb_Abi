@@ -15,7 +15,6 @@ class KelompokController extends Controller
     public function index()
     {
         //
-        return view('/pj/tambahkelompok');
     }
 
     /**
@@ -26,6 +25,7 @@ class KelompokController extends Controller
     public function create()
     {
         //
+        return view('/pj/tambahkelompok');
     }
 
     /**
