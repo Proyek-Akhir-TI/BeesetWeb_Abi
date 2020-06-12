@@ -148,11 +148,6 @@
                   </div>
                 </div>
 
-                <!-- <div class="form-group">
-                  <label for="exampleFormControlFile1">Example file input</label>
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
-                </div> -->
-
                 <div class="form-group">
                   <div class="input-group input-group-merge input-group-alternative mb-3">
                     <div class="input-group-prepend">

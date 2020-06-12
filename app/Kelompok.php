@@ -13,4 +13,9 @@ class Kelompok extends Model
     {
         return $this->hasMany('App\User');
     }
+
+    public function kandang()
+    {
+        return $this->hasMany('App\Kandang');
+    }
 }

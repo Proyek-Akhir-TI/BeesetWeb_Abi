@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Role;
 use App\Kelompok;
+use App\Kandang;
 
 class User extends Authenticatable
 {
@@ -46,6 +47,11 @@ class User extends Authenticatable
         return $this->belongsTo('App\Kelompok');
     }
 
+    public function kandang()
+    {
+        return $this->hasMany('App\Kandang');
+    }
+
     public function isKetua(){
         if($this->role->name == 'Ketua Kelompok'){
             return true;
@@ -61,10 +67,4 @@ class User extends Authenticatable
         return false;
     }
 
-    // public function isPeternak(){
-    //     if($this->role->name == 'Peternak'){
-    //         return true;
-    //     }
-    //     return false;
-    // }
 }

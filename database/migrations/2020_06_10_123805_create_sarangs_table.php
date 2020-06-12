@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKandangsTable extends Migration
+class CreateSarangsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,17 @@ class CreateKandangsTable extends Migration
      */
     public function up()
     {
-        Schema::create('kandangs', function (Blueprint $table) {
+        Schema::create('sarangs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->integer('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')
+            $table->integer('kandang_id')->unsigned()->nullable();
+            $table->foreign('kandang_id')
                 ->references('id')
-                ->on('users')
+                ->on('kandangs')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->string('location')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
+            $table->integer('berat_sarang1');
+            $table->integer('berat_sarang2');
+            $table->integer('berat_sarang3');
             $table->timestamps();
         });
     }
@@ -36,6 +35,6 @@ class CreateKandangsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kandangs');
+        Schema::dropIfExists('sarangs');
     }
 }

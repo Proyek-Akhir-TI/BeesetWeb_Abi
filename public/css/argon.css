@@ -29849,3 +29849,8 @@ input.datetimepicker[data-color='yellow'] + .bootstrap-datetimepicker-widget.dro
     font-size: 20pt;
     color: orange;
 }
+
+.img-info{
+    height:50px;
+    width: 50px;
+}

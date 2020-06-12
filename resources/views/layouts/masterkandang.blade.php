@@ -56,6 +56,19 @@
               </a>
             </li>
           </ul>
+          <hr class="my-3">
+          <!-- Heading -->
+                <h6 class="navbar-heading p-0 text-muted">
+                    <span class="docs-normal">Farmer Options</span>
+                </h6>
+          <ul class="navbar-nav mb-md-3">
+            <li class="nav-item">
+              <a class="nav-link" href="" target="_blank">
+                <i class="ni ni-basket text-orange"></i>
+                <span class="nav-link-text">Cage</span>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -135,7 +148,6 @@
   <script src="{{ asset('/vendor/chart.js/dist/Chart.extension.js') }}"></script>
   <!-- Argon JS -->
   <script src="{{ asset('/js/argon.js?v=1.2.0') }}"></script>
-  @yield('javascript')
 </body>
 
 </html>

@@ -8,6 +8,7 @@ use App\Role;
 use App\Kelompok;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use App\Kandang;
 
 class PeternakController extends Controller
 {
@@ -19,6 +20,7 @@ class PeternakController extends Controller
             ->where('kelompok_id',$data)
             ->where('role_id',4)
             ; 
+
         // $user = User::all(); 
         return view('ketua.peternak.listpeternak', compact('user'));
     }
@@ -41,7 +43,9 @@ class PeternakController extends Controller
     // }
     public function explore($id){
         $users = User::find($id);
-        return view('ketua.peternak.peternak', ['users' => $users]);
+        $kandang = Kandang::where('user_id', $id)->get();
+ 
+        return view('ketua.peternak.peternak', compact('kandang','users'));
     }
 
     
