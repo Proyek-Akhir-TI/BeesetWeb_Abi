@@ -7,6 +7,14 @@ use DB;
 
 class KelompokController extends Controller
 {
+    public function __construct(){
+        $this->middleware(function ($request, $next) {
+            if(Gate::allows('pj-role'))
+            return $next($request);
+            // abort(403, 'Anda tidak memiliki hak akses');
+            abort(redirect()->route('login'));
+        });
+    }
     /**
      * Display a listing of the resource.
      *

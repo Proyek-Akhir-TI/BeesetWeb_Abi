@@ -2,11 +2,15 @@
 
 @section('title')
   <title>Beeset - Explore Farmer</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.css">
 @endsection
 
 @section('content')
 <div class="container-fluid mt-3">
-      <div class="row">
+    <div class="row ml-1 mt-4 mb-4">
+        <h1>Performa Peternak</h1>
+    </div>
+        <div class="row">
         <div class="col-xl-4 order-xl-1">
                   <div class="card card-profile">
                     <img src="{{ asset('img/theme/img-1-1000x600.jpg')}}" alt="Image placeholder" class="card-img-top">
@@ -22,7 +26,6 @@
                     <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                       <div class="d-flex justify-content-between">
                         <a href="" class="btn btn-sm btn-danger  mr-4 ">Delete </a>
-                        <a href="/ketua/edit/{{$users->id}}" class="btn btn-sm btn-success float-right"> Edit </a>
                       </div>
                     </div>
                     <div class="card-body pt-0">
@@ -69,7 +72,7 @@
                   <h3 class="mb-0">Cages</h3>
                 </div>
                 <div class="col text-right">
-                  <a href="" class="btn btn-sm btn-primary" data-target="#exampleModal" data-toggle="modal">See all</a>
+                  <a href="" class="btn btn-sm btn-primary" data-target="#exampleModal" data-toggle="modal">Tambah Kandang</a>
                 </div>
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
@@ -82,6 +85,7 @@
                         </div>
                         <div class="modal-body">
                             <form method="post" action="/ketua/peternak/kandang/unggah" role="form">
+                              {{ csrf_field() }}
                               <div class="row">
                                   <div class="col-xl-6">
                                       <div id="map" style="width:100%; height:320px;"></div> 
@@ -102,11 +106,15 @@
                                         </div>
                                         <div class="form-group">
                                           <label for="exampleInputPassword1">Latitude</label>
-                                          <input type="number" name="latitude" class="form-control" id="lat" placeholder="Enter Location">
+                                          <input type="text" name="latitude" class="form-control" id="lat" placeholder="Enter Location">
                                         </div>
                                         <div class="form-group">
                                           <label for="exampleInputPassword1">Longitude</label>
-                                          <input type="number" name="longitude" class="form-control" id="leng" placeholder="Enter Location">
+                                          <input type="text" name="longitude" class="form-control" id="leng" placeholder="Enter Location">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="exampleInputPassword1">status</label>
+                                          <input type="number" name="status" class="form-control" id="leng" value="1" readonly="" placeholder="Aktif">
                                         </div>
                                         <div class="modal-footer">
                                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -141,7 +149,7 @@
                        {{$no++}}
                     </td>
                     <td>
-                        {{$kandangs -> name}}
+                        {{$kandangs->name}}
                     </td>
                     <td>
                     <a href="/ketua/explore/kandang/{{$kandangs->id}}" class="btn btn-sm btn-primary">Explore</a>
@@ -152,18 +160,122 @@
                 @endforeach
                 </tbody>
               </table>
+              <div class="float-right mb-3 mt-3">
+              {{ $kandang->links() }}
+              </div>
+            </div>
+        </div>
+      </div>
+      </div>
+      <div class="row">
+          <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0">Tinjauan Panen</h3>
+                </div>
+                <div class="col text-right">
+                  <a href="" class="btn btn-sm btn-primary" data-target="#tambah-aktivitas" data-toggle="modal">Tambah Aktivitas</a>
+                </div>
+                <div class="modal fade" id="tambah-aktivitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Tambah Aktivitas</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="/ketua/peternak/kandang/aktivitas/unggah" role="form">
+                              {{ csrf_field() }}
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                          <label for="exampleInputPassword1">User</label>
+                                          <select class="form-control" name="kandang_id">
+                                            @foreach ($kandang as $v)
+                                              <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                            @endforeach
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="exampleInputPassword1">Aktivitas</label>
+                                          <select class="form-control" name="aktivitas_id">
+                                            @foreach ($aktivitas as $id => $name)
+                                              <option value="{{ $id }}">{{ $name }}</option>
+                                            @endforeach
+                                          </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                          <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                            </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div class="table-responsive pt-4">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Kandang</th>
+                    <th scope="col">Berat</th>
+                    <th scope="col">Waktu</th>
+                  </tr>
+                </thead>
+                <tbody>
+                @php
+                 $no = 1
+                @endphp
+                 @foreach($panens as $panen)
+                  <tr>
+                    <td>
+                       {{$no++}}
+                    </td>
+                    <td>
+                        {{$panen->name}}
+                    </td>
+                    <td>
+                        {{$panen->berat}}
+                    </td>
+                    <td>
+                      {{$panen->created_at }}
+                    </td>
+                  </tr>
+                @endforeach
+                </tbody>
+                
+              </table>
             </div>
           </div>
-      </div>
-      </div>
+        </div>
+    </div>
 </div>
 @endsection
 
-@section('javascript')
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfC8SLDMQuvfSyZObH4BPW4o9zdvBEzKA&callback=initialize" type="text/javascript"></script>
+@section('javascript') 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.js"></script>
 
-<script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.data').DataTable();
+	});
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfC8SLDMQuvfSyZObH4BPW4o9zdvBEzKA&callback=initialize" type="application/javascript"></script>
+
+<script type="application/javascript">
+  google.maps.event.addDomListener(window, 'load', initialize);
         function initialize() {
+          
             //Cek Support Geolocation
             if(navigator.geolocation){
             //Mengambil Fungsi golocation

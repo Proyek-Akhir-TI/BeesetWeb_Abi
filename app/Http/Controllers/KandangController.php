@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Kandang;
+use App\AktivitasPeternak;
 
 class KandangController extends Controller
 {
@@ -20,15 +21,19 @@ class KandangController extends Controller
         $input['location'] = $request->location;
         $input['latitude'] = $request->latitude;
         $input['longitude'] = $request->longitude;
+        $input['status'] = $request->status;    
         $input->save();
 
-        return redirect('/ketua/explore/{id}');
+        return echo "Tambah Kandang Berhasil";
     }
 
     public function explore($id){
         
         $kandangs = Kandang::find($id);
         
+        
         return view('/ketua/peternak/kandang/kandang', compact('kandangs'));
     }
+
+    
 }

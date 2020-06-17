@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Role;
 use App\Kelompok;
 use App\Kandang;
+use App\AktivitasPeternak;
 
 class User extends Authenticatable
 {
@@ -50,6 +51,11 @@ class User extends Authenticatable
     public function kandang()
     {
         return $this->hasMany('App\Kandang');
+    }
+
+    public function user()
+    {
+        return $this->belongsToMany('App\AktivitasPeternak', 'aktivitas_peternaks');
     }
 
     public function isKetua(){

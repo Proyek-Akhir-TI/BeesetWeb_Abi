@@ -14,16 +14,14 @@ class CreateSarangsTable extends Migration
     public function up()
     {
         Schema::create('sarangs', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->integer('kandang_id')->unsigned()->nullable();
             $table->foreign('kandang_id')
                 ->references('id')
                 ->on('kandangs')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->integer('berat_sarang1');
-            $table->integer('berat_sarang2');
-            $table->integer('berat_sarang3');
+            $table->integer('berat_panen');
             $table->timestamps();
         });
     }

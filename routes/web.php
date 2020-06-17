@@ -53,5 +53,6 @@ Route::get('/ketua/listpeternak', 'PeternakController@index');
 Route::get('/ketua/edit/{id}', 'PeternakController@edit');
 Route::get('/ketua/explore/{id}', 'PeternakController@explore');
 Route::get('/ketua/explore/kandang/{id}','KandangController@explore');
-Route::get('/ketua/peternak/kandang/tambah','KandangController@showAdd');
-Route::get('/ketua/peternak/kandang/unggah','KandangController@store');
+
+Route::post('/ketua/peternak/kandang/unggah','KandangController@store');
+Route::post('/ketua/peternak/kandang/aktivitas/unggah','PeternakController@storeAktivitas');

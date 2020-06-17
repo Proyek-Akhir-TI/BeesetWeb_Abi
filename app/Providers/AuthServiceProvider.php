@@ -25,6 +25,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('pj-role', function($user){
+            return $user->role_id == "2";
+        });
+
+        Gate::define('ketua-role', function($user){
+            return $user->role_id == "3";
+        });
+
+        // Gate::define('hrd-role', function($user){
+        //     return $user->role == "hrd";
+        // });
+
         //
     }
 }
