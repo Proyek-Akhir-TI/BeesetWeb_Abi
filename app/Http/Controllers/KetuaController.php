@@ -7,6 +7,7 @@ use App\User;
 use App\Role;
 use App\Kelompok;
 use Image;
+use SweetAlert;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
 
@@ -71,6 +72,9 @@ class KetuaController extends Controller
             $images = $request->photo;
         }
         $input->save();
+
+        // SweetAlert::message('Message','Kelompok Berhasil Dibuat');
+
         return redirect('/pj/index');
     }
 
@@ -116,6 +120,13 @@ class KetuaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $users = User::findOrFail($id);
+
+        // if($users->photo)
+        // Storage::delete('public/uploads'.$users->photo);
+
+        $pegawai->delete();
+
+        return redirect('pj.listkelompok');
     }
 }

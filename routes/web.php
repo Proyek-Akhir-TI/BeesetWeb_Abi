@@ -40,8 +40,12 @@ Route::get('/pj/tambahkelompok', 'KelompokController@create');
 Route::post('/pj/uploadkelompok', 'KelompokController@store');
 Route::get('/pj/tambahketua', 'KetuaController@create');
 Route::post('/pj/uploadketua', 'KetuaController@store');
+Route::get('/pj/daftarkelompok', 'KelompokController@index');
+Route::get('/pj/kelompok/explore/{id}', 'KelompokController@show');
+Route::get('/pj/kelompok/delete/{id}', 'KelompokController@destroy');
 Route::get('/pj/index', function () {
     return view('pj.index');
+
 });
 
 

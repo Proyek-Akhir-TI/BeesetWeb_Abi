@@ -24692,6 +24692,11 @@ button.section-darker:focus
     fill-opacity: .8;
 }
 
+.fill-orange{
+    fill: #fb6340;
+
+}
+
 .blur--hover
 {
     position: relative;

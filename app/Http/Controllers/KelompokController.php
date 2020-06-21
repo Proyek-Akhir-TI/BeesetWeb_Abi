@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Gate;
+use App\Kelompok;
 
 class KelompokController extends Controller
 {
@@ -23,7 +24,9 @@ class KelompokController extends Controller
      */
     public function index()
     {
-        //
+        $kelompoks = Kelompok::paginate(5);
+
+        return view('/pj/listkelompok', compact('kelompoks'));
     }
 
     /**
@@ -61,7 +64,9 @@ class KelompokController extends Controller
      */
     public function show($id)
     {
-        //
+        $kelompoks = Kelompok::find($id);
+
+        return view('/pj/kelompok', compact('kelompoks'));
     }
 
     /**
@@ -95,6 +100,10 @@ class KelompokController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $kelompoks = Kelompok::findOrFail($id);
+
+        $kelompoks->delete();
+
+        return redirect('pj/listkelompok');
     }
 }
