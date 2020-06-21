@@ -168,6 +168,13 @@
       </div>
       </div>
       <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div id="tryChart"></div>
+            </div>    
+        </div>
+      </div>
+      <div class="row">
           <div class="col-xl-12">
           <div class="card">
             <div class="card-header border-0">
@@ -255,6 +262,7 @@
             </div>
           </div>
         </div>
+      
     </div>
 </div>
 @endsection
@@ -338,4 +346,47 @@
                     document.getElementById("leng").value = event.latLng.lng(); 
                     
                 });
+
+// Chart
+</script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script>
+  Highcharts.chart('tryChart', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Monthly Average Rainfall'
+    },
+    xAxis: {
+        categories: {!!json_encode($categories)!!},
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Berat Panen Madu (Kg)'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f} kg</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Panen',
+        data: {!!json_encode($data)!!}
+
+    }]
+});
+</script>
 @endsection

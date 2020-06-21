@@ -8,6 +8,7 @@ use App\Role;
 use App\Kelompok;
 use Image;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
 
 class KetuaController extends Controller
 {

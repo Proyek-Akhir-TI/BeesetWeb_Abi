@@ -30,8 +30,9 @@ class PeternakController extends Controller
         $data = Auth::user()->kelompok_id;
         $user = User::all()
             ->where('kelompok_id',$data)
-            ->where('role_id',4)
-            ; 
+            ->where('role_id',4);
+            // ->paginate(1);
+                
 
         // $user = User::all(); 
         return view('ketua.peternak.listpeternak', compact('user'));
@@ -55,7 +56,7 @@ class PeternakController extends Controller
     // }
     public function explore($id){
         $users = User::find($id);
-        $kandang = Kandang::where('user_id', $id)->paginate(1);
+        $kandang = Kandang::where('user_id', $id)->paginate(5);
 
         $aktivitas = JenisAktivitas::pluck('aktivitas','id');
         // $kandangs = Kandang::pluck('name','id');
@@ -68,7 +69,18 @@ class PeternakController extends Controller
                 ->where('kandangs.user_id',$id)
                 ->get();
 
-        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens'));
+        $categories = [];
+        $data = [];
+
+        foreach ($panens as $panen) {
+            $categories[] = $panen->name;
+            $data[] = $panen->berat;
+        }
+
+        // dd($categories);
+        // dd($data);
+
+        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens','categories', 'data'));
     }
 
     public function storeAktivitas(Request $request)
