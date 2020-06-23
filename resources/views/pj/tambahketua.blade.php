@@ -44,31 +44,37 @@
                     @enderror
                   </div>
                 </div>
-
-                <div class="form-group">
-                  <div class="input-group input-group-merge input-group-alternative mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-lock-circle-open text-warning"></i></span>
-                    </div>
-                    <input id="password" placeholder="Password" type="password" class="form-control @error('password') is-invalid @enderror text-darker" name="password" required autocomplete="new-password">
-                    @error('password')
-                          <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                          </span>
-                    @enderror
+                <div class="row">
+                  <div class="col-lg-6">
+                        <div class="form-group">
+                            <div class="input-group input-group-merge input-group-alternative mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="ni ni-lock-circle-open text-warning"></i></span>
+                              </div>
+                              <input id="password" placeholder="Password" type="password" class="form-control @error('password') is-invalid @enderror text-darker" name="password" required autocomplete="new-password">
+                              @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                    </span>
+                              @enderror
+                            </div>
+                          </div>
+                  </div>
+                  <div class="col-lg-6">
+                        <div class="form-group">
+                        <div class="input-group input-group-merge input-group-alternative mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="ni ni-lock-circle-open text-warning"></i></span>
+                          </div>
+                          <input id="password-confirm" placeholder="Re-type Password" type="password" class="form-control text-darker" name="password_confirmation" required autocomplete="new-password">
+                        </div>
+                      </div>
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <div class="input-group input-group-merge input-group-alternative mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-lock-circle-open text-warning"></i></span>
-                    </div>
-                    <input id="password-confirm" placeholder="Re-type Password" type="password" class="form-control text-darker" name="password_confirmation" required autocomplete="new-password">
-                  </div>
-                </div>
+                <input id="role" type="text" class="form-control" name="telp" value="3" required autofocus readonly hidden>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <div class="input-group input-group-merge input-group-alternative mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-circle-08 text-warning"></i></span>
@@ -79,7 +85,7 @@
                           @endforeach
                     </select>
                   </div>
-                </div>
+                </div> -->
 
                 <div class="row">
                       <div class="col-lg-6">

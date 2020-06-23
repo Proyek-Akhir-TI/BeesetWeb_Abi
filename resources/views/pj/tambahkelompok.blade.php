@@ -4,6 +4,15 @@
   <title>Beeset - Tambah Kelompok</title>
 @endsection
 
+@section('ul')
+<ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a href="/pj/index" class="nav-link">
+              <span class="nav-link-inner--text"><h3 class="text-white">Dashboard</h3></span>
+            </a>
+          </li>
+        </ul>
+@endsection
 @section('content')
     <!-- Page content -->
     <div class="container mt--8 pb-5">

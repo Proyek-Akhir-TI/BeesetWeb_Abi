@@ -59,7 +59,7 @@ Route::get('/ketua/explore/{id}', 'PeternakController@explore');
 Route::get('/ketua/explore/kandang/{id}','KandangController@explore');
 
 Route::post('/ketua/peternak/kandang/unggah','KandangController@store');
-Route::post('/ketua/peternak/kandang/aktivitas/unggah','PeternakController@storeAktivitas');
+Route::post('/ketua/peternak/kandang/aktivitas/unggah','KandangController@storeAktivitas'); 
 
 // role : super user
 Route::get('/administrator/tambahuser', 'AdministratorController@tambahUser');

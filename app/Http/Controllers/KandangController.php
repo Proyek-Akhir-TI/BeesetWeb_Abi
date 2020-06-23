@@ -8,6 +8,8 @@ use App\AktivitasPeternak;
 use Illuminate\Support\Facades\Gate;
 use App\AktivitasKandang;
 use App\JenisAktivitas;
+use App\Panen;
+use DB;
 
 class KandangController extends Controller
 {
@@ -48,7 +50,7 @@ class KandangController extends Controller
         // return echo "Tambah Kandang Berhasil" 
     }
 
-    public function storeActivity(Request $request)
+    public function storeAktivitas(Request $request)
     {
         $input = new AktivitasKandang();
         $input['kandang_id'] = $request->kandang_id;
@@ -59,28 +61,47 @@ class KandangController extends Controller
     public function explore($id){
         $kandangs = Kandang::find($id);
 
-        $aktivitas = AktivitasKandang::where('kandang_id', $id)->paginate(10);
+        $jenisaktivitas = JenisAktivitas::pluck('aktivitas','id');
 
-        $listaktivitas = JenisAktivitas::pluck('id', 'name');
+        $aktivitas = AktivitasKandang::where('kandang_id', $id)->paginate(5);
 
+        $listaktivitas = JenisAktivitas::pluck('id', 'aktivitas');
+
+        $tahun  = Date('Y');
+
+        // $panens = Panen::
+        //     select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at', DB::raw('SUM(berat_panen) as total'))
+        //     ->join('kandangs','kandangs.id','=','panens.kandang_id')
+        //     ->where('panens.kandang_id',$id)
+        //     ->whereYear('panens.created_at',$tahun)
+        //     ->groupBy('kandang_id')
+        //     ->get();
+
+        $panens = Panen::
+            select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
+            ->join('kandangs','kandangs.id','=','panens.kandang_id')
+            ->where('panens.kandang_id',$id)
+            ->whereYear('panens.created_at',$tahun)
+            // ->groupBy('kandang_id')
+            ->get();
 
         // $kandangs = Kandang::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
         //         ->join('kandangs','kandangs.id','=','panens.kandang_id')
         //         ->where('kandangs.user_id',$id)
         //         ->get();
 
-        // $categories = [];
-        // $data = [];
+        $categories = [];
+        $data = [];
 
-        // foreach ($kandangs as $kandang) {
-        //     $categories[] = $kandang->name;
-        //     $data[] = $panen->berat;
-        // }
+        foreach ($panens as $panen) {
+            $categories[] = $panen->name;
+            $data[] = (float)$panen->berat;
+        }
 
         // dd($categories);
-        // // dd($data);
+        // dd($data);
         
-        return view('ketua.peternak.kandang.kandang', compact('kandangs', 'aktivitas', 'listaktivitas')); 
+        return view('ketua.peternak.kandang.kandang', compact('kandangs', 'aktivitas', 'listaktivitas','kandang','jenisaktivitas','categories','data','tahun', 'panens')); 
     }
     
 }

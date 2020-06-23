@@ -55,14 +55,7 @@
             </div>
           </div>
         </div>
-
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a href="/pj/index" class="nav-link">
-              <span class="nav-link-inner--text"><h3 class="text-white">Dashboard</h3></span>
-            </a>
-          </li>
-        </ul>
+        @yield('ul')
         <hr class="d-lg-none" />
       </div>
     </div>

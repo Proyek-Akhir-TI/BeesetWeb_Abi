@@ -170,11 +170,25 @@
       <div class="row">
         <div class="col-xl-12">
             <div class="card">
-                <div>
-                  <select>
-                      
-                  </select>
-                </div>
+              <div class="row">
+                  <div class="col-xl-2">
+                      <div class="form">
+                          <div class="form-group">
+                                <div class="input-group input-group-merge input-group-alternative mb-3">
+                                      <div class="input-group-prepend">
+                                        <span class="input-group-text bg-light text-darker">Tahun</span>
+                                      </div>
+                                      <select class="form-control text-darker pl-2">
+                                        @foreach ($panenyuk as $val)
+                                          <option class="text-darker " value="{{ $val->created_at }}">{{ date('Y', strtotime($val->created_at)) }}</option>
+                                         @endforeach
+                                      </select>
+                                </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+                
                 <div id="tryChart"></div>
             </div>    
         </div>
@@ -264,7 +278,7 @@
                 </tbody>
                 
               </table>
-              {{$detailpanens->links()}}
+              <div class="float-right">{{$detailpanens->links()}}</div>
             </div>
           </div>
         </div>

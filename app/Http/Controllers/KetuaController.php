@@ -39,11 +39,10 @@ class KetuaController extends Controller
      */
     public function create()
     {
-        // $data = Auth::user()->id;
+        $data = Auth::user()->id;
         $roles = Role::pluck('name','id');
-        $kelompoks = Kelompok::all();
-            // where('user_id', $data)
-            // ->orderBy('id', 'desc')->get();
+        $kelompoks = Kelompok::where('user_id', $data)
+            ->orderBy('id', 'desc')->get();
 
         return view('pj.tambahketua', [
             'roles' => $roles, 

@@ -76,7 +76,12 @@ class PeternakController extends Controller
         $detailpanens = Panen::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
                 ->join('kandangs','kandangs.id','=','panens.kandang_id')
                 ->where('kandangs.user_id',$id)
-                ->paginate(1);
+                ->paginate(5);
+
+        $panenyuk = Panen::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
+                ->join('kandangs','kandangs.id','=','panens.kandang_id')
+                ->where('kandangs.user_id',$id)
+                ->get();
 
         $categories = [];
         $data = [];
@@ -88,19 +93,11 @@ class PeternakController extends Controller
 
         // dd($data);
         // dd($categories);
+        // dd($tahun);
 
-        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens','categories', 'data','tahun','detailpanens'));
+        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens','categories', 'data','tahun','detailpanens','panenyuk'));
     }
 
-    public function storeAktivitas(Request $request)
-    {
-        $input = new AktivitasKandang();
-        $input['kandang_id'] = $request->kandang_id;
-        $input['aktivitas_id'] = $request->aktivitas_id;
-        $input->save();
-
-        echo "Tambah Aktivitas Berhasil";
-    }
 
     
 }
