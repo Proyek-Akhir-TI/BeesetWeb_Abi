@@ -54,33 +54,42 @@ class PeternakController extends Controller
     // public function update(Request $request, $id){
 
     // }
-    public function explore($id){
+    public function explore($id, Request $request){
+        $tahun  = Date('Y');
         $users = User::find($id);
         $kandang = Kandang::where('user_id', $id)->paginate(5);
 
         $aktivitas = JenisAktivitas::pluck('aktivitas','id');
         // $kandangs = Kandang::pluck('name','id');
 
-        $tampilAktivitas = AktivitasKandang::all()
-                ->where('user_id', $id)
-                ->where('aktivitas_id', 1);
-        $panens = Panen::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
+        // $tampilAktivitas = AktivitasKandang::all()
+        //         ->where('user_id', $id)
+        //         ->where('aktivitas_id', 1);
+       $panens = Panen::
+                select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at', DB::raw('SUM(berat_panen) as total'))
                 ->join('kandangs','kandangs.id','=','panens.kandang_id')
                 ->where('kandangs.user_id',$id)
+                ->whereYear('panens.created_at',$tahun)
+                ->groupBy('kandang_id')
                 ->get();
+
+        $detailpanens = Panen::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
+                ->join('kandangs','kandangs.id','=','panens.kandang_id')
+                ->where('kandangs.user_id',$id)
+                ->paginate(1);
 
         $categories = [];
         $data = [];
 
         foreach ($panens as $panen) {
             $categories[] = $panen->name;
-            $data[] = $panen->berat;
+            $data[] = (float)$panen->total;
         }
 
-        // dd($categories);
         // dd($data);
+        // dd($categories);
 
-        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens','categories', 'data'));
+        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens','categories', 'data','tahun','detailpanens'));
     }
 
     public function storeAktivitas(Request $request)

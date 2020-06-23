@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Gate;
 use App\Kelompok;
+use App\User;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class KelompokController extends Controller
 {
@@ -24,7 +27,9 @@ class KelompokController extends Controller
      */
     public function index()
     {
-        $kelompoks = Kelompok::paginate(5);
+        $data = Auth::user()->id;
+        $kelompoks = Kelompok::where('user_id', $data)
+            ->paginate(5)   ;
 
         return view('/pj/listkelompok', compact('kelompoks'));
     }
@@ -51,9 +56,10 @@ class KelompokController extends Controller
         DB::table('kelompoks')->insert([
             'name' => $request->name,
             'address' => $request->address,
+            'user_id' => $request->user_id
         ]);
         
-        return redirect('/pj/tambahketua');
+        return redirect('/administrator/index');
     }
 
     /**
@@ -104,6 +110,19 @@ class KelompokController extends Controller
 
         $kelompoks->delete();
 
-        return redirect('pj/listkelompok');
+        $anggota = User::where('kelompok_id', $id);
+
+        foreach ($anggota as $val) {
+            if ($val->photo)
+            Storage::delete('public/uploads'.$val->photo);
+        }
+
+        
+
+        $anggota->delete();
+
+        
+
+        return redirect('pj/daftarkelompok');
     }
 }

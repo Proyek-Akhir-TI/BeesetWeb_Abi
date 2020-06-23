@@ -170,6 +170,11 @@
       <div class="row">
         <div class="col-xl-12">
             <div class="card">
+                <div>
+                  <select>
+                      
+                  </select>
+                </div>
                 <div id="tryChart"></div>
             </div>    
         </div>
@@ -240,7 +245,7 @@
                 @php
                  $no = 1
                 @endphp
-                 @foreach($panens as $panen)
+                 @foreach($detailpanens as $panen)
                   <tr>
                     <td>
                        {{$no++}}
@@ -259,6 +264,7 @@
                 </tbody>
                 
               </table>
+              {{$detailpanens->links()}}
             </div>
           </div>
         </div>
@@ -356,7 +362,7 @@
         type: 'column'
     },
     title: {
-        text: 'Monthly Average Rainfall'
+        text: 'Grafik Jumlah Panen Tiap Kandang'
     },
     xAxis: {
         categories: {!!json_encode($categories)!!},
@@ -383,8 +389,9 @@
         }
     },
     series: [{
-        name: 'Panen',
-        data: {!!json_encode($data)!!}
+        name: 'Panen '+{!!json_encode($tahun)!!},
+        data: {!!json_encode($data)!!},
+        // data: [1,2],
 
     }]
 });

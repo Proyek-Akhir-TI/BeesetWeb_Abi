@@ -1,7 +1,7 @@
-@extends('layouts.mastercrud')
+@extends('layouts.mastersuper')
 
 @section('title')
-  <title>Beeset - Tambah Ketua</title>
+  <title>Beeset - Admin Tambah Ketua</title>
 @endsection
 
 @section('content') 
@@ -13,9 +13,9 @@
           <div class="card bg-secondary border-0">
             <div class="card-body px-lg-5 py-lg-5">
               <div class=" text-center mb-5">
-                 <h1 class="text-warning">Tambah Ketua Kelompok</h1> 
+                 <h1 class="text-warning">Tambah User</h1> 
             </div>
-            <form role="form" action="/pj/uploadketua" method="post" enctype="multipart/form-data">
+            <form role="form" action="/administrator/buatuser" method="post" enctype="multipart/form-data">
               {{ csrf_field() }}
                 <div class="form-group">
                   <div class="input-group input-group-merge input-group-alternative mb-3">

@@ -73,4 +73,10 @@ class User extends Authenticatable
         return false;
     }
 
+    public function isSu(){
+        if($this->role->name == 'Super User'){
+            return true;
+        }
+        return false;
+    }
 }

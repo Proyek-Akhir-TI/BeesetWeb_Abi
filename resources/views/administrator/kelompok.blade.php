@@ -1,10 +1,10 @@
-@extends('layouts.mastercrud')
+@extends('layouts.mastersuper')
 
 @section('title')
-  <title>Beeset - Tambah Kelompok</title>
+  <title>Beeset - Admin Tambah Ketua</title>
 @endsection
 
-@section('content')
+@section('content') 
     <!-- Page content -->
     <div class="container mt--8 pb-5">
       <!-- Table -->
@@ -15,7 +15,7 @@
             <div class=" text-center mb-5">
                  <h1 class="text-warning">Tambah Kelompok</h1> 
             </div>
-            <form role="form" action="/pj/uploadkelompok" method="post">
+            <form role="form" action="/administrator/buatkelompok" method="post">
               {{ csrf_field() }}
                 <div class="form-group">
                   <label for="name" class="text-warning mb-3">Nama Kelompok</label>

@@ -10,6 +10,7 @@ use Image;
 use SweetAlert;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class KetuaController extends Controller
 {
@@ -38,8 +39,11 @@ class KetuaController extends Controller
      */
     public function create()
     {
+        // $data = Auth::user()->id;
         $roles = Role::pluck('name','id');
-        $kelompoks = Kelompok::pluck('name','id');
+        $kelompoks = Kelompok::all();
+            // where('user_id', $data)
+            // ->orderBy('id', 'desc')->get();
 
         return view('pj.tambahketua', [
             'roles' => $roles, 
@@ -55,7 +59,6 @@ class KetuaController extends Controller
      */
     public function store(Request $request)
     {
-        $no = 1;
         $input = new User();
         $input['name'] = $request->name;
         $input['email'] = $request->email;
@@ -66,7 +69,7 @@ class KetuaController extends Controller
         $input['telp'] = $request->telp;
         if($request->file('photo')){
             $image = $request->file('photo');
-            $images = 'user_photo'.$no++.'.'.$request->file('photo')->extension();
+            $images = 'user_photo'.$request->telp.'.'.$request->file('photo')->extension();
             Image::make($image)->resize(300, 300)->save(storage_path('app/public/uploads/' . $images));
             $input['photo'] = $images;
             $images = $request->photo;
@@ -76,6 +79,8 @@ class KetuaController extends Controller
         // SweetAlert::message('Message','Kelompok Berhasil Dibuat');
 
         return redirect('/pj/index');
+        // return redirect('/pj/tambahkelompok');
+
     }
 
     /**

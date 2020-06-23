@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing');
 });
 
 Auth::routes();
@@ -27,9 +27,9 @@ Route::get('/home', function(){
     if($user->isPj()){
         return view('pj.index');
     }
-    // if($user->isPeternak()){
-    //     return view('pj.index');
-    // }
+    if($user->isSu()){
+        return view('administrator.index');
+    }
 });
 
 // Route::get('/home', 'HomeController@index')->name('home');
@@ -60,3 +60,14 @@ Route::get('/ketua/explore/kandang/{id}','KandangController@explore');
 
 Route::post('/ketua/peternak/kandang/unggah','KandangController@store');
 Route::post('/ketua/peternak/kandang/aktivitas/unggah','PeternakController@storeAktivitas');
+
+// role : super user
+Route::get('/administrator/tambahuser', 'AdministratorController@tambahUser');
+Route::get('/administrator/kelompok', 'AdministratorController@tambahKelompok');
+Route::post('/administrator/buatuser', 'AdministratorController@buatUser');
+Route::post('/administrator/buatkelompok', 'AdministratorController@buatKelompok');
+Route::get('/administrator/index', function () {
+    return view('administrator.index');
+
+});
+
