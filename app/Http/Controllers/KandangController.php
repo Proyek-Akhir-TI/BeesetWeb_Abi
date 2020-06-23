@@ -22,7 +22,7 @@ class KandangController extends Controller
         });
     }
 
-    public function store(Request $request){
+    public function store(Request $request, $user_id){
         
         $input = new Kandang();
         $input['name'] = $request->name;
@@ -33,21 +33,25 @@ class KandangController extends Controller
         $input['status'] = $request->status;    
         $input->save();
 
-        // return echo "Tambah Kandang Berhasil";
+        return redirect('/ketua/explore/{user_id}');
     }
 
-    public function update(Request $request)
+    public function edit($id){
+        $input = Kandang::find($id);
+       return view('/ketua/peternak/kandang/edit', compact('input')); 
+    }
+    public function update(Request $request, $id)
     {
-        $input = new Kandang();
-        $input['name'] = $request->name;
-        $input['user_id'] = $request->user_id;
-        $input['location'] = $request->location;
-        $input['latitude'] = $request->latitude;
-        $input['longitude'] = $request->longitude;
-        $input['status'] = $request->status;    
+        $input = Kandang::find($id);
+        $input->name = $request->name;
+        $input->user_id = $request->user_id;
+        $input->location = $request->location;
+        $input->latitude = $request->latitude;
+        $input->longitude = $request->longitude;
+        $input->status = $request->status;    
         $input->save();
 
-        // return echo "Tambah Kandang Berhasil" 
+        return redirect('/ketua/explore/kandang/{id}');
     }
 
     public function storeAktivitas(Request $request)

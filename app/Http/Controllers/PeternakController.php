@@ -30,12 +30,33 @@ class PeternakController extends Controller
         $data = Auth::user()->kelompok_id;
         $user = User::all()
             ->where('kelompok_id',$data)
-            ->where('role_id',4);
+            ->where('role_id',4)
+            ->where('status', 1);
             // ->paginate(1);
                 
 
         // $user = User::all(); 
         return view('ketua.peternak.listpeternak', compact('user'));
+    }
+
+    public function needToConfirm(){
+        $data = Auth::user()->kelompok_id;
+        $user = User::all()
+            ->where('kelompok_id',$data)
+            ->where('role_id',4)
+            ->where('status', 0);
+            // ->paginate(1);
+                
+
+        // $user = User::all(); 
+        return view('ketua.peternak.verifikasi', compact('user'));
+    }
+
+    public function detailToConfirm($id){
+
+       $peternaks = User::find($id);
+
+        return view('ketua.peternak.verifikasidetail', compact('peternaks'));
     }
 
     public function edit($id)

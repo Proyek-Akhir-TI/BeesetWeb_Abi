@@ -11,6 +11,7 @@ use SweetAlert;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class KetuaController extends Controller
 {
@@ -57,7 +58,11 @@ class KetuaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        $this->validate($request, [
+            'email'  => 'required|unique:users',
+        ]);
+
         $input = new User();
         $input['name'] = $request->name;
         $input['email'] = $request->email;

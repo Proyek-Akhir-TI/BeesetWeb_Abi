@@ -12,16 +12,16 @@
                     <div class="card-title">
                       <div class="row">
                         <div class="col-xl-6">
-                            <h2 class="text-orange">Cage Info<h2>
+                            <h2 class="text-orange">Informasi Kandang<h2>
                         </div>
                         <div class="col-xl-6">
-                            <img src="{{ asset('storage/uploads/'.$kandangs->user->photo)}}" class="rounded-circle img-info float-right" title="{{$kandangs->user->name}}">
+                            
                         </div>
                       </div>
                     </div> 
                       <div class="row">
                             <div class="col-xl-4">
-                                <h4><b>Cage Name</b></h4>
+                                <h4><b>Nama Kandang</b></h4>
                             </div>
                             <div class="col-xl-6">
                                 <h4>: {{$kandangs->name}}</h4>
@@ -29,7 +29,7 @@
                        </div>
                        <div class="row">
                             <div class="col-xl-4">
-                                <h4><b>Owner</b></h4>
+                                <h4><b>Nama Pemilik</b></h4>
                             </div>
                             <div class="col-xl-6">
                                 <h4>: {{$kandangs->user->name}}</h4>
@@ -37,12 +37,29 @@
                        </div> 
                        <div class="row">
                             <div class="col-xl-4">
-                                <h4><b>Team</b></h4>
+                                <h4><b>Kelompok</b></h4>
                             </div>
                             <div class="col-xl-6">
                                 <h4>: {{$kandangs->user->kelompok->name}}</h4>
                             </div>                        
-                       </div> 
+                       </div>
+                       <div class="row">
+                            <div class="col-xl-4">
+                                <h4><b>Lokasi</b></h4>
+                            </div>
+                            <div class="col-xl-6">
+                                <h4>: {{$kandangs->location}}</h4>
+                            </div>                        
+                       </div>
+                       <div class="row">
+                            <div class="col-xl-4">
+                                <h4><b>Status</b></h4>
+                            </div>
+                            <div class="col-xl-6">
+                                <h4>: Aktif
+                                </h4>
+                            </div>                        
+                       </div>    
                 </div>
             </div>
         </div>

@@ -54,17 +54,24 @@ Route::get('/ketua/index', function () {
     return view('ketua.index');
 });
 Route::get('/ketua/listpeternak', 'PeternakController@index');
+Route::get('/ketua/konfirmasipeternak', 'PeternakController@needToConfirm');
+Route::get('/ketua/detalverifikasi/{id}', 'PeternakController@detailToConfirm');
+
+
+Route::post('/ketua/peternak/konfirmasi/{id}', 'KonfirmasiController@updateUser');
+
 Route::get('/ketua/edit/{id}', 'PeternakController@edit');
 Route::get('/ketua/explore/{id}', 'PeternakController@explore');
 Route::get('/ketua/explore/kandang/{id}','KandangController@explore');
-
+Route::get('/ketua/explore/kandang/edit/{id}','KandangController@edit');
+Route::post('/ketua/explore/kandang/update/{id}','KandangController@update');
 Route::post('/ketua/peternak/kandang/unggah','KandangController@store');
 Route::post('/ketua/peternak/kandang/aktivitas/unggah','KandangController@storeAktivitas'); 
 
 // role : super user
 Route::get('/administrator/tambahuser', 'AdministratorController@tambahUser');
 Route::get('/administrator/kelompok', 'AdministratorController@tambahKelompok');
-Route::post('/administrator/buatuser', 'AdministratorController@buatUser');
+Route::post('/administrator/buatuser', 'KonfirmasiController@userToConfirm');
 Route::post('/administrator/buatkelompok', 'AdministratorController@buatKelompok');
 Route::get('/administrator/index', function () {
     return view('administrator.index');

@@ -10,6 +10,7 @@ use DB;
 use Image;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class AdministratorController extends Controller
 {
@@ -24,6 +25,10 @@ class AdministratorController extends Controller
 
     public function buatUser(Request $request)
     {
+        $this->validate($request, [
+            'email'  => 'required|unique:users',
+        ]);
+
     	$input = new User();
         $input['name'] = $request->name;
         $input['email'] = $request->email;

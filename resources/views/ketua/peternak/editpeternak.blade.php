@@ -1,4 +1,4 @@
-@extends('layouts.masterketua')
+@extends('layouts.mastercrud')
 
 @section('title')
   <title>Beeset - Edit Farmer</title>

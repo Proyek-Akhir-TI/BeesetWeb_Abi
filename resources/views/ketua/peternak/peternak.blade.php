@@ -69,7 +69,7 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Cages</h3>
+                  <h3 class="mb-0">Kandang</h3>
                 </div>
                 <div class="col text-right">
                   <a href="" class="btn btn-sm btn-primary" data-target="#exampleModal" data-toggle="modal">Tambah Kandang</a>
@@ -78,7 +78,7 @@
                     <div class="modal-dialog modal-lg" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Add Cage</h5>
+                          <h5 class="modal-title" id="exampleModalLabel">Tambah Kandang</h5>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
@@ -94,11 +94,9 @@
                                     <div class="form-group">
                                           <label for="exampleInputEmail1">Name</label>
                                           <input type="text" name="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter name">
-                                          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                                         </div>
                                         <div class="form-group">
-                                          <label for="exampleInputPassword1">User</label>
-                                          <input type="text" name="user_id" class="form-control" id="exampleInputPassword1" value="{{$users->id}}">
+                                          <input type="text" name="user_id" class="form-control" id="exampleInputPassword1" value="{{$users->id}}" hidden="">
                                         </div>
                                         <div class="form-group">
                                           <label for="exampleInputPassword1">Location</label>
@@ -113,8 +111,7 @@
                                           <input type="text" name="longitude" class="form-control" id="leng" placeholder="Enter Location">
                                         </div>
                                         <div class="form-group">
-                                          <label for="exampleInputPassword1">status</label>
-                                          <input type="number" name="status" class="form-control" id="leng" value="1" readonly="" placeholder="Aktif">
+                                          <input type="number" name="status" class="form-control" id="leng" value="1" readonly="" hidden>
                                         </div>
                                         <div class="modal-footer">
                                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -149,12 +146,23 @@
                        {{$no++}}
                     </td>
                     <td>
+                      @if($kandangs->status == 0)
                         {{$kandangs->name}}
+                        <h5 class="badge badge-pill text-capitalize badge-danger">Kandang Tidak Aktif</h5>
+                      @endif
+                      @if($kandangs->status == 1)
+                        {{$kandangs->name}}
+                      @endif
                     </td>
                     <td>
+                  @if($kandangs->status == 1)
                     <a href="/ketua/explore/kandang/{{$kandangs->id}}" class="btn btn-sm btn-primary">Explore</a>
-                    <a href="" class="btn btn-sm btn-success">Edit</a>
+                    <a href="/ketua/explore/kandang/edit/{{$kandangs->id}}" class="btn btn-sm btn-success">Edit</a>
                     <a href="#!" class="btn btn-sm btn-danger">Delete</a>
+                  @endif
+                  @if($kandangs->status == 0)
+                    <a href="/ketua/explore/kandang/edit/{{$kandangs->id}}" class="btn btn-sm btn-success">Edit</a>
+                  @endif
                     </td>
                   </tr>
                 @endforeach

@@ -118,6 +118,14 @@
                   </div>
                 </div>
                 <div class="form-group">
+                              <div class="input-group input-group-merge input-group-alternative mb-3">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text"><i class="fas fa-phone-square-alt text-warning"></i></span>
+                                </div>
+                                <input id="telp" placeholder="Status" type="text" class="form-control @error('telp') is-invalid @enderror text-darker" name="status" value="0" required autocomplete="telp" readonly="" autofocus>
+                              </div>
+                            </div>
+                <div class="form-group">
                     <label for="photo" class="text-warning"> Foto </label>
                     <input id="photo" type="file" class="form-control-file" name="photo" onchange="readURL(this);" required autocomplete="photo" >
                 </div>

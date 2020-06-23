@@ -1,7 +1,7 @@
 @extends('layouts.masterketua')
 
 @section('title')
-  <title>Beeset - Daftar Peternak</title>
+  <title>Beeset - Konfirmasi Peternak</title>
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Daftar Peternak Aktif </h3>
+                  <h3 class="mb-0">Peternak Tidak Aktif</h3>
                 </div>
               </div>
             </div>
@@ -51,16 +51,15 @@
                       {{$peternak->address}}
                     </td>
                     <td>
-                    <a href="/ketua/explore/{{$peternak->id}}"  class="btn btn-sm btn-primary">Explore</a>
+                    <a href="/ketua/detalverifikasi/{{$peternak->id}}"  class="btn btn-sm btn-primary">Detail</a>
                     <a href="/ketua/edit/{{$peternak->id}}" class="btn btn-sm btn-success">Edit</a>
-                    <a href="#!" class="btn btn-sm btn-danger">Delete</a>
+                    <a href="#!" class="btn btn-sm btn-danger">Hapus</a>
                     </td>
                   </tr>
                 @endforeach
                 </tbody>
               </table>
-              <div class="float-right mb-3 mt-3">
-             
+              <div class="float-right mb-3 mt-3"> 
               </div>
             </div>
           </div>

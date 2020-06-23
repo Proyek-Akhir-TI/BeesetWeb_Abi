@@ -42,7 +42,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="">
+              <a class="nav-link" href="/ketua/konfirmasipeternak">
                 <i class="ni ni-bell-55 text-orange"></i>
                 <span class="nav-link-text">Un-Verify Farmer</span>
               </a>
