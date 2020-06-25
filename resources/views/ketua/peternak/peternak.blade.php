@@ -169,7 +169,7 @@
                 </tbody>
               </table>
               <div class="float-right mb-3 mt-3">
-              {{ $kandang->links() }}
+              {{ $kandang->withQueryString()->links() }}
               </div>
             </div>
         </div>
@@ -181,18 +181,21 @@
               <div class="row">
                   <div class="col-xl-2">
                       <div class="form">
+                        <form action="{{url('ketua/explore').'/'.$users->id}}" method="get">
                           <div class="form-group">
                                 <div class="input-group input-group-merge input-group-alternative mb-3">
                                       <div class="input-group-prepend">
                                         <span class="input-group-text bg-light text-darker">Tahun</span>
                                       </div>
-                                      <select class="form-control text-darker pl-2">
+                                      <select class="form-control text-darker pl-2" name="tahun">
                                         @foreach ($panenyuk as $val)
-                                          <option class="text-darker " value="{{ $val->created_at }}">{{ date('Y', strtotime($val->created_at)) }}</option>
+                                          <option value="{{$val->year}}" @if($val->year == $tahun) {{'selected="selected"'}} @endif >{{$val->year}}</option>
                                          @endforeach
                                       </select>
                                 </div>
                           </div>
+                          <button type="submit" class="btn btn-primary">Pilih</button>
+                          </form>
                       </div>
                   </div>
               </div>
@@ -254,7 +257,7 @@
             </div>
             <div class="table-responsive pt-4">
               <!-- Projects table -->
-              <table class="table align-items-center table-flush">
+              <table class="table align-items-center table-flush table-hover">
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">No</th>
@@ -276,21 +279,21 @@
                         {{$panen->name}}
                     </td>
                     <td>
-                        {{$panen->berat}}
+                        {{$panen->berat}} Kg
                     </td>
                     <td>
-                      {{$panen->created_at }}
+                      {{$panen->created_at->diffForHumans() }}
                     </td>
                   </tr>
                 @endforeach
                 </tbody>
                 
               </table>
-              <div class="float-right">{{$detailpanens->links()}}</div>
+              <div class="float-right">{{$detailpanens->withQueryString()->links()}}</div>
             </div>
           </div>
         </div>
-      
+      <div id="mapyuk" style="width:100%; height:320px;"></div>
     </div>
 </div>
 @endsection
@@ -306,7 +309,7 @@
 	});
 </script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfC8SLDMQuvfSyZObH4BPW4o9zdvBEzKA&callback=initialize" type="application/javascript"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC68gJT0BtgwM_Mc8jMmC7T4FuTQ6IhISc&callback=initialize" type="application/javascript"></script>
 
 <script type="application/javascript">
   google.maps.event.addDomListener(window, 'load', initialize);
@@ -322,7 +325,7 @@
             }
             //Variabel Marker
             var marker;
-            var marker2;
+
             function taruhMarker(peta, posisiTitik){
                 
                 if( marker ){
@@ -346,9 +349,11 @@
             
             //Fungsi untuk geolocation
             function lokasi(position){
+
                 //Mengirim data koordinat ke form input
                 document.getElementById("lat").value = position.coords.latitude;
                 document.getElementById("leng").value = position.coords.longitude;
+
                 //Current Location
                 var lat = position.coords.latitude;
                 var long = position.coords.longitude;
@@ -374,9 +379,66 @@
                     document.getElementById("leng").value = event.latLng.lng(); 
                     
                 });
+            }
+      }
 
-// Chart
 </script>
+<!-- ============= Array ============= -->
+
+    <script>
+      var array =[];
+    </script>
+
+    @foreach ($maps as $map)
+
+    <script type="text/javascript">
+        //Memasukkan data tabel ke array
+        array.push(['<?php echo $map->location?>','<?php echo $map->latitude?>','<?php echo $map->longitude?>','<?php echo $map->name?>']);
+    </script> 
+
+    @endforeach
+  
+<!-- ============= Array ============= -->
+
+<script>
+     
+      function initialize() {
+        var bounds = new google.maps.LatLngBounds();
+        var peta = new google.maps.Map(document.getElementById("mapyuk"), {
+          center : {lat: -8.408698, lng: 114.2339090},
+          zoom : 9.5
+        });
+        var infoWindow = new google.maps.InfoWindow(), marker, i;
+        for (var i = 0; i < array.length; i++) {
+          
+          var position = new google.maps.LatLng(array[i][1],array[i][2]);
+          bounds.extend(position);
+          var marker = new google.maps.Marker({
+            position : position,
+            map : peta,
+            icon : 'https://img.icons8.com/plasticine/40/000000/marker.png',
+            title : array[i][0]
+          });
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              var infoWindowContent = 
+              '<div class="content"><p>'+
+              '<h6>'+array[i][0]+'</h6>'+
+              // '<img height="130" style="margin:0 auto; display:block;" src="assets/img/tempatsampah/'+array[i][4]+'"/><br/>'+
+              // 'Petugas yang Menambahkan : '+array[i][3]+'<br/>'+
+              // 'Titik Koordinat : '+array[i][1]+', '+array[i][2]+'<br/>'+
+              '</p></div>';
+              infoWindow.setContent(infoWindowContent);
+              infoWindow.open(peta, marker);
+            }
+          })(marker, i));
+        }
+       
+      }
+      
+    </script>
+
+
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script>
   Highcharts.chart('tryChart', {

@@ -58,7 +58,7 @@ class KonfirmasiController extends Controller
         $new_photo = $request->file('photo');
         if($new_photo){
             if($input->photo && file_exists(storage_path('app/public/uploads' .$input->photo))){
-                \Storage::delete('public/uploads'. $data->photo);
+                \Storage::delete('public/uploads'. $input->photo);
             }
             $new_photo_path = $new_photo->storeAs(
                 'user_photobaru', $request->telp.'.'.$request->file('photo')->extension()

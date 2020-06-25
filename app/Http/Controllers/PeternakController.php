@@ -7,12 +7,14 @@ use App\User;
 use App\Role;
 use App\Kelompok;
 use DB;
+use Alert;
 use Illuminate\Support\Facades\Auth;
 use App\Kandang;
 use App\JenisAktivitas;
 use App\AktivitasKandang;
 use App\Panen;
 use Illuminate\Support\Facades\Gate;
+use Storage;
 
 class PeternakController extends Controller
 {
@@ -76,7 +78,11 @@ class PeternakController extends Controller
 
     // }
     public function explore($id, Request $request){
+        if($request->tahun == 0)
         $tahun  = Date('Y');
+        else
+        $tahun = $request->tahun;
+
         $users = User::find($id);
         $kandang = Kandang::where('user_id', $id)->paginate(5);
 
@@ -99,10 +105,16 @@ class PeternakController extends Controller
                 ->where('kandangs.user_id',$id)
                 ->paginate(5);
 
-        $panenyuk = Panen::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
+        $panenyuk = Panen::select(DB::raw('YEAR(panens.created_at) as year'))
                 ->join('kandangs','kandangs.id','=','panens.kandang_id')
                 ->where('kandangs.user_id',$id)
+                ->groupBy('year')
+                ->orderBy('year','desc')
                 ->get();
+
+                // return $panenyuk;
+        // return $panenyuk;
+        $detailpanens->setPageName('other_page');
 
         $categories = [];
         $data = [];
@@ -112,11 +124,28 @@ class PeternakController extends Controller
             $data[] = (float)$panen->total;
         }
 
+        $maps = Kandang::where('user_id', $id)->get();
+
         // dd($data);
         // dd($categories);
         // dd($tahun);
+        // dd($maps);
 
-        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens','categories', 'data','tahun','detailpanens','panenyuk'));
+        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens','categories', 'data','tahun','detailpanens','panenyuk','maps'));
+    }
+
+    public function destroy($id)
+    {
+        $peternak = User::findOrFail($id);
+
+        if($peternak->photo)
+        Storage::delete('public/uploads'.$peternak->photo);
+
+        $peternak->delete();
+
+        Alert::error('Peternak Sudah Dihapus', 'Hapus Berhasil');
+
+        return redirect('/ketua/listpeternak');
     }
 
 

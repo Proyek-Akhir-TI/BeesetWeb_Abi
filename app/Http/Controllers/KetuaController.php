@@ -129,12 +129,12 @@ class KetuaController extends Controller
      */
     public function destroy($id)
     {
-        $users = User::findOrFail($id);
+        $ketua = User::findOrFail($id);
 
         // if($users->photo)
         // Storage::delete('public/uploads'.$users->photo);
 
-        $pegawai->delete();
+        $ketua->delete();
 
         return redirect('pj.listkelompok');
     }

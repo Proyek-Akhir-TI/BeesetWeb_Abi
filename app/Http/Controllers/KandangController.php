@@ -73,39 +73,33 @@ class KandangController extends Controller
 
         $tahun  = Date('Y');
 
-        // $panens = Panen::
-        //     select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at', DB::raw('SUM(berat_panen) as total'))
-        //     ->join('kandangs','kandangs.id','=','panens.kandang_id')
-        //     ->where('panens.kandang_id',$id)
-        //     ->whereYear('panens.created_at',$tahun)
-        //     ->groupBy('kandang_id')
-        //     ->get();
-
         $panens = Panen::
-            select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
+            select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at', DB::raw('MONTH(panens.created_at) as month'), DB::raw('SUM(berat_panen) as total'))
             ->join('kandangs','kandangs.id','=','panens.kandang_id')
             ->where('panens.kandang_id',$id)
             ->whereYear('panens.created_at',$tahun)
-            // ->groupBy('kandang_id')
+            ->groupBy('month')
             ->get();
 
-        // $kandangs = Kandang::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
-        //         ->join('kandangs','kandangs.id','=','panens.kandang_id')
-        //         ->where('kandangs.user_id',$id)
-        //         ->get();
+        $panenyuk = Panen::select(DB::raw('YEAR(panens.created_at) as year'))
+                ->join('kandangs','kandangs.id','=','panens.kandang_id')
+                ->where('panens.kandang_id',$id)
+                ->groupBy('year')
+                ->orderBy('year','desc')
+                ->get();
 
         $categories = [];
         $data = [];
 
         foreach ($panens as $panen) {
-            $categories[] = $panen->name;
-            $data[] = (float)$panen->berat;
+            $categories[] = $panen->month;
+            $data[] = (float)$panen->total;
         }
 
         // dd($categories);
         // dd($data);
         
-        return view('ketua.peternak.kandang.kandang', compact('kandangs', 'aktivitas', 'listaktivitas','kandang','jenisaktivitas','categories','data','tahun', 'panens')); 
+        return view('ketua.peternak.kandang.kandang', compact('kandangs', 'aktivitas', 'listaktivitas','kandang','jenisaktivitas','categories','data','tahun', 'panens','panenyuk')); 
     }
     
 }

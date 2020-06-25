@@ -2,6 +2,7 @@
 
 @section('title')
   <title>Beeset - Detail Kelompok</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
 @endsection
 
 @section('content')
@@ -39,3 +40,7 @@
     </div>
 @endsection
 
+@section('javascript')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+@include('sweet::alert')
+@endsection

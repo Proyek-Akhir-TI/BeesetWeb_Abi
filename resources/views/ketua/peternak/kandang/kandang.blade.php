@@ -67,20 +67,24 @@
             <div class="col-xl-6">
                 <div class="row">
                   <div class="col-xl-12">
-                      <div class="form">
+                      <form action="{{url('ketua/explore/kandang').'/'.$kandangs->id}}" method="get">
                           <div class="form-group">
                                 <div class="input-group input-group-merge input-group-alternative mb-3">
                                       <div class="input-group-prepend">
                                         <span class="input-group-text bg-light text-darker">Tahun</span>
                                       </div>
-                                      <select class="form-control text-darker pl-2">
-                                        @foreach ($panens as $val)
-                                          <option class="text-darker " value="{{ $val->created_at }}">{{ date('Y', strtotime($val->created_at)) }}</option>
+                                      <select class="form-control text-darker pl-2" name="tahun">
+                                        @foreach ($panenyuk as $val)
+                                          <option value="{{$val->year}}"
+                                           @if($val->year == $tahun)     
+                                            {{'selected="selected"'}} 
+                                            @endif >{{$val->year}}</option>
                                          @endforeach
                                       </select>
                                 </div>
                           </div>
-                      </div>
+                          <button type="submit" class="btn btn-primary">Pilih</button>
+                          </form>
                   </div>
               </div>
                 <div id="tryChart" class="card pt-3"></div>
@@ -157,14 +161,14 @@
                       {{$akt->aktivitasKandang->aktivitas}}
                     </td>
                     <td>
-                      {{$akt->created_at}}
+                      {{$akt->created_at->diffForHumans()}}
                     </td>
                   </tr>
                 @endforeach
                 </tbody>
               </table>
               <div class="float-right mb-3 mt-3">
-             
+                {{$aktivitas->withQueryString()->links()}}
               </div>
             </div>
           </div>

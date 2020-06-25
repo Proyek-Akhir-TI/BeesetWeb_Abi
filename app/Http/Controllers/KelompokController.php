@@ -7,6 +7,7 @@ use DB;
 use Illuminate\Support\Facades\Gate;
 use App\Kelompok;
 use App\User;
+use Alert;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
@@ -121,7 +122,7 @@ class KelompokController extends Controller
 
         $anggota->delete();
 
-        
+        alert()->success('Kelompok Sudah Dihapus', 'Hapus Berhasil')->persistent('Konfirmasi');
 
         return redirect('pj/daftarkelompok');
     }

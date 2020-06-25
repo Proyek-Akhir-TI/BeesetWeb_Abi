@@ -2,6 +2,7 @@
 
 @section('title')
   <title>Beeset - Daftar Peternak</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
 @endsection
 
 @section('content')
@@ -53,7 +54,7 @@
                     <td>
                     <a href="/ketua/explore/{{$peternak->id}}"  class="btn btn-sm btn-primary">Explore</a>
                     <a href="/ketua/edit/{{$peternak->id}}" class="btn btn-sm btn-success">Edit</a>
-                    <a href="#!" class="btn btn-sm btn-danger">Delete</a>
+                    <a href="/ketua/hapus/{{$peternak->id}}" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                   </tr>
                 @endforeach
@@ -72,5 +73,5 @@
 @endsection
 
 @section('javascript')
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 @endsection

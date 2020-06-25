@@ -62,6 +62,7 @@ Route::post('/ketua/peternak/konfirmasi/{id}', 'KonfirmasiController@updateUser'
 
 Route::get('/ketua/edit/{id}', 'PeternakController@edit');
 Route::get('/ketua/explore/{id}', 'PeternakController@explore');
+Route::get('/ketua/hapus/{id}', 'PeternakController@destroy');
 Route::get('/ketua/explore/kandang/{id}','KandangController@explore');
 Route::get('/ketua/explore/kandang/edit/{id}','KandangController@edit');
 Route::post('/ketua/explore/kandang/update/{id}','KandangController@update');
