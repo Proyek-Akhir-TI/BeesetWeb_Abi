@@ -142,21 +142,17 @@
 @endsection
 
 @section('javascript')
-<script type="application/javascript">
-  $('#password').on('keyup', function () {
-  if ($('#password').val() == $('#confirm_password').val()) {
-    $('#message').html('Password Cocok').css('color', 'green');
-    $('#button').prop("disabled");
-  } else 
-    $('#message').html('Password Tidak Cocok').css('color', 'red');
-});
+<script type="text/javascript">
+  $('#password, #confirm_password').on('keyup', function () {
+        if ($('#password').val() == $('#confirm_password').val()) {
+          $('#message').html('Password Cocok').css('color', 'green');
+          $('#button').removeAttr("disabled");
+        } else {
+          $('#message').html('Password Tidak Cocok').css('color', 'red');
+          var element = document.getElementById('button');
+          element.setAttribute('disabled','disabled');
+        }
 
-  $('#password').on('keyup', function () {
-  if ($('#password').val() == $('#confirm_password').val()) {
-    $('#message').html('Password Cocok').css('color', 'green');
-    $('#button').prop("disabled");
-  } else 
-    $('#message').html('Password Tidak Cocok').css('color', 'red');
-});
+      });
 </script>
 @endsection
