@@ -30,7 +30,8 @@ class KelompokController extends Controller
     {
         $data = Auth::user()->id;
         $kelompoks = Kelompok::where('user_id', $data)
-            ->paginate(5)   ;
+            ->paginate(5);
+            
 
         return view('/pj/listkelompok', compact('kelompoks'));
     }
@@ -60,7 +61,7 @@ class KelompokController extends Controller
             'user_id' => $request->user_id
         ]);
         
-        return redirect('/administrator/index');
+        return redirect('/pj/tambahketua');
     }
 
     /**
@@ -73,7 +74,15 @@ class KelompokController extends Controller
     {
         $kelompoks = Kelompok::find($id);
 
-        return view('/pj/kelompok', compact('kelompoks'));
+        $ketuas  = User::all()
+            ->where('kelompok_id', $id)
+            ->where('role_id', 3);
+
+        // $panens = Panen::
+
+            // return $ketuas;
+
+        return view('/pj/kelompok', compact('kelompoks', 'ketuas'));
     }
 
     /**

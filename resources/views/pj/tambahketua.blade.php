@@ -22,7 +22,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-circle-08 text-warning"></i></span>
                     </div>
-                    <input id="name" placeholder="Name" type="text" class="form-control @error('name') is-invalid @enderror text-darker" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                    <input id="name" placeholder="Nama" type="text" class="form-control @error('name') is-invalid @enderror text-darker" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                     @error('name')
                           <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -66,13 +66,14 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="ni ni-lock-circle-open text-warning"></i></span>
                           </div>
-                          <input id="password-confirm" placeholder="Re-type Password" type="password" class="form-control text-darker" name="password_confirmation" required autocomplete="new-password">
+                          <input id="confirm_password" placeholder="Ketik Ulang Password" type="password" class="form-control text-darker" name="password_confirmation" required autocomplete="new-password">
                         </div>
+                        <span class="h5" id='message'></span>
                       </div>
                   </div>
                 </div>
 
-                <input id="role" type="text" class="form-control" name="telp" value="3" required autofocus readonly hidden>
+                <input id="role" type="text" class="form-control" name="role_id" value="3" required autofocus readonly hidden>
 
                 <!-- <div class="form-group">
                   <div class="input-group input-group-merge input-group-alternative mb-3">
@@ -108,7 +109,7 @@
                                 <div class="input-group-prepend">
                                   <span class="input-group-text"><i class="fas fa-phone-square-alt text-warning"></i></span>
                                 </div>
-                                <input id="telp" placeholder="Telp" type="text" class="form-control @error('telp') is-invalid @enderror text-darker" name="telp" value="{{ old('telp') }}" required autocomplete="telp" autofocus>
+                                <input id="telp" placeholder="No. Telpon" type="text" class="form-control @error('telp') is-invalid @enderror text-darker" name="telp" value="{{ old('telp') }}" required autocomplete="telp" autofocus>
                               </div>
                             </div>
                       </div>
@@ -120,7 +121,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-pin-3 text-warning"></i></span>
                     </div>
-                    <textarea id="address" placeholder="Address" type="text" class="form-control text-darker" name="address" required autocomplete="address" autofocus></textarea>
+                    <textarea id="address" placeholder="Alamat" type="text" class="form-control text-darker" name="address" required autocomplete="address" autofocus></textarea>
                   </div>
                 </div>
                 <div class="form-group">
@@ -129,7 +130,7 @@
                 </div>
 
                 <div class="text-center">
-                  <button type="submit" class="btn btn-warning mt-4">Add</button>
+                  <button id="button" type="submit" class="btn btn-warning mt-4" disabled="">Tambah</button>
                 </div>
             </form>
             </div>
@@ -138,4 +139,24 @@
       </div>
     </div>
   </div>
+@endsection
+
+@section('javascript')
+<script type="application/javascript">
+  $('#password').on('keyup', function () {
+  if ($('#password').val() == $('#confirm_password').val()) {
+    $('#message').html('Password Cocok').css('color', 'green');
+    $('#button').prop("disabled");
+  } else 
+    $('#message').html('Password Tidak Cocok').css('color', 'red');
+});
+
+  $('#password').on('keyup', function () {
+  if ($('#password').val() == $('#confirm_password').val()) {
+    $('#message').html('Password Cocok').css('color', 'green');
+    $('#button').prop("disabled");
+  } else 
+    $('#message').html('Password Tidak Cocok').css('color', 'red');
+});
+</script>
 @endsection

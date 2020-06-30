@@ -20,6 +20,7 @@
 </head>
 
 <body>
+  @include('sweet::alert')
   <!-- Sidenav -->
   <nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <div class="scrollbar-inner">
@@ -133,6 +134,7 @@
   <script src="{{ asset('/vendor/chart.js/dist/Chart.extension.js') }}"></script>
   <!-- Argon JS -->
   <script src="{{ asset('/js/argon.js?v=1.2.0') }}"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   @yield('javascript')
 </body>
 

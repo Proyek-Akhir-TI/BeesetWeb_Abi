@@ -65,13 +65,8 @@ class PeternakController extends Controller
     {
         $roles = Role::pluck('name','id');
         $kelompoks = Kelompok::pluck('name','id');
-        $users = User::find($id);
-        return view('ketua.peternak.editpeternak',
-        [
-            'roles' => $roles, 
-            'kelompoks' => $kelompoks,
-            'users' => $users,
-        ]);
+        $peternaks = User::find($id);
+        return view('ketua.peternak.editpeternak', compact('roles','kelompoks','peternaks'));
     }
 
     // public function update(Request $request, $id){
@@ -104,6 +99,8 @@ class PeternakController extends Controller
                 ->join('kandangs','kandangs.id','=','panens.kandang_id')
                 ->where('kandangs.user_id',$id)
                 ->paginate(5);
+                
+        $detailpanens->setPageName('other_page');
 
         $panenyuk = Panen::select(DB::raw('YEAR(panens.created_at) as year'))
                 ->join('kandangs','kandangs.id','=','panens.kandang_id')
@@ -113,8 +110,8 @@ class PeternakController extends Controller
                 ->get();
 
                 // return $panenyuk;
-        // return $panenyuk;
-        $detailpanens->setPageName('other_page');
+        
+        
 
         $categories = [];
         $data = [];
@@ -126,12 +123,25 @@ class PeternakController extends Controller
 
         $maps = Kandang::where('user_id', $id)->get();
 
-        // dd($data);
+        $jml_kandangs = Kandang::where('user_id', $id)->count();
+        $jml_panens = Panen::select(DB::raw('SUM(berat_panen) as total'))
+            ->join('kandangs','kandangs.id','=','panens.kandang_id')
+            ->where('kandangs.user_id',$id)
+            ->groupBy('user_id')
+            ->get();
+
+
+        foreach ($jml_panens as $panen) {
+            $jml_panen = (float)$panen->total;
+        }
+
+        // return $jml_panen;
+         // dd($jml_panen);
         // dd($categories);
         // dd($tahun);
         // dd($maps);
 
-        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens','categories', 'data','tahun','detailpanens','panenyuk','maps'));
+        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens','categories', 'data','tahun','detailpanens','panenyuk','maps','jml_kandangs','jml_panen'));
     }
 
     public function destroy($id)

@@ -29,23 +29,14 @@
                       </div>
                     </div>
                     <div class="card-body pt-0">
-                      <!-- <div class="row">
+                      <div class="row">
                         <div class="col">
                           <div class="card-profile-stats d-flex justify-content-center">
-                            <div>
-                              <span class="heading">22</span>
-                              <span class="description">Friends</span>
-                            </div>
-                            <div>
-                              <span class="heading">10</span>
-                              <span class="description">Photos</span>
-                            </div>
-                            <div>
-                              <span class="heading">89</span>
-                              <span class="description">Comments</span>
-                            </div>
+
+                            
+
                           </div>
-                        </div> -->
+                        </div>
                       </div>
                       <div class="text-center">
                         <h2>{{$users->name}}</h2>
@@ -64,6 +55,7 @@
                       </div>
                     </div>
                   </div> 
+        </div>
         <div class="col-xl-8 order-xl-1 float-right">
         <div class="card">
             <div class="card-header border-0">
@@ -97,6 +89,10 @@
                                         </div>
                                         <div class="form-group">
                                           <input type="text" name="user_id" class="form-control" id="exampleInputPassword1" value="{{$users->id}}" hidden="">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="exampleInputPassword1">URL</label>
+                                          <input type="text" name="tkUrl" class="form-control" id="exampleInputPassword1" placeholder="URL Thingspeak">
                                         </div>
                                         <div class="form-group">
                                           <label for="exampleInputPassword1">Location</label>
@@ -158,7 +154,7 @@
                   @if($kandangs->status == 1)
                     <a href="/ketua/explore/kandang/{{$kandangs->id}}" class="btn btn-sm btn-primary">Explore</a>
                     <a href="/ketua/explore/kandang/edit/{{$kandangs->id}}" class="btn btn-sm btn-success">Edit</a>
-                    <a href="#!" class="btn btn-sm btn-danger">Delete</a>
+                    <a href="/ketua/explore/kandang/delete/{{$kandangs->id}}" class="btn btn-sm btn-danger">Delete</a>
                   @endif
                   @if($kandangs->status == 0)
                     <a href="/ketua/explore/kandang/edit/{{$kandangs->id}}" class="btn btn-sm btn-success">Edit</a>
@@ -179,7 +175,7 @@
         <div class="col-xl-12">
             <div class="card">
               <div class="row">
-                  <div class="col-xl-2">
+                  <div class="col-xl-3">
                       <div class="form">
                         <form action="{{url('ketua/explore').'/'.$users->id}}" method="get">
                           <div class="form-group">
@@ -293,7 +289,12 @@
             </div>
           </div>
         </div>
-      <div id="mapyuk" style="width:100%; height:320px;"></div>
+
+      <div class="card p-3 mb-5">
+            <div class="card-header"><h2>Peta Lokasi Kandang Milik {{$users->name}}</h2></div>
+           <div id="mapyuk" style="width:100%; height:400px;"></div>
+      </div>
+     
     </div>
 </div>
 @endsection
@@ -393,7 +394,7 @@
 
     <script type="text/javascript">
         //Memasukkan data tabel ke array
-        array.push(['<?php echo $map->location?>','<?php echo $map->latitude?>','<?php echo $map->longitude?>','<?php echo $map->name?>']);
+        array.push(['<?php echo $map->location?>','<?php echo $map->latitude?>','<?php echo $map->longitude?>','<?php echo $map->name?>','<?php echo $map->user->name?>']);
     </script> 
 
     @endforeach
@@ -423,10 +424,10 @@
             return function() {
               var infoWindowContent = 
               '<div class="content"><p>'+
-              '<h6>'+array[i][0]+'</h6>'+
-              // '<img height="130" style="margin:0 auto; display:block;" src="assets/img/tempatsampah/'+array[i][4]+'"/><br/>'+
-              // 'Petugas yang Menambahkan : '+array[i][3]+'<br/>'+
-              // 'Titik Koordinat : '+array[i][1]+', '+array[i][2]+'<br/>'+
+              '<h2>'+array[i][3]+'</h2>'+
+              '<h4>'+array[i][0]+'</h4>'+
+              'Pemilik : '+array[i][4]+'<br/>'+
+              'Titik Koordinat : '+array[i][1]+', '+array[i][2]+'<br/>'+
               '</p></div>';
               infoWindow.setContent(infoWindowContent);
               infoWindow.open(peta, marker);

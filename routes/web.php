@@ -65,6 +65,7 @@ Route::get('/ketua/explore/{id}', 'PeternakController@explore');
 Route::get('/ketua/hapus/{id}', 'PeternakController@destroy');
 Route::get('/ketua/explore/kandang/{id}','KandangController@explore');
 Route::get('/ketua/explore/kandang/edit/{id}','KandangController@edit');
+Route::get('/ketua/explore/kandang/delete/{id}','KandangController@destroy');
 Route::post('/ketua/explore/kandang/update/{id}','KandangController@update');
 Route::post('/ketua/peternak/kandang/unggah','KandangController@store');
 Route::post('/ketua/peternak/kandang/aktivitas/unggah','KandangController@storeAktivitas'); 
@@ -72,7 +73,7 @@ Route::post('/ketua/peternak/kandang/aktivitas/unggah','KandangController@storeA
 // role : super user
 Route::get('/administrator/tambahuser', 'AdministratorController@tambahUser');
 Route::get('/administrator/kelompok', 'AdministratorController@tambahKelompok');
-Route::post('/administrator/buatuser', 'KonfirmasiController@userToConfirm');
+Route::post('/administrator/buatuser', 'AdministratorController@userToConfirm');
 Route::post('/administrator/buatkelompok', 'AdministratorController@buatKelompok');
 Route::get('/administrator/index', function () {
     return view('administrator.index');

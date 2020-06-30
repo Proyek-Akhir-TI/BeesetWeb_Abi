@@ -32,7 +32,7 @@
                             <div class="col-xl-6">
                                 <h4>: {{$kelompoks->address}}</h4>
                             </div>                        
-                       </div> 
+                       </div>
                 </div>
             </div>
         </div>

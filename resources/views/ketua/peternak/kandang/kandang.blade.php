@@ -51,6 +51,7 @@
                                 <h4>: {{$kandangs->location}}</h4>
                             </div>                        
                        </div>
+                       @if($kandangs->status == 1)
                        <div class="row">
                             <div class="col-xl-4">
                                 <h4><b>Status</b></h4>
@@ -59,10 +60,23 @@
                                 <h4>: Aktif
                                 </h4>
                             </div>                        
-                       </div>    
+                       </div>
+                       @endif
+                       @if($kandangs->status == 0)
+                       <div class="row">
+                            <div class="col-xl-4">
+                                <h4><b>Status</b></h4>
+                            </div>
+                            <div class="col-xl-6">
+                                <h4>: Tidak Aktif
+                                </h4>
+                            </div>                        
+                       </div>
+                       @endif    
                 </div>
             </div>
         </div>
+        @if($kandangs->status == 1)
         <div class="row">
             <div class="col-xl-6">
                 <div class="row">
@@ -175,6 +189,12 @@
         </div>
         </div>
     </div>
+    @endif
+    @if($kandangs->status == 0)
+      <div class="card">
+        <div class="card-header">Data Tidak Tersedia</div>
+      </div>
+    @endif
 @endsection
 
 @section('javascript')
@@ -182,7 +202,7 @@
 <script>
   Highcharts.chart('tryChart', {
     chart: {
-        type: 'area'
+        type: 'column'
     },
     title: {
         text: 'Grafik Jumlah Panen Kandang {{$kandangs->name}}'

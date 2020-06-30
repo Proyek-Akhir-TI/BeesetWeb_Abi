@@ -61,7 +61,7 @@ class KonfirmasiController extends Controller
                 \Storage::delete('public/uploads'. $input->photo);
             }
             $new_photo_path = $new_photo->storeAs(
-                'user_photobaru', $request->telp.'.'.$request->file('photo')->extension()
+                'public/uploads', 'user_photobaru'.$request->telp.'.'.$request->file('photo')->extension()
             );
             $input->photo = $new_photo_path;
         }

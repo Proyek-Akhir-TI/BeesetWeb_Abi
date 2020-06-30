@@ -19,7 +19,7 @@
             </div>
             <div class="table-responsive">
               <!-- Projects table -->
-              <table class="table align-items-center table-flush table-hover">
+              <table class="table align-items-center table-flush table-hover table-sm" style="width: 200px;">
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">No</th>
