@@ -107,7 +107,10 @@
                                           <input type="text" name="longitude" class="form-control" id="leng" placeholder="Enter Location">
                                         </div>
                                         <div class="form-group">
-                                          <input type="number" name="status" class="form-control" id="leng" value="1" readonly="" hidden>
+                                          <input type="number" name="status" class="form-control" value="1" readonly="" hidden>
+                                        </div>
+                                        <div class="form-group">
+                                          <input type="number" name="kelompok_id" class="form-control" value="{{ Auth::user()->kelompok_id }}" readonly="" hidden>
                                         </div>
                                         <div class="modal-footer">
                                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -129,6 +132,7 @@
                   <tr>
                     <th scope="col">No</th>
                     <th scope="col">Kandang</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -142,12 +146,14 @@
                        {{$no++}}
                     </td>
                     <td>
-                      @if($kandangs->status == 0)
                         {{$kandangs->name}}
-                        <h5 class="badge badge-pill text-capitalize badge-danger">Kandang Tidak Aktif</h5>
+                    </td>
+                    <td>
+                      @if($kandangs->status == 0)
+                        <h4 class="badge badge-pill text-capitalize badge-danger">Kandang Tidak Aktif</h4>
                       @endif
                       @if($kandangs->status == 1)
-                        {{$kandangs->name}}
+                      <h4 class="badge badge-pill text-capitalize badge-success">Kandang Aktif</h4>
                       @endif
                     </td>
                     <td>
@@ -158,6 +164,7 @@
                   @endif
                   @if($kandangs->status == 0)
                     <a href="/ketua/explore/kandang/edit/{{$kandangs->id}}" class="btn btn-sm btn-success">Edit</a>
+                    <a href="/ketua/explore/kandang/delete/{{$kandangs->id}}" class="btn btn-sm btn-danger">Delete</a>
                   @endif
                     </td>
                   </tr>
@@ -304,11 +311,6 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.js"></script>
 
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('.data').DataTable();
-	});
-</script>
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC68gJT0BtgwM_Mc8jMmC7T4FuTQ6IhISc&callback=initialize" type="application/javascript"></script>
 

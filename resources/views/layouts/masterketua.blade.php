@@ -20,7 +20,7 @@
 </head>
 
 <body>
-  @include('sweet::alert')
+   @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
   <!-- Sidenav -->
   <nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <div class="scrollbar-inner">
@@ -108,7 +108,7 @@
                   <i class="ni ni-user-run"></i>
                   <span>Logout</span> 
                 </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                <form id="logout-form" action="{{ route('logout') }}" method="get" style="display: none;">
                       @csrf
                 </form>
               </div>
@@ -134,7 +134,7 @@
   <script src="{{ asset('/vendor/chart.js/dist/Chart.extension.js') }}"></script>
   <!-- Argon JS -->
   <script src="{{ asset('/js/argon.js?v=1.2.0') }}"></script>
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+ <script src="{{ asset('/js/sweetalert.min.js') }}"></script>
   @yield('javascript')
 </body>
 

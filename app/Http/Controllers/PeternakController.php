@@ -18,14 +18,7 @@ use Storage;
 
 class PeternakController extends Controller
 {
-    public function __construct(){
-        $this->middleware(function ($request, $next) {
-            if(Gate::allows('ketua-role'))
-            return $next($request);
-            // abort(403, 'Anda tidak memiliki hak akses');
-            abort(redirect()->route('login'));
-        });
-    }
+    
     public function index()
     {
         //
@@ -106,7 +99,7 @@ class PeternakController extends Controller
                 ->join('kandangs','kandangs.id','=','panens.kandang_id')
                 ->where('kandangs.user_id',$id)
                 ->groupBy('year')
-                ->orderBy('year','desc')
+                ->orderBy('year','desc') 
                 ->get();
 
                 // return $panenyuk;
@@ -134,12 +127,6 @@ class PeternakController extends Controller
         foreach ($jml_panens as $panen) {
             $jml_panen = (float)$panen->total;
         }
-
-        // return $jml_panen;
-         // dd($jml_panen);
-        // dd($categories);
-        // dd($tahun);
-        // dd($maps);
 
         return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens','categories', 'data','tahun','detailpanens','panenyuk','maps','jml_kandangs','jml_panen'));
     }

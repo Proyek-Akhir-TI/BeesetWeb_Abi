@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/users', 'PeternakApiController@users');
-Route::post('/peternak/register', 'AuthController@register');
-Route::post('/peternak/login', 'AuthController@login');
+Route::post('/peternak/register', 'AuthApiController@register');
+Route::post('/peternak/login', 'AuthApiController@login');
 Route::post('/kelompok', 'PeternakApiController@kelompok');
 Route::get('/peternak/listkandang', 'PeternakApiController@kandang')->middleware('auth:api');

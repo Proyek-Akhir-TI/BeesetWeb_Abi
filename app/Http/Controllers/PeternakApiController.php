@@ -24,6 +24,6 @@ class PeternakApiController extends Controller
     public function kelompok(){
     	$kelompoks = Kelompok::pluck('name','id');
 
-    	return response()->json($kelompoks)
+    	return response()->json($kelompoks);
     }
 }

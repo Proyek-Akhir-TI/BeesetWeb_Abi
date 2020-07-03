@@ -41,7 +41,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     public function role(){
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo('App\Role', 'role_id');
     }
 
     public function kelompok(){
@@ -59,7 +59,7 @@ class User extends Authenticatable
     }
 
     public function isKetua(){
-        if($this->role->name == 'Ketua Kelompok'){
+        if($this->role_id == 3){
             return true;
         }
         return false;    
@@ -67,14 +67,14 @@ class User extends Authenticatable
     }
 
     public function isPj(){
-        if($this->role->name == 'Penanggung Jawab'){
+        if($this->role_id == 2){
             return true;
         }
         return false;
     }
 
-    public function isSu(){
-        if($this->role->name == 'Super User'){
+    public function isSuper(){
+        if($this->role_id == 1){
             return true;
         }
         return false;

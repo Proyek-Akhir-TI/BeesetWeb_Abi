@@ -7,20 +7,15 @@ use DB;
 use Illuminate\Support\Facades\Gate;
 use App\Kelompok;
 use App\User;
-use Alert;
+use App\Kandang;
+use App\Panen;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class KelompokController extends Controller
 {
-    public function __construct(){
-        $this->middleware(function ($request, $next) {
-            if(Gate::allows('pj-role'))
-            return $next($request);
-            // abort(403, 'Anda tidak memiliki hak akses');
-            abort(redirect()->route('login'));
-        });
-    }
+   
     /**
      * Display a listing of the resource.
      *
@@ -58,7 +53,7 @@ class KelompokController extends Controller
         DB::table('kelompoks')->insert([
             'name' => $request->name,
             'address' => $request->address,
-            'user_id' => $request->user_id
+            'user_id' => $request->user_id  
         ]);
         
         return redirect('/pj/tambahketua');
@@ -71,18 +66,52 @@ class KelompokController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
+    {   
+
         $kelompoks = Kelompok::find($id);
 
         $ketuas  = User::all()
             ->where('kelompok_id', $id)
             ->where('role_id', 3);
 
-        // $panens = Panen::
+        $kandangs = Kandang::where('kelompok_id', $id)->count();
 
-            // return $ketuas;
+        $panens = Panen::select(DB::raw('SUM(berat_panen) as total'))
+                ->join('kandangs','kandangs.id','=','panens.kandang_id')
+                ->where('kandangs.kelompok_id', $id)
+                ->get();
+        
+        $tables = Panen::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
+                ->join('kandangs','kandangs.id','=','panens.kandang_id')
+                ->where('kandangs.kelompok_id',$id)
+                ->paginate(5);
+        
 
-        return view('/pj/kelompok', compact('kelompoks', 'ketuas'));
+        $anggotas = User::all()
+            ->where('kelompok_id', $id)
+            ->where('role_id', 4)
+            ->count();
+
+
+        return view('/pj/kelompok', compact('kelompoks', 'ketuas', 'kandangs','anggotas','panens','tables'));
+    }
+
+    public function highlight()
+    {
+        $id = Auth::user()->id;
+        $datas = Panen::select('kandangs.kelompok_id as kelompok', 'kelompoks.name as name', 'kelompoks.address as address', DB::raw('SUM(berat_panen) as total'), 'panens.created_at as created_at')
+                ->join('kandangs','kandangs.id','=','panens.kandang_id')
+                ->join('kelompoks','kelompoks.id','=','kandangs.kelompok_id')
+                ->where('kelompoks.user_id', $id)
+                ->groupBy('kelompok')
+                ->paginate(10);
+        
+        $datas->setCollection($datas->sortByDesc('total'));
+
+        
+        return view('/pj/highlight', compact('datas'));
+
+        
     }
 
     /**
@@ -93,7 +122,9 @@ class KelompokController extends Controller
      */
     public function edit($id)
     {
-        //
+        $kelompoks = Kelompok::find($id);
+
+        return view('pj.editkelompok', compact('kelompoks'));
     }
 
     /**
@@ -105,7 +136,14 @@ class KelompokController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = Kelompok::find($id);
+        $input['name'] = $request->name;
+        $input['address'] = $request->address;
+        $input->save();
+
+        Alert::success('Kelompok Sudah Diedit', 'Edit Berhasil');
+
+        return redirect('/pj/daftarkelompok');
     }
 
     /**
@@ -127,11 +165,10 @@ class KelompokController extends Controller
             Storage::delete('public/uploads'.$val->photo);
         }
 
-        
 
         $anggota->delete();
 
-        alert()->success('Kelompok Sudah Dihapus', 'Hapus Berhasil')->persistent('Konfirmasi');
+        Alert::success('Kelompok Sudah Dihapus', 'Hapus Berhasil');
 
         return redirect('pj/daftarkelompok');
     }

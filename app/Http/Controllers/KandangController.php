@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Kandang;
 use App\AktivitasPeternak;
 use Illuminate\Support\Facades\Gate;
@@ -10,32 +11,30 @@ use App\AktivitasKandang;
 use App\JenisAktivitas;
 use App\Panen;
 use DB;
-use Alert;
 
 class KandangController extends Controller
 {
-    public function __construct(){
-        $this->middleware(function ($request, $next) {
-            if(Gate::allows('ketua-role'))
-            return $next($request);
-            // abort(403, 'Anda tidak memiliki hak akses');
-            abort(redirect()->route('login'));
-        });
-    }
 
     public function store(Request $request){
         
-        $input = new Kandang();
-        $input['name'] = $request->name;
-        $input['user_id'] = $request->user_id;
-        $input['tkUrl'] = $request->tkUrl;
-        $input['location'] = $request->location;
-        $input['latitude'] = $request->latitude;
-        $input['longitude'] = $request->longitude;
-        $input['status'] = $request->status;    
-        $input->save();
+    $input = ([
+        'name' => $request->name,
+        'user_id' => $request->user_id,
+        'tkUrl' => $request->tkUrl,
+        'location' => $request->location,
+        'latitude' => $request->latitude,
+        'longitude' => $request->longitude,
+        'status' => $request->status,
+        'kelompok_id' => $request->kelompok_id,
+    ]);
+    
+    $kandang_id = Kandang::create($input)->id;
+    
+    $panen = new Panen();
+    $panen->kandang_id = $kandang_id;
+    $panen->save();
 
-        alert()->success('Tambah Berhasil');
+    alert()->success('Tambah Berhasil');
 
         return back();
     }
@@ -52,19 +51,20 @@ class KandangController extends Controller
         $input->location = $request->location;
         $input->latitude = $request->latitude;
         $input->longitude = $request->longitude;
-        $input->status = $request->status;    
+        $input->status = $request->status;
+        $input->kelompok_id = $request->kelompok_id;    
         $input->save();
 
-        return redirect('/ketua/explore/kandang/{id}');
+        return back();
     }
 
-    public function storeAktivitas(Request $request)
-    {
-        $input = new AktivitasKandang();
-        $input['kandang_id'] = $request->kandang_id;
-        $input['aktivitas_id'] = $request->aktivitas_id;
-        $input->save();
-    }
+    // public function storeAktivitas(Request $request)
+    // {
+    //     $input = new AktivitasKandang();
+    //     $input['kandang_id'] = $request->kandang_id;
+    //     $input['aktivitas_id'] = $request->aktivitas_id;
+    //     $input->save();
+    // }
 
     public function explore($id, Request $request){
         $kandangs = Kandang::find($id);

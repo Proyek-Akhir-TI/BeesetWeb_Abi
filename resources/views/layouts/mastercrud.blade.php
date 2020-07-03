@@ -30,6 +30,7 @@
 </head>
 
 <body class="bg-orange">
+  @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
   <!-- Navbar -->
   <nav id="navbar-main" class="navbar navbar-horizontal navbar-transparent navbar-main navbar-expand-lg navbar-light">
     <div class="container">
@@ -86,6 +87,7 @@
   <script src="{{ asset('/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js') }}"></script>
   <!-- Argon JS -->
   <script src="{{ asset('/js/argon.js?v=1.2.0') }}"></script>
+  <script src="{{ asset('/js/sweetalert.min.js') }}"></script>
   @yield('javascript')
 </body>
 

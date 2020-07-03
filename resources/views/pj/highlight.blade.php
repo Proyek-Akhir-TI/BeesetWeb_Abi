@@ -1,7 +1,7 @@
 @extends('layouts.masterpj')
 
 @section('title')
-	<title>Beeset - Daftar Kelompok</title>
+	<title>Beeset - Highlight Kelompok</title>
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Daftar Kelompok</h3>
+                  <h3 class="mb-0">Hasil Panen Kelompok</h3>
                 </div>
               </div>
             </div>
@@ -24,35 +24,51 @@
                     <th scope="col">No</th>
                     <th scope="col">Nama Kelompok</th>
                     <th scope="col">Alamat</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">Hasil Panen</th>
+                    <th scope="col">Terakhir Panen</th>
                   </tr>
                 </thead>
                 <tbody>
                 @php
                   $no = 1;
                 @endphp
-                @foreach($kelompoks as $kelompok)
+                @foreach($datas as $data)
                   <tr>
                     <td>
                       {{$no++}}
                     </td>
                     <td> 
-                      {{$kelompok->name}}
+                      {{$data->name}}
                     </td>
                     <td>
-                      {{$kelompok->address}}
+                      {{$data->address}}
                     </td>
+                    @if($data->total > 0)
                     <td>
-                    <a href="/pj/kelompok/explore/{{$kelompok->id}}"  class="btn btn-sm btn-primary">Explore</a>
-                    <a href="/pj/editkelompok/{{$kelompok->id}}" class="btn btn-sm btn-success">Edit</a>
-                    <a href="/pj/kelompok/delete/{{$kelompok->id}}" class="btn btn-sm btn-danger">Delete</a>
+                      {{$data->total}} Kg
                     </td>
+                    @endif
+                    @if($data->total == null)
+                    <td>
+                      Belum Panen
+                    </td>
+                    @endif
+                    @if($data->total > 0)
+                    <td>
+                      {{$data->created_at->diffForHumans()}}
+                    </td>
+                    @endif
+                    @if($data->total == null)
+                    <td>
+                      Belum Panen
+                    </td>
+                    @endif
                   </tr>
                 @endforeach
                 </tbody>
               </table>
               <div class="float-right mb-3 mt-3">
-             		{{ $kelompoks->links()}}
+             	    {{$datas->links()}}
               </div>
             </div>
           </div>

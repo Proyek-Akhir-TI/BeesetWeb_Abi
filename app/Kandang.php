@@ -13,6 +13,11 @@ class Kandang extends Model
         'name', 
         'user_id', 
         'kelompok_id',
+        'tkUrl',
+        'location',
+        'latitude',
+        'longitude',
+        'status',
     ];
 
     public function kelompok(){

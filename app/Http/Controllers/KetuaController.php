@@ -7,7 +7,7 @@ use App\User;
 use App\Role;
 use App\Kelompok;
 use Image;
-use SweetAlert;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
@@ -15,14 +15,6 @@ use Illuminate\Validation\Rule;
 
 class KetuaController extends Controller
 {
-    public function __construct(){
-        $this->middleware(function ($request, $next) {
-            if(Gate::allows('pj-role'))
-            return $next($request);
-            // abort(403, 'Anda tidak memiliki hak akses');
-            abort(redirect()->route('login'));
-        });
-    }
     /**
      * Display a listing of the resource.
      *
@@ -129,13 +121,6 @@ class KetuaController extends Controller
      */
     public function destroy($id)
     {
-        $ketua = User::findOrFail($id);
-
-        // if($users->photo)
-        // Storage::delete('public/uploads'.$users->photo);
-
-        $ketua->delete();
-
-        return redirect('pj.listkelompok');
+        
     }
 }
