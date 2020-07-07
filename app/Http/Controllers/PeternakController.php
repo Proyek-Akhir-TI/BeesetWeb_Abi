@@ -16,6 +16,8 @@ use App\Panen;
 use Illuminate\Support\Facades\Gate;
 use Storage;
 
+
+
 class PeternakController extends Controller
 {
     
@@ -44,14 +46,14 @@ class PeternakController extends Controller
                 
 
         // $user = User::all(); 
-        return view('ketua.peternak.verifikasi', compact('user'));
+        return view('ketua.peternak.konfirmasi', compact('user'));
     }
 
     public function detailToConfirm($id){
 
        $peternaks = User::find($id);
 
-        return view('ketua.peternak.verifikasidetail', compact('peternaks'));
+        return view('ketua.peternak.detailkonfirmasi', compact('peternaks'));
     }
 
     public function edit($id)
@@ -81,7 +83,7 @@ class PeternakController extends Controller
         //         ->where('user_id', $id)
         //         ->where('aktivitas_id', 1);
        $panens = Panen::
-                select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at', DB::raw('SUM(berat_panen) as total'))
+                select('kandangs.name as name','panens.berat_panen as berat', DB::raw('SUM(berat_panen) as total'))
                 ->join('kandangs','kandangs.id','=','panens.kandang_id')
                 ->where('kandangs.user_id',$id)
                 ->whereYear('panens.created_at',$tahun)
@@ -92,7 +94,8 @@ class PeternakController extends Controller
                 ->join('kandangs','kandangs.id','=','panens.kandang_id')
                 ->where('kandangs.user_id',$id)
                 ->paginate(5);
-                
+        
+        $kandang->setPageName('page');
         $detailpanens->setPageName('other_page');
 
         $panenyuk = Panen::select(DB::raw('YEAR(panens.created_at) as year'))
@@ -100,10 +103,7 @@ class PeternakController extends Controller
                 ->where('kandangs.user_id',$id)
                 ->groupBy('year')
                 ->orderBy('year','desc') 
-                ->get();
-
-                // return $panenyuk;
-        
+                ->get();       
         
 
         $categories = [];
@@ -128,7 +128,16 @@ class PeternakController extends Controller
             $jml_panen = (float)$panen->total;
         }
 
-        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas','panens','categories', 'data','tahun','detailpanens','panenyuk','maps','jml_kandangs','jml_panen'));
+        return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas',
+        'panens','categories', 'data','tahun','detailpanens','panenyuk','maps','jml_kandangs','jml_panen'));
+    }
+
+    public function lokasi($id){
+        $users = User::find($id);
+        $maps = Kandang::where('user_id', $id)->get();
+
+        return view('/ketua/peternak/kandang/lokasi', compact('users','maps'));
+
     }
 
     public function destroy($id)

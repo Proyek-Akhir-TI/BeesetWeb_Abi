@@ -5,6 +5,42 @@
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
 @endsection
 
+@section('ul')
+<ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/pj/index">
+                <i class="ni ni-tv-2 text-orange"></i>
+                <span class="nav-link-text">Beranda</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pj/tambahkelompok">
+                <i class="ni ni-fat-add text-orange"></i>
+                <span class="nav-link-text">Tambah Kelompok</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pj/daftarkelompok">
+                <i class="ni ni-align-center text-orange"></i>
+                <span class="nav-link-text">Daftar Kelompok</span>
+              </a>
+            </li>
+          </ul>
+<hr class="my-3">
+          <!-- Heading -->
+                <h6 class="navbar-heading p-0 text-muted">
+                    <span class="docs-normal">Opsi {{$kelompoks->name}}</span>
+                </h6>
+          <ul class="navbar-nav mb-md-3">
+            <li class="nav-item">
+              <a class="nav-link active" href="/pj/kelompok/explore/{{$kelompoks->id}}">
+                <i class="ni ni-chart-bar-32 text-orange"></i>
+                <span class="nav-link-text">Detail Kelompok</span>
+              </a>
+            </li>
+          </ul>
+@endsection
+
 @section('content')
     <div class="container-fluid mt-3">
         <div class="row">
@@ -72,14 +108,24 @@
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="table-responsive pt-4">
+        <div class="row">
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0">Tinjauan Panen Anggota Kelompok {{$kelompoks->name}}</h3>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
                 <!-- Projects table -->
                 <table class="table align-items-center table-flush table-hover">
                     <thead class="thead-light">
                     <tr>
                         <th scope="col">No</th>
                         <th scope="col">Kandang</th>
+                        <th scope="col">Peternak</th>
                         <th scope="col">Berat</th>
                         <th scope="col">Waktu</th>
                     </tr>
@@ -97,6 +143,9 @@
                             {{$val->name}}
                         </td>
                         <td>
+                            {{$val->peternak}}
+                        </td>
+                        <td>
                             {{$val->berat}} Kg
                         </td>
                         <td>
@@ -110,7 +159,9 @@
                 <div class="float-right">{{$tables->links()}}</div>
                 </div>
             </div>
+          </div>
         </div>
+      </div>   
     </div>
 @endsection
 

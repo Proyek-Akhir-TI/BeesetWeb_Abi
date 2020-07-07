@@ -83,8 +83,8 @@
                             <div class="col-xl-4">
                                 <h4><b>Tanggal Daftar</b></h4>
                             </div>
-                            <div class="col-xl-4">
-                                <h4>: {{$peternaks->created_at}}</h4>
+                            <div class="col-xl-5">
+                                <h4>: {{\Carbon\Carbon::parse($peternaks->created_at)->isoFormat('LLLL')}}</h4>
                             </div>                        
                        </div>
                        <div class="row mt-4">

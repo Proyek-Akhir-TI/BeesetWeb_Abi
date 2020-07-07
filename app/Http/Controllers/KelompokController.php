@@ -49,7 +49,7 @@ class KelompokController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    { 
         DB::table('kelompoks')->insert([
             'name' => $request->name,
             'address' => $request->address,
@@ -81,11 +81,11 @@ class KelompokController extends Controller
                 ->where('kandangs.kelompok_id', $id)
                 ->get();
         
-        $tables = Panen::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
+        $tables = Panen::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at','users.name as peternak')
                 ->join('kandangs','kandangs.id','=','panens.kandang_id')
+                ->join('users','users.id','=','kandangs.user_id')
                 ->where('kandangs.kelompok_id',$id)
                 ->paginate(5);
-        
 
         $anggotas = User::all()
             ->where('kelompok_id', $id)

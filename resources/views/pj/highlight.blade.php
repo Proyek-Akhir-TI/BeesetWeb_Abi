@@ -4,6 +4,29 @@
 	<title>Beeset - Highlight Kelompok</title>
 @endsection
 
+@section('ul')
+<ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" href="/pj/index">
+                <i class="ni ni-tv-2 text-orange"></i>
+                <span class="nav-link-text">Beranda</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pj/tambahkelompok">
+                <i class="ni ni-fat-add text-orange"></i>
+                <span class="nav-link-text">Tambah Kelompok</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pj/daftarkelompok">
+                <i class="ni ni-align-center text-orange"></i>
+                <span class="nav-link-text">Daftar Kelompok</span>
+              </a>
+            </li>
+          </ul>
+@endsection
+
 @section('content')
 	<div class="container-fluid mt-5">
       <div class="row">

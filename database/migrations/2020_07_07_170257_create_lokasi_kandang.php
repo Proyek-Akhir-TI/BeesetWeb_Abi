@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePanensTable extends Migration
+class CreateLokasiKandang extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreatePanensTable extends Migration
      */
     public function up()
     {
-        Schema::create('panens', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('lokasi_kandang', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('kandang_id')->unsigned()->nullable();
             $table->foreign('kandang_id')
                 ->references('id')
                 ->on('kandangs')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->integer('berat_panen');
+            $table->string('latitude');
+            $table->string('logitude');
             $table->timestamps();
         });
     }
@@ -33,6 +34,6 @@ class CreatePanensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('panens');
+        Schema::dropIfExists('lokasi_kandang');
     }
 }

@@ -51,15 +51,16 @@
                       {{$peternak->address}}
                     </td>
                     <td>
-                    <a href="/ketua/detalverifikasi/{{$peternak->id}}"  class="btn btn-sm btn-primary">Detail</a>
+                    <a href="/ketua/detailkonfirmasi/{{$peternak->id}}"  class="btn btn-sm btn-primary">Detail</a>
                     <a href="/ketua/edit/{{$peternak->id}}" class="btn btn-sm btn-success">Edit</a>
-                    <a href="#!" class="btn btn-sm btn-danger">Hapus</a>
+                    <a href="/ketua/hapus/{{$peternak->id}}" class="btn btn-sm btn-danger">Hapus</a>
                     </td>
                   </tr>
                 @endforeach
                 </tbody>
               </table>
               <div class="float-right mb-3 mt-3"> 
+                {{--$user->links()--}}
               </div>
             </div>
           </div>

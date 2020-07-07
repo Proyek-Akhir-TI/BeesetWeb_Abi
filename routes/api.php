@@ -23,3 +23,4 @@ Route::post('/peternak/register', 'AuthApiController@register');
 Route::post('/peternak/login', 'AuthApiController@login');
 Route::post('/kelompok', 'PeternakApiController@kelompok');
 Route::get('/peternak/listkandang', 'PeternakApiController@kandang')->middleware('auth:api');
+Route::post('peternak/panen', 'PeternakApiController@getBeratPanen');

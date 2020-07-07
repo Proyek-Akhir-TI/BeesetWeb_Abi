@@ -11,6 +11,7 @@ use App\AktivitasKandang;
 use App\JenisAktivitas;
 use App\Panen;
 use DB;
+use Carbon\Carbon;
 
 class KandangController extends Controller
 {
@@ -58,16 +59,18 @@ class KandangController extends Controller
         return back();
     }
 
-    // public function storeAktivitas(Request $request)
-    // {
-    //     $input = new AktivitasKandang();
-    //     $input['kandang_id'] = $request->kandang_id;
-    //     $input['aktivitas_id'] = $request->aktivitas_id;
-    //     $input->save();
-    // }
+    public function storeAktivitas(Request $request)
+    {
+        $input = new AktivitasKandang();
+        $input['kandang_id'] = $request->kandang_id;
+        $input['aktivitas_id'] = $request->aktivitas_id;
+        $input->save();
+    }
 
     public function explore($id, Request $request){
         $kandangs = Kandang::find($id);
+
+        // $qr = 
 
         $jenisaktivitas = JenisAktivitas::pluck('aktivitas','id');
 
@@ -81,13 +84,11 @@ class KandangController extends Controller
         $tahun = $request->tahun;
 
         $panens = Panen::
-            select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at', DB::raw('SUM(berat_panen) as total'))
+            select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
             ->join('kandangs','kandangs.id','=','panens.kandang_id')
             ->where('panens.kandang_id',$id)
             ->whereYear('panens.created_at',$tahun)
-            // ->groupBy('kandang_id')
             ->get();
-            // DB::raw('MONTH(panens.created_at) as month'),
 
         $panenyuk = Panen::select(DB::raw('YEAR(panens.created_at) as year'))
                 ->join('kandangs','kandangs.id','=','panens.kandang_id')
@@ -100,14 +101,21 @@ class KandangController extends Controller
         $data = [];
 
         foreach ($panens as $panen) {
-            $categories[] = $panen->created_at;
-            $data[] = (float)$panen->total;
+            $categories[] = \Carbon\Carbon::parse($panen->created_at)->isoFormat('LL');
+            $data[] = $panen->berat;
         }
 
         // dd($categories);
         // dd($data);
         
         return view('ketua.peternak.kandang.kandang', compact('kandangs', 'aktivitas', 'listaktivitas','kandang','jenisaktivitas','categories','data','tahun', 'panens','panenyuk')); 
+    }
+
+    public function lokasi($id){
+        $maps = Kandang::where('id', $id)->get();
+
+        return view('/ketua/peternak/kandang/lokasi2', compact('maps'));
+
     }
 
     public function destroy($id)

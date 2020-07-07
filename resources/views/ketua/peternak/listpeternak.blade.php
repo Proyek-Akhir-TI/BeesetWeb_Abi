@@ -19,7 +19,7 @@
             </div>
             <div class="table-responsive">
               <!-- Projects table -->
-              <table class="table align-items-center table-flush table-hover table-sm" style="width: 200px;">
+              <table class="table align-items-center table-flush table-hover" >
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">No</th>
@@ -70,8 +70,4 @@
     </div>
     <div>
   </div>
-@endsection
-
-@section('javascript')
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 @endsection

@@ -33,11 +33,11 @@ class AuthController extends Controller
             }
             elseif (auth()->user()->role_id == 2) {
                 Alert::success('Selamat datang Penanggung Jawab');
-                return redirect()->route('pj.listkelompok');
+                return redirect()->route('pj.highlight');
             }
             elseif (auth()->user()->role_id == 3) {
                 Alert::success('Selamat datang Ketua Kelompok');
-                return redirect()->route('ketua.listpeternak');
+                return redirect()->route('ketua.konfirmasipeternak');
             }
         }
         SweetAlert::error('Akun tidak ditemukan','Gagal');

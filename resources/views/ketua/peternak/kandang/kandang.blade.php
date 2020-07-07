@@ -1,11 +1,30 @@
-@extends('layouts.masterkandang')
+@extends('layouts.masterketua')
 
 @section('title')
-  <title>Beeset - Cage</title>
+  <title>Beeset - Kandang</title>
+@endsection
+
+@section('ul')
+<hr class="my-3">
+          <!-- Heading -->
+                <h6 class="navbar-heading p-0 text-muted">
+                    <span class="docs-normal">Opsi {{$kandangs->name}}</span>
+                </h6>
+          <ul class="navbar-nav mb-md-3">
+            <li class="nav-item">
+              <a class="nav-link active" href="/ketua/explore/kandang/{{$kandangs->id}}">
+                <i class="ni ni-chart-bar-32 text-orange"></i>
+                <span class="nav-link-text">Performa Kandang</span>
+              </a>
+            </li>
+          </ul>
 @endsection
 
 @section('content')
     <div class="container-fluid mt-3">
+    <div class="row ml-1 mt-4 mb-4">
+        <h1>Performa Kandang</h1>
+    </div>
         <div class="row">
             <div class="col-xl-6">
                 <div class="card card-profile p-4">
@@ -79,29 +98,38 @@
         @if($kandangs->status == 1)
         <div class="row">
             <div class="col-xl-6">
-                <div class="row">
-                  <div class="col-xl-12">
-                      <form action="{{url('ketua/explore/kandang').'/'.$kandangs->id}}" method="get">
-                          <div class="form-group">
-                                <div class="input-group input-group-merge input-group-alternative mb-3">
-                                      <div class="input-group-prepend">
-                                        <span class="input-group-text bg-light text-darker">Tahun</span>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                      <div class="row">
+                          <div class="col-xl-5">
+                                <form action="{{url('ketua/explore/kandang').'/'.$kandangs->id}}" method="get">
+                                  <div class="row pt-4 pl-3">
+                                      <div class="col-xl-10">
+                                        <div class="form-group">
+                                              <div class="input-group input-group-merge input-group-alternative mb-3">
+                                                    <div class="input-group-prepend">
+                                                      <span class="input-group-text bg-light text-darker">Tahun</span>
+                                                    </div>
+                                                    <select class="form-control text-darker pl-2" name="tahun">
+                                                      @foreach ($panenyuk as $val)
+                                                        <option value="{{$val->year}}" @if($val->year == $tahun) {{'selected="selected"'}} @endif >{{$val->year}}</option>
+                                                      @endforeach
+                                                    </select>
+                                              </div>
+                                        </div>
                                       </div>
-                                      <select class="form-control text-darker pl-2" name="tahun">
-                                        @foreach ($panenyuk as $val)
-                                          <option value="{{$val->year}}"
-                                           @if($val->year == $tahun)     
-                                            {{'selected="selected"'}} 
-                                            @endif >{{$val->year}}</option>
-                                         @endforeach
-                                      </select>
-                                </div>
+                                      <div class="col-xl-1">
+                                        <button type="submit" class="btn btn-primary">Filter  </button>
+                                      </div>
+                                  </div>
+                                  </form>
                           </div>
-                          <button type="submit" class="btn btn-primary">Pilih</button>
-                          </form>
-                  </div>
+                      </div> 
+                        <div id="tryChart"></div>
+                    </div>    
+                </div>
               </div>
-                <div id="tryChart" class="card pt-3"></div>
             </div>
             <div class="col-xl-6">
           <div class="card">
@@ -202,7 +230,7 @@
 <script>
   Highcharts.chart('tryChart', {
     chart: {
-        type: 'column'
+        type: 'area'
     },
     title: {
         text: 'Grafik Jumlah Panen Kandang {{$kandangs->name}}'

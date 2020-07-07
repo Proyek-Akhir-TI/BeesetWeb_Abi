@@ -37,24 +37,19 @@
           <!-- Nav items -->
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" href="/ketua/index">
-                <i class="ni ni-tv-2 text-orange"></i>
-                <span class="nav-link-text">Dashboard</span>
-              </a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="/ketua/konfirmasipeternak">
                 <i class="ni ni-bell-55 text-orange"></i>
-                <span class="nav-link-text">Un-Verify Farmer</span>
+                <span class="nav-link-text">Beranda</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/ketua/listpeternak">
                 <i class="ni ni-align-center text-orange"></i>
-                <span class="nav-link-text">Farmer List</span>
+                <span class="nav-link-text">Daftar Peternak</span>
               </a>
             </li>
           </ul>
+          @yield('ul')
         </div>
       </div>
     </div>
