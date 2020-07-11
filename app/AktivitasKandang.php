@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class AktivitasKandang extends Model
 {
+    protected $table = 'aktivitas_kandang';
     //
-    public function aktivitasKandang(){
-        return $this->belongsTo('App\JenisAktivitas','aktivitas_id');
-    }
+    // public function aktivitasKandang(){
+    //     return $this->belongsTo('App\JenisAktivitas','aktivitas_id');
+    // }
 
 }

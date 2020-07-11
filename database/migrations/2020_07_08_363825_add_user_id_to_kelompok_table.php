@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSarangsTable extends Migration
+class AddUserIdToKelompokTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,13 @@ class CreateSarangsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sarangs', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('kandang_id')->unsigned()->nullable();
-            $table->foreign('kandang_id')
-                ->references('id')
-                ->on('kandangs')
+        Schema::table('kelompok', function (Blueprint $table) {
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')
+                ->references('id_user')
+                ->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->integer('berat_panen');
-            $table->timestamps();
         });
     }
 
@@ -33,6 +30,8 @@ class CreateSarangsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sarangs');
+        Schema::table('kelompok', function (Blueprint $table) {
+            //
+        });
     }
 }

@@ -8,7 +8,8 @@ use App\Kelompok;
 
 class Kandang extends Model
 {
-    //
+    protected $table = 'kandang';
+
     protected $fillable = [
         'name', 
         'user_id', 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKandangsTable extends Migration
+class CreateLokasiKandangTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreateKandangsTable extends Migration
      */
     public function up()
     {
-        Schema::create('kandangs', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->integer('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
+        Schema::create('lokasi_kandang', function (Blueprint $table) {
+            $table->bigIncrements('id_aktivitas_kandang');
+            $table->bigInteger('kandang_id')->unsigned()->nullable();
+            $table->foreign('kandang_id')
+                ->references('id_kandang')
+                ->on('kandang')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->string('location')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->timestamps();
@@ -36,6 +34,6 @@ class CreateKandangsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kandangs');
+        Schema::dropIfExists('lokasi_kandang');
     }
 }

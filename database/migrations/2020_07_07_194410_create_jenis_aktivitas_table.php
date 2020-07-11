@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStatusToKandangs extends Migration
+class CreateJenisAktivitasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddStatusToKandangs extends Migration
      */
     public function up()
     {
-        Schema::table('kandangs', function (Blueprint $table) {
-            $table->integer('status')->nullable();
+        Schema::create('jenis_aktivitas', function (Blueprint $table) {
+            $table->bigIncrements('id_jenis_aktivitas');
+            $table->string('aktivitas');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ class AddStatusToKandangs extends Migration
      */
     public function down()
     {
-        Schema::table('kandangs', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('jenis_aktivitas');
     }
 }

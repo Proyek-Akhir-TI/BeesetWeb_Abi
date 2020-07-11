@@ -14,6 +14,8 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $table = 'users';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -45,7 +47,7 @@ class User extends Authenticatable
     }
 
     public function kelompok(){
-        return $this->belongsTo('App\Kelompok');
+        return $this->belongsTo('App\Kelompok', 'kelompok_id');
     }
 
     public function kandang()
