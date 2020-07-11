@@ -8,7 +8,7 @@
 <hr class="my-3">
           <!-- Heading -->
                 <h6 class="navbar-heading p-0 text-muted">
-                    <span class="docs-normal">Opsi {{$kandangs->name}}</span>
+                    <span class="docs-normal">Opsi {{$kandangs->nama}}</span>
                 </h6>
           <ul class="navbar-nav mb-md-3">
             <li class="nav-item">
@@ -33,69 +33,71 @@
                         <div class="col-xl-6">
                             <h2 class="text-orange">Informasi Kandang<h2>
                         </div>
-                        <div class="col-xl-6">
-                            
-                        </div>
+                        
                       </div>
                     </div> 
                       <div class="row">
                             <div class="col-xl-4">
                                 <h4><b>Nama Kandang</b></h4>
                             </div>
-                            <div class="col-xl-6">
-                                <h4>: {{$kandangs->name}}</h4>
+                            <div class="col-xl-5">
+                                <h4>: {{$kandangs->nama}}</h4>
                             </div>                        
                        </div>
                        <div class="row">
                             <div class="col-xl-4">
                                 <h4><b>Nama Pemilik</b></h4>
                             </div>
-                            <div class="col-xl-6">
-                                <h4>: {{$kandangs->user->name}}</h4>
+                            <div class="col-xl-5">
+                                <h4>: {{$kandangs->user->nama}}</h4>
                             </div>                        
                        </div> 
                        <div class="row">
                             <div class="col-xl-4">
                                 <h4><b>Kelompok</b></h4>
                             </div>
-                            <div class="col-xl-6">
-                                <h4>: {{$kandangs->user->kelompok->name}}</h4>
+                            <div class="col-xl-5">
+                                <h4>: {{$kandangs->user->kelompok->nama}}</h4>
                             </div>                        
                        </div>
                        <div class="row">
-                            <div class="col-xl-4">
-                                <h4><b>Lokasi</b></h4>
+                            <div class="col-xl-4  ">
+                                <h4><b>Total Madu Yang Dipanen</b></h4>
                             </div>
-                            <div class="col-xl-6">
-                                <h4>: {{$kandangs->location}}</h4>
+                            <div class="col-xl-5">
+                                <h4>: {{$jml_panen}} Kg</h4>
                             </div>                        
                        </div>
-                       @if($kandangs->status == 1)
                        <div class="row">
-                            <div class="col-xl-4">
-                                <h4><b>Status</b></h4>
-                            </div>
-                            <div class="col-xl-6">
-                                <h4>: Aktif
-                                </h4>
-                            </div>                        
-                       </div>
-                       @endif
-                       @if($kandangs->status == 0)
-                       <div class="row">
-                            <div class="col-xl-4">
-                                <h4><b>Status</b></h4>
-                            </div>
-                            <div class="col-xl-6">
-                                <h4>: Tidak Aktif
-                                </h4>
-                            </div>                        
-                       </div>
-                       @endif    
+                          <div class="col-xl-6">
+                          <input id="text" value="Kandang = {{$kandangs->nama}}, Pemilik = {{$kandangs->user->nama}}, Kelompok = {{$kandangs->user->kelompok->nama}}, Alamat = " type="text" hidden/><br />
+                          <button id="btn-qrcode" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Qr Code</button>
+                          <button id="btn-qrcode" class="btn btn-sm btn-success">Cetak</button>
+                          </div>
+                        </div>                                           
                 </div>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Pindai Saya !</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                              <div id="qrcode"></div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Keluar</button>
+                            <button type="button" class="btn btn-success">Cetak</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                
             </div>
         </div>
-        @if($kandangs->status == 1)
         <div class="row">
             <div class="col-xl-6">
             <div class="row">
@@ -103,7 +105,7 @@
                     <div class="card">
                       <div class="row">
                           <div class="col-xl-5">
-                                <form action="{{url('ketua/explore/kandang').'/'.$kandangs->id}}" method="get">
+                                <form action="{{url('ketua/explore/kandang').'/'.$kandangs->id_kandang}}" method="get">
                                   <div class="row pt-4 pl-3">
                                       <div class="col-xl-10">
                                         <div class="form-group">
@@ -164,8 +166,8 @@
                                         <div class="form-group">
                                           <label for="exampleInputPassword1">Aktivitas</label>
                                           <select class="form-control" name="aktivitas_id">
-                                            @foreach ($jenisaktivitas as $id => $name)
-                                              <option value="{{ $id }}">{{ $name }}</option>
+                                            @foreach ($jenisaktivitas as $id => $nama)
+                                              <option value="{{ $id }}">{{ $nama }}</option>
                                             @endforeach
                                           </select>
                                         </div>
@@ -200,7 +202,7 @@
                       {{$no++}}
                     </td>
                     <td> 
-                      {{$akt->aktivitasKandang->aktivitas}}
+                      {{$akt->aktivitas}}
                     </td>
                     <td>
                       {{$akt->created_at->diffForHumans()}}
@@ -217,16 +219,10 @@
         </div>
         </div>
     </div>
-    @endif
-    @if($kandangs->status == 0)
-      <div class="card">
-        <div class="card-header">Data Tidak Tersedia</div>
-      </div>
-    @endif
 @endsection
 
 @section('javascript')
-  <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
 <script>
   Highcharts.chart('tryChart', {
     chart: {
@@ -266,6 +262,23 @@
 
     }]
 });
+</script>
+<script src="{{ asset('/js/qrcode.min.js') }}"></script>
+<script>
+    let input = document.querySelector('#text');
+    let button = document.querySelector('#btn-qrcode');
+    let qrcode = new QRCode(document.querySelector('#qrcode'), {
+        
+        width: 200,
+        height: 200,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+    button.addEventListener('click', () => {
+      let inputValue = input.value;
+      qrcode.makeCode(inputValue);
+    })
 </script>
 @endsection
 
