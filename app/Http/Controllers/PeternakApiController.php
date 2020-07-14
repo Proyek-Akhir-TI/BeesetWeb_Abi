@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Kandang;
 use App\Panen;
+use App\Kelompok;
+use App\LokasiKandang;
+
 
 class PeternakApiController extends Controller
 {
@@ -23,9 +26,11 @@ class PeternakApiController extends Controller
     }
 
     public function kelompok(){
-    	$kelompoks = Kelompok::pluck('name','id');
+        $kelompoks = Kelompok::where('id', '!=', 1)
+            ->where('id','!=', 2)
+            ->get();
 
-    	return response()->json($kelompoks);
+    	return response()->json(["kel" => $kelompoks]);
     }
 
     public function  inputaktivitas(){
@@ -151,14 +156,72 @@ class PeternakApiController extends Controller
         return response()->json($panen);
     }
 
+//Kandang
+
+    public function storeKandang(Request $request){
+        $image = $request->photo;  // your base64 encoded
+         $imageName =  $request->get('nama').time().'.jpeg';
+         \File::put(public_path('storage/kandang/') . $imageName, base64_decode($image));
+        $input = ([
+            'nama' => $request->name,
+            'user_id' => $request->user_id,
+            'url' => $request->url,
+            'kelompok_id' => $request->kelompok_id,
+            'foto' => $imageName,
+        ]);
+        
+        $kandang_id = Kandang::create($input)->id;
+        
+        $panen = new Panen();
+        $panen->kandang_id = $kandang_id;
+        $panen->save();
+    
+        $lokasi = new LokasiKandang();
+        $lokasi->kandang_id = $kandang_id;
+        $lokasi->save();
+    
+        return response()->json($input);
+        }
+    
+        public function updateKandang(Request $request, $id)
+        {
+            
+            $nama= $request->nama;
+            $user_id = $request->user_id;
+            $kelompok_id = $request->kelompok_id;   
+            $new_photo = $request->file('foto');
+            if($new_photo){
+                if($input->foto && file_exists(storage_path('app/public/uploads' .$input->foto))){
+                \Storage::delete('public/uploads'. $input->foto);
+            }
+            $new_photo_path = $new_photo->storeAs(
+                'public/uploads', 'kandang_photobaru'.time().'.'.$request->file('foto')->extension()
+            );
+            $input->photo = $new_photo_path;
+            }   
+            $input->save();
+            
+            return response()->json($input);
+        }
+        
     public function getLokasiKandang(Request $request)
     {
-        $panen = new Panen([
-            'kandang_id' => $request->get('kandang_id'),
-            'berat_panen' => $request->get('berat_panen')
-            ]);
-        $panen->save();
+        $kandang_id = $request->kandang_id;
+        $latitude = $request->latitude;
+        $longitude = $request->longitude;
 
-        return response()->json($panen);
+        $input = LokasiKandang::where('kandang_id', $kandang_id)->first();
+
+        if($latitude == $input->latitude || $longitude == $input->longitude ) {
+            return response()->json("Gagal Update", 422);
+        }
+        else{
+            $input->latitude = $request->latitude;
+            $input->longitude = $request->longitude;
+            $input->save();
+
+            return response()->json("Update Berhasil", 201);
+        }
+
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Role;
 use App\Kelompok;
+use App\Notif;
 use DB;
 use Image;	
 use Illuminate\Support\Facades\Hash;
@@ -48,26 +49,21 @@ class KonfirmasiController extends Controller
         ]);
 
         $input = User::find($id);
-        $input->name = $request->name;
-        $input->email = $request->email;
-        $input->password = Hash::make($request->password);
-        $input->role_id = $request->role_id;
-        $input->kelompok_id = $request->kelompok_id;
-        $input->address = $request->address;
-        $input->telp = $request->telp;
-        $new_photo = $request->file('photo');
-        if($new_photo){
-            if($input->photo && file_exists(storage_path('app/public/uploads' .$input->photo))){
-                \Storage::delete('public/uploads'. $input->photo);
-            }
-            $new_photo_path = $new_photo->storeAs(
-                'public/uploads', 'user_photobaru'.$request->telp.'.'.$request->file('photo')->extension()
-            );
-            $input->photo = $new_photo_path;
-        }
         $input->status = $request->status;
         $input->save();
 
-        return redirect('/ketua/listpeternak');
+        $input = User::find($id);
+   
+        $input->status = $request->status;
+        $input->save();
+        $notif = new Notif();
+        $token = $input->api_firebase;
+
+        $pesan = 'Akun Beeset Anda Aktif';
+       
+        $judul = $input->nama;
+        $notif->suhu2($token, $judul, $pesan);
+
+        return view('/ketua/listpeternak');
     }
 }
