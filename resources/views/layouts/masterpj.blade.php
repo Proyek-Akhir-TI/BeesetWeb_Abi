@@ -17,6 +17,7 @@
   <!-- Page plugins -->
   <!-- Argon CSS -->
   <link rel="stylesheet" href="{{ asset('/css/argon.css?v=1.2.0') }}" type="text/css">
+  <link rel="stylesheet" href="{{ asset('/css/print.min.js') }}" type="text/css">
 </head>
 
 <body>
@@ -26,7 +27,7 @@
     <div class="scrollbar-inner">
       <!-- Brand -->
       <div class="sidenav-header  align-items-center">
-        <a class="navbar-brand" href="/pj/index">
+        <a class="navbar-brand" href="{{route('pj.beranda')}}">
           <img src="{{ asset('/img/brand/logo.png')}}"> 
           <!-- <img src="/img/brand/blue.png" class="navbar-brand-img" alt="..."> -->
         </a>
@@ -69,8 +70,11 @@
             <li class="nav-item dropdown">
               <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="media align-items-center">
+                  <span class="avatar avatar-sm rounded-circle">
+                    <img alt="Image placeholder" src="{{ asset('storage/uploads/'.Auth::user()->photo)}}">
+                  </span>
                   <div class="media-body  ml-2  d-none d-lg-block">
-                    <span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->name }}</span>
+                    <span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->nama }}</span>
                   </div>
                 </div>
               </a>
@@ -117,6 +121,7 @@
   <!-- Argon JS -->
   <script src="{{ asset('/js/argon.js?v=1.2.0') }}"></script>
   <script src="{{ asset('/js/sweetalert.min.js') }}"></script>
+  <script src="{{ asset('/js/print.js') }}"></script>
   @yield('javascript')
 </body>
 

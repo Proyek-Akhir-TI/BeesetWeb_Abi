@@ -17,6 +17,7 @@
   <!-- Page plugins -->
   <!-- Argon CSS -->
   <link rel="stylesheet" href="{{ asset('/css/argon.css?v=1.2.0') }}" type="text/css">
+  <link rel="stylesheet" href="{{ asset('/css/print.min.js') }}" type="text/css">
 </head>
 
 <body>
@@ -101,7 +102,7 @@
               <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="media align-items-center">
                   <div class="media-body  ml-2  d-none d-lg-block">
-                    <span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->name }}</span>
+                    <span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->nama }}</span>
                   </div>
                 </div>
               </a>
@@ -148,6 +149,7 @@
   <!-- Argon JS -->
   <script src="{{ asset('/js/argon.js?v=1.2.0') }}"></script>
   <script src="{{ asset('/js/sweetalert.min.js') }}"></script>
+  <script src="{{ asset('/js/print.js') }}"></script>
   @yield('javascript')
 </body>
 

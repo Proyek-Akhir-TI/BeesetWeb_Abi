@@ -5,6 +5,39 @@
 @endsection
 
 @section('ul')
+<nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+    <div class="scrollbar-inner">
+      <!-- Brand -->
+      <div class="sidenav-header  align-items-center">
+        <a class="navbar-brand" href="javascript:void(0)">
+          <img src="{{ asset('/img/brand/logo.png')}}"> 
+          <!-- <img src="/img/brand/blue.png" class="navbar-brand-img" alt="..."> -->
+        </a>
+      </div>
+      <div class="navbar-inner">
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+          <!-- Nav items -->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{route('ketua.index')}}">
+                <i class="ni ni-tv-2  text-orange"></i>
+                <span class="nav-link-text">Beranda</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/ketua/konfirmasipeternak">
+                <i class="ni ni-bell-55 text-orange"></i>
+                <span class="nav-link-text">Konfirmasi Peternak</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/ketua/listpeternak">
+                <i class="ni ni-align-center text-orange"></i>
+                <span class="nav-link-text">Daftar Peternak</span>
+              </a>
+            </li>
+          </ul>
 <hr class="my-3">
           <!-- Heading -->
                 <h6 class="navbar-heading p-0 text-muted">
@@ -12,7 +45,7 @@
                 </h6>
           <ul class="navbar-nav mb-md-3">
             <li class="nav-item">
-              <a class="nav-link active" href="/ketua/explore/kandang/{{$kandangs->id}}">
+              <a class="nav-link active" href="{{route('ketua.explore.kandang',[$kandangs->id])}}"> 
                 <i class="ni ni-chart-bar-32 text-orange"></i>
                 <span class="nav-link-text">Performa Kandang</span>
               </a>
@@ -72,7 +105,6 @@
                           <div class="col-xl-6">
                           <input id="text" value="Kandang = {{$kandangs->nama}}, Pemilik = {{$kandangs->user->nama}}, Kelompok = {{$kandangs->user->kelompok->nama}}, Alamat = " type="text" hidden/><br />
                           <button id="btn-qrcode" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Qr Code</button>
-                          <button id="btn-qrcode" class="btn btn-sm btn-success">Cetak</button>
                           </div>
                         </div>                                           
                 </div>
@@ -90,12 +122,12 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Keluar</button>
-                            <button type="button" class="btn btn-success">Cetak</button>
+                            <button type="button" class="btn btn-success" onclick="printJS({printable: 'qrcode', type: 'html', header: 'Pindai Saya !'})">Cetak</button>
                           </div>
                         </div>
                       </div>
                     </div>
-                
+                                 
             </div>
         </div>
         <div class="row">
@@ -138,50 +170,8 @@
             <div class="card-header border-0">
               <div class="row align-items-center pb-3">
                 <div class="col">
-                  <h3 class="mb-0">Aktivitas Kandang</h3>
+                  <h3 class="mb-3">Aktivitas Kandang</h3>
                 </div>
-                <div class="col text-right">
-                  <a href="" class="btn btn-sm btn-primary" data-target="#tambah-aktivitas" data-toggle="modal">Tambah Aktivitas</a>
-                </div>
-                <div class="modal fade" id="tambah-aktivitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Tambah Aktivitas</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                            <form method="post" action="/ketua/peternak/kandang/aktivitas/unggah" role="form">
-                              {{ csrf_field() }}
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                          <label for="exampleInputPassword1">Kandang</label>
-                                          <select class="form-control" name="kandang_id">
-                                            
-                                              <option value="{{ $kandangs->id }}">{{ $kandangs->id }}</option>
-                                          </select>
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="exampleInputPassword1">Aktivitas</label>
-                                          <select class="form-control" name="aktivitas_id">
-                                            @foreach ($jenisaktivitas as $id => $nama)
-                                              <option value="{{ $id }}">{{ $nama }}</option>
-                                            @endforeach
-                                          </select>
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                          <button type="submit" class="btn btn-primary">Save changes</button>
-                                        </div>
-                            </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-              </div>
-            </div>
             <div class="table-responsive">
               <!-- Projects table -->
               <table class="table align-items-center table-flush table-hover">
@@ -279,6 +269,18 @@
       let inputValue = input.value;
       qrcode.makeCode(inputValue);
     })
+</script>
+<script>
+function printDocument(documentId) {
+    var doc = document.getElementById(documentId);
+
+    //Wait until PDF is ready to print    
+    if (typeof doc.print === 'undefined') {    
+        setTimeout(function(){printDocument(documentId);}, 1000);
+    } else {
+        doc.print();
+    }
+}
 </script>
 @endsection
 

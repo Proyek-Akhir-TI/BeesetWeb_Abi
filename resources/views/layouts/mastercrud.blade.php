@@ -47,7 +47,7 @@
               <a href="">
                 <img src="{{asset ('/img/brand/logo_putih.png') }}">
               </a>
-            </div>
+            </div> 
             <div class="col-6 collapse-close">
               <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span></span>
