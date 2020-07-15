@@ -8,6 +8,7 @@ use App\Kandang;
 use App\Panen;
 use App\Kelompok;
 use App\LokasiKandang;
+use App\AktivitasKandang;
 
 
 class PeternakApiController extends Controller
@@ -145,33 +146,67 @@ class PeternakApiController extends Controller
          return response()->json($pesan);
     }
 
-    public function getBeratPanen(Request $request)
+    public function getData(Request $request)
     {
-        $panen = new Panen([
-            'kandang_id' => $request->get('kandang_id'),
-            'berat_panen' => $request->get('berat_panen')
+        $panen = ([
+            'kandang_id' => $request->field1,
+            'berat_panen' => $request->field4,
             ]);
-        $panen->save();
+
+        
+        $kandang_id = Panen::create($panen)->kandang_id;
+
+        $aktivitas = new AktivitasKandang();
+        $aktivitas->kandang_id = $kandang_id;
+        $aktivitas->aktivitas_id = 1;
+        $aktivitas->save();
+
+        $latitude = $request->field3;
+        $longitude = $request->field2;
+
+        $input = LokasiKandang::where('kandang_id', $kandang_id)->first();
+
+        if($latitude == $input->latitude || $longitude == $input->longitude ) {
+            echo "0 0";
+        }
+        else if(Panen::create($panen)){
+            echo "1 0";
+        }
+        else{
+            $input->latitude = $latitude;
+            $input->longitude = $longitude;
+            $input->save();
+
+            $aktivitas2 = new AktivitasKandang();
+            $aktivitas2->kandang_id = $kandang_id;
+            $aktivitas2->aktivitas_id = 4;
+            $aktivitas2->save();
+
+            echo "1 1";
+        }
+
+
 
         return response()->json($panen);
     }
 
 //Kandang
 
-    public function storeKandang(Request $request){
-        $image = $request->photo;  // your base64 encoded
-         $imageName =  $request->get('nama').time().'.jpeg';
+    public function tambahKandang(Request $request){
+
+        $image = $request->foto;  // your base64 encoded
+        $imageName =  $request->get('nama').time().'.jpeg';
          \File::put(public_path('storage/kandang/') . $imageName, base64_decode($image));
         $input = ([
-            'nama' => $request->name,
+            'nama' => $request->nama,
             'user_id' => $request->user_id,
             'url' => $request->url,
             'kelompok_id' => $request->kelompok_id,
             'foto' => $imageName,
         ]);
-        
+
         $kandang_id = Kandang::create($input)->id;
-        
+
         $panen = new Panen();
         $panen->kandang_id = $kandang_id;
         $panen->save();
@@ -180,7 +215,7 @@ class PeternakApiController extends Controller
         $lokasi->kandang_id = $kandang_id;
         $lokasi->save();
     
-        return response()->json($input);
+        return response()->json(["status"=>"berhasil","kandang"=>$input,"panen"=>$panen],201);
         }
     
         public function updateKandang(Request $request, $id)
