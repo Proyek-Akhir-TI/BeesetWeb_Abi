@@ -12,4 +12,6 @@ class AktivitasKandang extends Model
     //     return $this->belongsTo('App\JenisAktivitas','aktivitas_id');
     // }
 
+    protected $fillable = ['kandang_id','aktivitas_id'];
+
 }

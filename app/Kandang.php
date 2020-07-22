@@ -11,14 +11,13 @@ class Kandang extends Model
     protected $table = 'kandang';
 
     protected $fillable = [
-        'name', 
+        'id',
+        'nama', 
         'user_id', 
         'kelompok_id',
-        'tkUrl',
-        'location',
-        'latitude',
-        'longitude',
+        'url',
         'status',
+        'foto'
     ];
 
     public function kelompok(){

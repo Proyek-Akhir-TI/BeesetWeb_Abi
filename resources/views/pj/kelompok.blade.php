@@ -8,19 +8,19 @@
 @section('ul')
 <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="/pj/index">
+              <a class="nav-link" href="{{route('pj.beranda')}}">
                 <i class="ni ni-tv-2 text-orange"></i>
                 <span class="nav-link-text">Beranda</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/pj/tambahkelompok">
+              <a class="nav-link" href="{{route('pj.tambahkelompok')}}">
                 <i class="ni ni-fat-add text-orange"></i>
                 <span class="nav-link-text">Tambah Kelompok</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/pj/daftarkelompok">
+              <a class="nav-link" href="{{route('pj.listkelompok')}}">
                 <i class="ni ni-align-center text-orange"></i>
                 <span class="nav-link-text">Daftar Kelompok</span>
               </a>
@@ -29,11 +29,11 @@
 <hr class="my-3">
           <!-- Heading -->
                 <h6 class="navbar-heading p-0 text-muted">
-                    <span class="docs-normal">Opsi {{$kelompoks->name}}</span>
+                    <span class="docs-normal">Opsi {{$kelompoks->nama}}</span>
                 </h6>
           <ul class="navbar-nav mb-md-3">
             <li class="nav-item">
-              <a class="nav-link active" href="/pj/kelompok/explore/{{$kelompoks->id}}">
+              <a class="nav-link active" href="{{route('pj.kelompok.explore',[$kelompoks->id])}}">
                 <i class="ni ni-chart-bar-32 text-orange"></i>
                 <span class="nav-link-text">Detail Kelompok</span>
               </a>
@@ -58,7 +58,7 @@
                                 <h4><b>Nama Kelompok</b></h4>
                             </div>
                             <div class="col-xl-6">
-                                <h4>: {{$kelompoks->name}}</h4>
+                                <h4>: {{$kelompoks->nama}}</h4>
                             </div>                        
                        </div>
                        <div class="row">
@@ -66,7 +66,7 @@
                                 <h4><b>Alamat</b></h4>
                             </div>
                             <div class="col-xl-6">
-                                <h4>: {{$kelompoks->address}}</h4>
+                                <h4>: {{$kelompoks->alamat}}</h4>
                             </div>                        
                        </div>
                        @foreach($ketuas as $ketua)     
@@ -75,7 +75,7 @@
                                 <h4><b>Nama Ketua Kelompok</b></h4>
                             </div>
                             <div class="col-xl-6">
-                                <h4>: {{$ketua->name}}</h4>
+                                <h4>: {{$ketua->nama}}</h4>
                             </div>                        
                        </div>
                        @endforeach
@@ -114,7 +114,7 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Tinjauan Panen Anggota Kelompok {{$kelompoks->name}}</h3>
+                  <h3 class="mb-0">Tinjauan Panen Anggota Kelompok {{$kelompoks->nama}}</h3>
                 </div>
               </div>
             </div>
@@ -140,7 +140,7 @@
                         {{$no++}}
                         </td>
                         <td>
-                            {{$val->name}}
+                            {{$val->nama}}
                         </td>
                         <td>
                             {{$val->peternak}}

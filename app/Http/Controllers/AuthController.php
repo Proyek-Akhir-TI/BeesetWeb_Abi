@@ -18,7 +18,7 @@ class AuthController extends Controller
 
     public function storeLogin(Request $request)
     {
-        $logintype = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+        $logintype = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'nama';
 
         $login = [
             $logintype => $request->email,
@@ -28,19 +28,19 @@ class AuthController extends Controller
         if(Auth::attempt($login)){
             
             if(auth()->user()->role_id == 1){
-                Alert::success('Selamat datang Super User');
+                Alert::success('Selamat datang Administrator');
                 return redirect()->route('administrator.kelompok');
             }
             elseif (auth()->user()->role_id == 2) {
                 Alert::success('Selamat datang Penanggung Jawab');
-                return redirect()->route('pj.highlight');
+                return redirect()->route('pj.beranda');
             }
             elseif (auth()->user()->role_id == 3) {
                 Alert::success('Selamat datang Ketua Kelompok');
-                return redirect()->route('ketua.konfirmasipeternak');
+                return redirect()->route('ketua.index');
             }
         }
-        SweetAlert::error('Akun tidak ditemukan','Gagal');
+        Alert::error('Akun tidak ditemukan','Gagal');
         return redirect('login');
     }
 

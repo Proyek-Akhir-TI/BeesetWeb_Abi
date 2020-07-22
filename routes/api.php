@@ -21,6 +21,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/users', 'PeternakApiController@users');
 Route::post('/peternak/register', 'AuthApiController@register');
 Route::post('/peternak/login', 'AuthApiController@login');
-Route::post('/kelompok', 'PeternakApiController@kelompok');
+Route::get('/kelompok', 'PeternakApiController@kelompok');
+Route::post('/peternak/reset', 'AuthApiController@reset');
+Route::post('/peternak/firebase', 'AuthApiController@firebase');
+Route::get('/peternak/profile', 'AuthApiController@profile')->middleware('auth:api');
+
+
 Route::get('/peternak/listkandang', 'PeternakApiController@kandang')->middleware('auth:api');
-Route::post('peternak/panen', 'PeternakApiController@getBeratPanen');
+Route::post('/peternak/tambahkandang', 'PeternakApiController@tambahKandang')->middleware('auth:api');
+Route::post('/peternak/hapuskandang', 'PeternakApiController@hapusKandang')->middleware('auth:api');
+Route::post('/peternak/updatekandang', 'PeternakApiController@updateKandang')->middleware('auth:api');
+
+Route::get('peternak/kandang/data', 'PeternakApiController@getData');
+
+Route::post('peternak/kandang/lokasi', 'PeternakApiController@getLokasiKandang');

@@ -3,7 +3,41 @@
 @section('title')
   <title>Beeset - Konfirmasi Peternak</title>
 @endsection
-
+@section('ul')
+<nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+    <div class="scrollbar-inner">
+      <!-- Brand -->
+      <div class="sidenav-header  align-items-center">
+        <a class="navbar-brand" href="javascript:void(0)">
+          <img src="{{ asset('/img/brand/logo.png')}}"> 
+          <!-- <img src="/img/brand/blue.png" class="navbar-brand-img" alt="..."> -->
+        </a>
+      </div>
+      <div class="navbar-inner">
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+          <!-- Nav items -->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{route('ketua.index')}}">
+                <i class="ni ni-tv-2  text-orange"></i>
+                <span class="nav-link-text">Beranda</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{route('ketua.konfirmasipeternak')}}">
+                <i class="ni ni-bell-55 text-orange"></i>
+                <span class="nav-link-text">Konfirmasi Peternak</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{route('ketua.listpeternak')}}">
+                <i class="ni ni-align-center text-orange"></i>
+                <span class="nav-link-text">Daftar Peternak</span>
+              </a>
+            </li>
+          </ul>
+@endsection
 @section('content')
     <div class="container-fluid mt-5">
       <div class="row">
@@ -28,7 +62,7 @@
                     <div class="card-body pt-0">
                       </div>
                       <div class="text-center">
-                        <h2>{{$peternaks->name}}</h2>
+                        <h2>{{$peternaks->nama}}</h2>
                         <div>
                           <i class="ni education_hat mr-2"></i>
                         </div>
@@ -52,7 +86,7 @@
                                 <h4><b>Nama</b></h4>
                             </div>
                             <div class="col-xl-6">
-                                <h4>: {{$peternaks->name}}</h4>
+                                <h4>: {{$peternaks->nama}}</h4>
                             </div>                        
                        </div>
                        <div class="row">
@@ -68,7 +102,7 @@
                                 <h4><b>Alamat</b></h4>
                             </div>
                             <div class="col-xl-6">
-                                <h4>: {{$peternaks->address}}</h4>
+                                <h4>: {{$peternaks->alamat}}</h4>
                             </div>                        
                        </div>
                        <div class="row">
@@ -76,7 +110,7 @@
                                 <h4><b>Nomor Telepon</b></h4>
                             </div>
                             <div class="col-xl-6">
-                                <h4>: {{$peternaks->telp}}</h4>
+                                <h4>: {{$peternaks->telpon}}</h4>
                             </div>                        
                        </div>
                        <div class="row">
@@ -106,11 +140,11 @@
                                 </button>
                               </div>
                               <div class="modal-body">
-                                  <form method="post" action="/ketua/peternak/konfirmasi/{{$peternaks->id}}" role="form" enctype="multipart/form-data">
+                                  <form method="post" action="{{route('ketua.peternak.konfirmasi',[$peternaks->id])}}" role="form" enctype="multipart/form-data">
                                     {{ csrf_field() }}
                                           <div class="form-group">
                                               <div class="form-group">
-                                                  <input type="text" name="name" value="{{$peternaks->name}}" placeholder="{{$peternaks->name}}" hidden="">
+                                                  <input type="text" name="nama" value="{{$peternaks->nama}}" placeholder="{{$peternaks->nama}}" hidden="">
                                               </div>
                                               <div class="form-group">
                                                   <input type="email" name="email" value="{{$peternaks->email}}" placeholder="{{$peternaks->email}}" hidden="">
@@ -125,10 +159,10 @@
                                                   <input type="text" name="role_id" value="{{$peternaks->role_id}}" placeholder="{{$peternaks->role_id}}" hidden="">
                                               </div>
                                               <div class="form-group">
-                                                  <input type="text" name="address" value="{{$peternaks->address}}" placeholder="{{$peternaks->address}}" hidden="">
+                                                  <input type="text" name="alamat" value="{{$peternaks->alamat}}" placeholder="{{$peternaks->alamat}}" hidden="">
                                               </div>
                                               <div class="form-group">
-                                                  <input type="text" name="telp" value="{{$peternaks->telp}}" placeholder="{{$peternaks->telp}}" hidden="">
+                                                  <input type="text" name="telpon" value="{{$peternaks->telpon}}" placeholder="{{$peternaks->telpon}}" hidden="">
                                               </div>
                                               <div class="form-group">
                                                   <input type="number" name="status" value="1" placeholder="Konfirmasi" hidden="">

@@ -13,40 +13,119 @@ use App\Kandang;
 use App\JenisAktivitas;
 use App\AktivitasKandang;
 use App\Panen;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Gate; 
 use Storage;
+use Carbon\Carbon;
 
 
 
 class PeternakController extends Controller
 {
     
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $data = Auth::user()->kelompok_id;
-        $user = User::all()
-            ->where('kelompok_id',$data)
+        $id = Auth::user()->kelompok_id;
+        $anggota = User::all()
+            ->where('kelompok_id',$id)
             ->where('role_id',4)
-            ->where('status', 1);
-            // ->paginate(1);
+            ->count();
+
+        $anggota_aktif = User::all()
+            ->where('kelompok_id',$id)
+            ->where('role_id',4)
+            ->where('status', 1)
+            ->count();
+        
+        $kandang = Kandang::where('kelompok_id', $id)->count();
+
+        $panen = Panen::select(DB::raw('SUM(berat_panen) as total'))
+            ->join('kandang','kandang.id','=','panen.kandang_id')
+            ->join('kelompok','kelompok.id','=','kandang.kelompok_id')
+            ->where('kandang.kelompok_id', $id)
+            ->groupBy('kandang.kelompok_id')
+            ->get();
+            
+            foreach ($panen as $val) {
+                $hasil = (float)$val->total;
+            }
+        
+        if($request->tahun == 0)
+            $tahun  = Date('Y');
+        else
+            $tahun = $request->tahun;
+        
+        $tanggal = Panen::select(DB::raw('YEAR(panen.created_at) as year'))
+            ->join('kandang','kandang.id','=','panen.kandang_id')
+            ->join('kelompok','kelompok.id','=','kandang.kelompok_id')
+            ->where('kandang.kelompok_id',$id)
+            ->groupBy('year')
+            ->orderBy('year','desc')
+            ->get();
+
+        $panen_tabel = Panen::select('users.nama as nama','panen.created_at as created_at', DB::raw('SUM(berat_panen) as total'))
+            ->join('kandang','kandang.id','=','panen.kandang_id')
+            ->join('users','users.id','=','kandang.user_id')
+            ->where('kandang.kelompok_id',$id)
+            ->whereYear('panen.created_at',$tahun)
+            ->groupBy('user_id')
+            ->get();       
+    
+
+        $categories = [];
+        $data = [];
+
+        foreach ($panen_tabel as $panen) {
+            $categories[] = $panen->nama;
+            $data[] = (float)$panen->total;
+        }
+
+        $panen_tabel_2 = Panen::select('panen.created_at as created_at', DB::raw('SUM(berat_panen) as total'), DB::raw('YEAR(panen.created_at) as year'))
+            ->join('kandang','kandang.id','=','panen.kandang_id')
+            ->join('users','users.id','=','kandang.user_id')
+            ->where('kandang.kelompok_id',$id)
+            ->groupBy('year')
+            ->get();
+
+            $categories2 = [];
+            $data2 = [];
+    
+            foreach ($panen_tabel_2 as $panen) {
+                $categories2[] = \Carbon\Carbon::parse($panen->created_at)->isoFormat('Y');
+                $data2[] = (float)$panen->total;
+            }
+
+        return view('ketua.index', compact('user','anggota','anggota_aktif','kandang','hasil',
+            'categories','data','tahun','categories2','data2','tanggal'));
+    }
+
+    public function daftarPeternak(){
+        $data = Auth::user()->kelompok_id;
+        $user = User::where('kelompok_id',$data)
+            ->where('role_id',4)
+            ->where('status', 1)
+            ->paginate(10);
                 
 
         // $user = User::all(); 
         return view('ketua.peternak.listpeternak', compact('user'));
     }
 
-    public function needToConfirm(){
+    public function belumKonfirmasi(){
         $data = Auth::user()->kelompok_id;
-        $user = User::all()
-            ->where('kelompok_id',$data)
+        $user = User::where('kelompok_id',$data)
             ->where('role_id',4)
-            ->where('status', 0);
-            // ->paginate(1);
-                
-
-        // $user = User::all(); 
-        return view('ketua.peternak.konfirmasi', compact('user'));
+            ->where('status', 0)
+            ->paginate(10);
+        
+        $jumlah = User::where('kelompok_id',$data)
+            ->where('role_id',4)
+            ->where('status', 0)
+            ->count();
+        
+        // $jml = (integer)$jumlah;
+        // dd($jml);
+    
+        return view('ketua.peternak.konfirmasi', compact('user','jumlah')); 
     }
 
     public function detailToConfirm($id){
@@ -58,15 +137,13 @@ class PeternakController extends Controller
 
     public function edit($id)
     {
-        $roles = Role::pluck('name','id');
-        $kelompoks = Kelompok::pluck('name','id');
+        $roles = Role::pluck('nama','id');
+        $kelompoks = Kelompok::pluck('nama','id');
         $peternaks = User::find($id);
         return view('ketua.peternak.editpeternak', compact('roles','kelompoks','peternaks'));
     }
 
-    // public function update(Request $request, $id){
 
-    // }
     public function explore($id, Request $request){
         if($request->tahun == 0)
         $tahun  = Date('Y');
@@ -83,43 +160,43 @@ class PeternakController extends Controller
         //         ->where('user_id', $id)
         //         ->where('aktivitas_id', 1);
        $panens = Panen::
-                select('kandangs.name as name','panens.berat_panen as berat', DB::raw('SUM(berat_panen) as total'))
-                ->join('kandangs','kandangs.id','=','panens.kandang_id')
-                ->where('kandangs.user_id',$id)
-                ->whereYear('panens.created_at',$tahun)
+                select('kandang.nama as nama','panen.berat_panen as berat', DB::raw('SUM(berat_panen) as total'))
+                ->join('kandang','kandang.id','=','panen.kandang_id')
+                ->where('kandang.user_id',$id)
+                ->whereYear('panen.created_at',$tahun)
                 ->groupBy('kandang_id')
                 ->get();
-
-        $detailpanens = Panen::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
-                ->join('kandangs','kandangs.id','=','panens.kandang_id')
-                ->where('kandangs.user_id',$id)
-                ->paginate(5);
         
-        $kandang->setPageName('page');
-        $detailpanens->setPageName('other_page');
+                $categories = [];
+                $data = [];
+        
+                foreach ($panens as $panen) {
+                    $categories[] = $panen->nama;
+                    $data[] = (float)$panen->total;
+                }
 
-        $panenyuk = Panen::select(DB::raw('YEAR(panens.created_at) as year'))
-                ->join('kandangs','kandangs.id','=','panens.kandang_id')
-                ->where('kandangs.user_id',$id)
+        $detailpanens = Panen::select('kandang.nama as nama','panen.berat_panen as berat','panen.created_at as created_at')
+                ->join('kandang','kandang.id','=','panen.kandang_id')
+                ->where('kandang.user_id',$id)
+                ->get();
+        
+        // $kandang->setPageName('page');
+
+
+        $panenyuk = Panen::select(DB::raw('YEAR(panen.created_at) as year'))
+                ->join('kandang','kandang.id','=','panen.kandang_id')
+                ->where('kandang.user_id',$id)
                 ->groupBy('year')
                 ->orderBy('year','desc') 
                 ->get();       
         
 
-        $categories = [];
-        $data = [];
-
-        foreach ($panens as $panen) {
-            $categories[] = $panen->name;
-            $data[] = (float)$panen->total;
-        }
-
         $maps = Kandang::where('user_id', $id)->get();
 
         $jml_kandangs = Kandang::where('user_id', $id)->count();
         $jml_panens = Panen::select(DB::raw('SUM(berat_panen) as total'))
-            ->join('kandangs','kandangs.id','=','panens.kandang_id')
-            ->where('kandangs.user_id',$id)
+            ->join('kandang','kandang.id','=','panen.kandang_id')
+            ->where('kandang.user_id',$id)
             ->groupBy('user_id')
             ->get();
 
@@ -132,13 +209,6 @@ class PeternakController extends Controller
         'panens','categories', 'data','tahun','detailpanens','panenyuk','maps','jml_kandangs','jml_panen'));
     }
 
-    public function lokasi($id){
-        $users = User::find($id);
-        $maps = Kandang::where('user_id', $id)->get();
-
-        return view('/ketua/peternak/kandang/lokasi', compact('users','maps'));
-
-    }
 
     public function destroy($id)
     {
@@ -151,7 +221,7 @@ class PeternakController extends Controller
 
         Alert::error('Peternak Sudah Dihapus', 'Hapus Berhasil');
 
-        return redirect('/ketua/listpeternak');
+        return redirect()->route('ketua.listpeternak');
     }
 
 

@@ -1,21 +1,14 @@
-@extends('layouts.mastercrud')
-
-@section('title')
-  <title>Beeset - Edit Kelompok</title>
-@endsection
-
-@section('ul')
-<ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a href="/pj/listkelompok" class="nav-link">
-              <span class="nav-link-inner--text"><h3 class="text-white">Kembali</h3></span>
-            </a>
-          </li>
-        </ul>
-@endsection
-@section('content')
-    <!-- Page content -->
-    <div class="container mt--8 pb-5">
+<div role="dialog" class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="container mt--8 pb-5">
       <!-- Table -->
       <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
@@ -24,7 +17,7 @@
             <div class=" text-center mb-5">
                  <h1 class="text-warning">Tambah Kelompok</h1> 
             </div>
-            <form role="form" action="/pj/updatekelompok/{{$kelompoks->id}}" method="post">
+            <form role="form" method="post">
               {{ csrf_field() }}
                 <div class="form-group">
                   <label for="name" class="text-warning mb-3">Nama Kelompok</label>
@@ -32,11 +25,11 @@
                     <div class="input-group-prepend" style="border: 1px #fb6340 solid;">
                       <span class="input-group-text"><i class="ni ni-circle-08 text-warning"></i></span>
                     </div>
-                    <input id="name" type="text" class="form-control" style="border: 1px #fb6340 solid; border-left: 1px #fff solid; color: #000;" name="name" required autocomplete="name" autofocus placeholder="{{$kelompoks->name}}">
+                    <input id="name" type="text" class="form-control" style="border: 1px #fb6340 solid; border-left: 1px #fff solid; color: #000;" name="nama" required autofocus placeholder="">
                   </div>
                 </div>
                 <div class="form-group">
-                    <input id="user_id" type="text" class="form-control" style="border: 1px #fb6340 solid; border-left: 1px #fff solid; color: #000;" name="user_id" required autocomplete="name" autofocus value="{{Auth::user()->id}}" readonly="" hidden="">
+                    <input id="user_id" type="text" class="form-control" style="border: 1px #fb6340 solid; border-left: 1px #fff solid; color: #000;" name="user_id" required autofocus value="{{Auth::user()->id}}" readonly="" hidden="">
                 </div>
                 <div class="form-group">
                 <label for="address" class="text-warning mb-3">Alamat</label>
@@ -44,7 +37,7 @@
                     <div class="input-group-prepend" style="border: 1px #fb6340 solid;">
                       <span class="input-group-text"><i class="ni ni-pin-3 text-warning"></i></span>
                     </div>
-                    <textarea id="address" type="text" class="form-control" style="border: 1px #fb6340 solid; border-left: 1px #fff solid; color: #000;" name="address" required autocomplete="address" autofocus placeholder="{{$kelompoks->address}}"></textarea>
+                    <textarea id="address" type="text" class="form-control" style="border: 1px #fb6340 solid; border-left: 1px #fff solid; color: #000;" name="address" required autofocus placeholder=""></textarea>
                   </div>
                 </div>
                 <div class="text-center">
@@ -56,5 +49,13 @@
         </div>
       </div>
     </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
   </div>
-@endsection
+</div>
+
+

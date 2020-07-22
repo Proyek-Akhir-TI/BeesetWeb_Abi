@@ -1,34 +1,65 @@
-@extends('layouts.mastercrud')
+@extends('layouts.masterpj')
 
 @section('title')
   <title>Beeset - Tambah Ketua</title>
 @endsection
 
+@section('ul')
+<ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{route('pj.beranda')}}">
+                <i class="ni ni-tv-2 text-orange"></i>
+                <span class="nav-link-text">Beranda</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{route('pj.tambahkelompok')}}">
+                <i class="ni ni-fat-add text-orange"></i>
+                <span class="nav-link-text">Tambah Kelompok</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{route('pj.listkelompok')}}">
+                <i class="ni ni-align-center text-orange"></i>
+                <span class="nav-link-text">Daftar Kelompok</span>
+              </a>
+            </li>
+          </ul>
+<hr class="my-3">
+          <!-- Heading -->
+                <h6 class="navbar-heading p-0 text-muted">
+                    <span class="docs-normal">Opsi</span>
+                </h6>
+          <ul class="navbar-nav mb-md-3">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">
+                <i class="ni ni-fat-add text-orange"></i>
+                <span class="nav-link-text">Tambah Ketua</span>
+              </a>
+            </li>
+          </ul>
+@endsection
+
 @section('content') 
     <!-- Page content -->
-    <div class="container mt--8 pb-5">
+    <!-- <div class="container mt--8 pb-5"> -->
       <!-- Table -->
-      <div class="row justify-content-center">
+      <div class="row justify-content-center mt-5">
         <div class="col-lg-9 col-md-8">
           <div class="card bg-secondary border-0">
             <div class="card-body px-lg-5 py-lg-5">
               <div class=" text-center mb-5">
                  <h1 class="text-warning">Tambah Ketua Kelompok</h1> 
             </div>
-            <form role="form" action="/pj/uploadketua" method="post" enctype="multipart/form-data">
+            <form role="form" action="{{route('pj.uploadketua')}}" method="post" enctype="multipart/form-data">
               {{ csrf_field() }}
                 <div class="form-group">
                   <div class="input-group input-group-merge input-group-alternative mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-circle-08 text-warning"></i></span>
                     </div>
-                    <input id="name" placeholder="Nama" type="text" class="form-control @error('name') is-invalid @enderror text-darker" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-                    @error('name')
-                          <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                          </span>
-                    @enderror
-                  </div>
+                    <input id="nama" placeholder="Nama" type="text" class="form-control text-darker" name="nama" required autofocus>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -36,12 +67,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-email-83 text-warning"></i></span>
                     </div>
-                    <input id="email" placeholder="Email" type="email" class="form-control @error('email') is-invalid @enderror text-darker" name="email" value="{{ old('email') }}" required autocomplete="email">
-                    @error('email')
-                          <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                          </span>
-                    @enderror
+                    <input id="email" placeholder="Email" type="email" class="form-control text-darker" name="email" required>
                   </div>
                 </div>
                 <div class="row">
@@ -51,12 +77,7 @@
                               <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="ni ni-lock-circle-open text-warning"></i></span>
                               </div>
-                              <input id="password" placeholder="Password" type="password" class="form-control @error('password') is-invalid @enderror text-darker" name="password" required autocomplete="new-password">
-                              @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                    </span>
-                              @enderror
+                              <input id="password" placeholder="Password" type="password" class="form-control text-darker" name="password" required >
                             </div>
                           </div>
                   </div>
@@ -73,31 +94,16 @@
                   </div>
                 </div>
 
-                <input id="role" type="text" class="form-control" name="role_id" value="3" required autofocus readonly hidden>
-
-                <!-- <div class="form-group">
-                  <div class="input-group input-group-merge input-group-alternative mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-circle-08 text-warning"></i></span>
-                    </div>
-                    <select id="role_id" class="form-control @error('role_id') is-invalid @enderror" name="role_id" required autocomplete="role_id" autofocus>
-                          @foreach ($roles as $id => $name)
-                              <option value="{{ $id }}">{{ $name }}</option>
-                          @endforeach
-                    </select>
-                  </div>
-                </div> -->
-
-                <div class="row">
+                   <div class="row">
                       <div class="col-lg-6">
                           <div class="form-group">
                             <div class="input-group input-group-merge input-group-alternative mb-3">
                               <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="ni ni-circle-08 text-warning"></i></span>
                               </div>
-                              <select id="kelompok_id" class="form-control @error('kelompok_id') is-invalid @enderror" name="kelompok_id" required autocomplete="kelompok_id" autofocus>
+                              <select id="kelompok_id" class="form-control text-darker" name="kelompok_id" required autocomplete="kelompok_id" autofocus>
                                           @foreach ($kelompoks as $val)
-                                              <option class="text-darker" value="{{ $val->id }}">{{ $val->name }}</option>
+                                              <option class="text-darker" value="{{ $val->id }}">{{ $val->nama }}</option>
                                           @endforeach
                               </select>
                             </div>
@@ -109,7 +115,7 @@
                                 <div class="input-group-prepend">
                                   <span class="input-group-text"><i class="fas fa-phone-square-alt text-warning"></i></span>
                                 </div>
-                                <input id="telp" placeholder="No. Telpon" type="text" class="form-control @error('telp') is-invalid @enderror text-darker" name="telp" value="{{ old('telp') }}" required autocomplete="telp" autofocus>
+                                <input id="telpon" placeholder="No. Telpon" type="text" class="form-control text-darker" name="telpon" required>
                               </div>
                             </div>
                       </div>
@@ -121,7 +127,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-pin-3 text-warning"></i></span>
                     </div>
-                    <textarea id="address" placeholder="Alamat" type="text" class="form-control text-darker" name="address" required autocomplete="address" autofocus></textarea>
+                    <textarea id="alamat" placeholder="Alamat" type="text" class="form-control text-darker" name="alamat" required autocomplete="alamat"></textarea>
                   </div>
                 </div>
                 <div class="form-group">

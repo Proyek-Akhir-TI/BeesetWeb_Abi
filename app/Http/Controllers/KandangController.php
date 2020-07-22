@@ -10,54 +10,14 @@ use Illuminate\Support\Facades\Gate;
 use App\AktivitasKandang;
 use App\JenisAktivitas;
 use App\Panen;
+use App\User;
+use App\LokasiKandang;
 use DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class KandangController extends Controller
 {
-
-    public function store(Request $request){
-        
-    $input = ([
-        'name' => $request->name,
-        'user_id' => $request->user_id,
-        'tkUrl' => $request->tkUrl,
-        'location' => $request->location,
-        'latitude' => $request->latitude,
-        'longitude' => $request->longitude,
-        'status' => $request->status,
-        'kelompok_id' => $request->kelompok_id,
-    ]);
-    
-    $kandang_id = Kandang::create($input)->id;
-    
-    $panen = new Panen();
-    $panen->kandang_id = $kandang_id;
-    $panen->save();
-
-    alert()->success('Tambah Berhasil');
-
-        return back();
-    }
-
-    public function edit($id){
-        $input = Kandang::find($id);
-       return view('/ketua/peternak/kandang/edit', compact('input')); 
-    }
-    public function update(Request $request, $id)
-    {
-        $input = Kandang::find($id);
-        $input->name = $request->name;
-        $input->user_id = $request->user_id;
-        $input->location = $request->location;
-        $input->latitude = $request->latitude;
-        $input->longitude = $request->longitude;
-        $input->status = $request->status;
-        $input->kelompok_id = $request->kelompok_id;    
-        $input->save();
-
-        return back();
-    }
 
     public function storeAktivitas(Request $request)
     {
@@ -70,11 +30,11 @@ class KandangController extends Controller
     public function explore($id, Request $request){
         $kandangs = Kandang::find($id);
 
-        // $qr = 
-
         $jenisaktivitas = JenisAktivitas::pluck('aktivitas','id');
 
-        $aktivitas = AktivitasKandang::where('kandang_id', $id)->paginate(5);
+        $aktivitas = AktivitasKandang::select('jenis_aktivitas.aktivitas as aktivitas','aktivitas_kandang.created_at as created_at')
+                ->join('jenis_aktivitas','jenis_aktivitas.id','=','aktivitas_kandang.aktivitas_id')
+                ->where('kandang_id', $id)->paginate(5);
 
         $listaktivitas = JenisAktivitas::pluck('id', 'aktivitas');
 
@@ -84,18 +44,28 @@ class KandangController extends Controller
         $tahun = $request->tahun;
 
         $panens = Panen::
-            select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at')
-            ->join('kandangs','kandangs.id','=','panens.kandang_id')
-            ->where('panens.kandang_id',$id)
-            ->whereYear('panens.created_at',$tahun)
+            select('kandang.nama as nama','panen.berat_panen as berat','panen.created_at as created_at')
+            ->join('kandang','kandang.id','=','panen.kandang_id')
+            ->where('panen.kandang_id',$id)
+            ->whereYear('panen.created_at',$tahun)
             ->get();
 
-        $panenyuk = Panen::select(DB::raw('YEAR(panens.created_at) as year'))
-                ->join('kandangs','kandangs.id','=','panens.kandang_id')
-                ->where('panens.kandang_id',$id)
+        $panenyuk = Panen::select(DB::raw('YEAR(panen.created_at) as year'))
+                ->join('kandang','kandang.id','=','panen.kandang_id')
+                ->where('panen.kandang_id',$id)
                 ->groupBy('year')
                 ->orderBy('year','desc')
                 ->get();
+        
+        $jml_panens = Panen::select(DB::raw('SUM(berat_panen) as total'))
+                ->join('kandang','kandang.id','=','panen.kandang_id')
+                ->where('kandang_id',$id)
+                ->groupBy('kandang_id')
+                ->get();
+
+                foreach ($jml_panens as $panen) {
+                    $jml_panen = (float)$panen->total;
+                }
 
         $categories = [];
         $data = [];
@@ -105,16 +75,37 @@ class KandangController extends Controller
             $data[] = $panen->berat;
         }
 
-        // dd($categories);
-        // dd($data);
+        $curl = curl_init(); 
+        curl_setopt($curl, CURLOPT_URL, 'https://api.thingspeak.com/channels/1085076/feeds.json?api_key=R28BW9NXV8RGGCQ6&results=1000'); 
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); 
+        $result = curl_exec($curl); 
+        curl_close($curl);      
+
+        $result = json_decode($result, true);
+
+        $panjang = count($result['feeds']);
+
+        $suhu = $result['feeds'][$panjang-1]['field1'];
+        $kelembapan = $result['feeds'][$panjang-1]['field2'];
+
         
-        return view('ketua.peternak.kandang.kandang', compact('kandangs', 'aktivitas', 'listaktivitas','kandang','jenisaktivitas','categories','data','tahun', 'panens','panenyuk')); 
+        // return $kelembapan;
+        
+        return view('ketua.peternak.kandang.kandang', compact('kandangs', 'aktivitas', 'listaktivitas','kandang',
+        'jenisaktivitas','categories','data','tahun', 'panens','panenyuk', 'jml_panen','suhu','kelembapan')); 
     }
 
     public function lokasi($id){
-        $maps = Kandang::where('id', $id)->get();
+        $users = User::find($id);
+        $maps = LokasiKandang::select('users.nama as peternak','kandang.nama as nama','lokasi_kandang.latitude as latitude', 'lokasi_kandang.longitude as longitude')
+            ->join('kandang','kandang.id','=','lokasi_kandang.kandang_id')
+            ->join('users','users.id','=','kandang.user_id')
+            ->where('kandang.user_id', $id)
+            ->get();
 
-        return view('/ketua/peternak/kandang/lokasi2', compact('maps'));
+        // return $maps;
+
+        return view('ketua.peternak.kandang.lokasi', compact('maps','users'));
 
     }
 

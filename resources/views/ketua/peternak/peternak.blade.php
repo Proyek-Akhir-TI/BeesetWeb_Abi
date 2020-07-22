@@ -2,24 +2,56 @@
 
 @section('title')
   <title>Beeset - Explore Farmer</title>
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.css">
 @endsection
 
 @section('ul')
+<nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+    <div class="scrollbar-inner">
+      <!-- Brand -->
+      <div class="sidenav-header  align-items-center">
+        <a class="navbar-brand" href="javascript:void(0)">
+          <img src="{{ asset('/img/brand/logo.png')}}"> 
+          <!-- <img src="/img/brand/blue.png" class="navbar-brand-img" alt="..."> -->
+        </a>
+      </div>
+      <div class="navbar-inner">
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+          <!-- Nav items -->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{route('ketua.index')}}">
+                <i class="ni ni-tv-2  text-orange"></i>
+                <span class="nav-link-text">Beranda</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{route('ketua.konfirmasipeternak')}}">
+                <i class="ni ni-bell-55 text-orange"></i>
+                <span class="nav-link-text">Konfirmasi Peternak</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{route('ketua.listpeternak')}}">
+                <i class="ni ni-align-center text-orange"></i>
+                <span class="nav-link-text">Daftar Peternak</span>
+              </a>
+            </li>
+          </ul>
 <hr class="my-3">
           <!-- Heading -->
                 <h6 class="navbar-heading p-0 text-muted">
-                    <span class="docs-normal">Opsi {{$users->name}}</span>
+                    <span class="docs-normal">Opsi {{$users->nama}}</span>
                 </h6>
           <ul class="navbar-nav mb-md-3">
             <li class="nav-item">
-              <a class="nav-link active" href="/ketua/explore/{{$users->id}}">
+              <a class="nav-link active" href="{{route('ketua.explore',[$users->id]) }}">
                 <i class="ni ni-chart-bar-32 text-orange"></i>
                 <span class="nav-link-text">Performa Peternak</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/ketua/explore/{{$users->id}}/lokasi" target="_blank">
+              <a class="nav-link" href="{{route('ketua.explore.lokasi',[$users->id]) }}" target="_blank">
                 <i class="ni ni-pin-3 text-orange"></i>
                 <span class="nav-link-text">Lokasi Kandang</span>
               </a>
@@ -33,7 +65,7 @@
         <h1>Performa Peternak</h1>
     </div>
         <div class="row">
-        <div class="col-xl-4 order-xl-1">
+        <div class="col-xl-5 order-xl-1">
                   <div class="card card-profile">
                     <img src="{{ asset('img/theme/img-1-1000x600.jpg')}}" alt="Image placeholder" class="card-img-top">
                     <div class="row justify-content-center">
@@ -47,10 +79,10 @@
                     </div>
                     <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                       <div class="d-flex justify-content-between">
-                        <a href="" class="btn btn-sm btn-danger  mr-4 ">Delete </a>
+                        
                       </div>
                     </div>
-                    <div class="card-body pt-0">
+                    <div class="card-body pt-3">
                           <div class="row">
                             <div class="col">
                               <div class="card-profile-stats d-flex justify-content-center">
@@ -77,15 +109,15 @@
                             </div>
                           </div>
                       <div class="text-center">
-                        <h2>{{$users->name}}</h2>
+                        <h2>{{$users->nama}}</h2>
                         <div class="h5 font-weight-300">
                           <i class="ni location_pin mr-2"></i>{{$users->email}}
                         </div>
                         <div class="h5">
-                          <i class="ni business_briefcase-24 mr-2"></i>{{$users->kelompok->name}}
+                          <i class="ni business_briefcase-24 mr-2"></i>{{$users->kelompok->nama}}
                         </div>
                         <div class="h5">
-                          <i class="ni business_briefcase-24 mr-2"></i>{{$users->address}} - {{$users->telp}}
+                          <i class="ni business_briefcase-24 mr-2"></i>{{$users->alamat}} - {{$users->telpon}}
                         </div>
                         <div>
                           <i class="ni education_hat mr-2"></i>
@@ -94,7 +126,7 @@
                     </div>
                   </div> 
         </div>
-        <div class="col-xl-8 order-xl-1 float-right">
+        <div class="col-xl-7 order-xl-1 float-right">
         <div class="card">
             <div class="card-header border-0">
               <div class="row align-items-center">
@@ -170,7 +202,6 @@
                   <tr>
                     <th scope="col">No</th>
                     <th scope="col">Kandang</th>
-                    <th scope="col">Status</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -184,27 +215,11 @@
                        {{$no++}}
                     </td>
                     <td>
-                        {{$kandangs->name}}
+                        {{$kandangs->nama}}
                     </td>
-                    <td>
-                      @if($kandangs->status == 0)
-                        <h4 class="badge badge-pill text-capitalize badge-danger">Kandang Tidak Aktif</h4>
-                      @endif
-                      @if($kandangs->status == 1)
-                      <h4 class="badge badge-pill text-capitalize badge-success">Kandang Aktif</h4>
-                      @endif
-                    </td>
-                    <td>
-                  @if($kandangs->status == 1)
-                    <a href="/ketua/explore/kandang/{{$kandangs->id}}" class="btn btn-sm btn-primary">Explore</a>
-                    <a href="/ketua/explore/kandang/edit/{{$kandangs->id}}" class="btn btn-sm btn-success">Edit</a>
-                    <a href="/ketua/explore/kandang/delete/{{$kandangs->id}}" class="btn btn-sm btn-danger">Delete</a>
-                  @endif
-                  @if($kandangs->status == 0)
-                    <a href="/ketua/explore/kandang/edit/{{$kandangs->id}}" class="btn btn-sm btn-success">Edit</a>
-                    <a href="/ketua/explore/kandang/delete/{{$kandangs->id}}" class="btn btn-sm btn-danger">Delete</a>
-                  @endif
-                    </td>
+                  <td>
+                    <a href="{{route('ketua.explore.kandang',[$kandangs->id])}}" class="btn btn-sm btn-primary">Explore</a>
+                  </td>
                   </tr>
                 @endforeach
                 </tbody>
@@ -222,7 +237,7 @@
             <div class="card">
               <div class="row">
                   <div class="col-xl-5">
-                        <form action="{{url('ketua/explore').'/'.$users->id}}" method="get">
+                        <form action="{{route('ketua.explore',[$users->id])}}" method="get">
                           <div class="row pt-4 pl-3">
                               <div class="col-xl-5">
                                 <div class="form-group">
@@ -257,48 +272,6 @@
                 <div class="col">
                   <h3 class="mb-0">Tinjauan Panen</h3>
                 </div>
-                <div class="col text-right">
-                  <a href="" class="btn btn-sm btn-primary" data-target="#tambah-aktivitas" data-toggle="modal">Tambah Aktivitas</a>
-                </div>
-                <div class="modal fade" id="tambah-aktivitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Tambah Aktivitas</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                            <form method="post" action="/ketua/peternak/kandang/aktivitas/unggah" role="form">
-                              {{ csrf_field() }}
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                          <label for="exampleInputPassword1">User</label>
-                                          <select class="form-control" name="kandang_id">
-                                            @foreach ($kandang as $v)
-                                              <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                            @endforeach
-                                          </select>
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="exampleInputPassword1">Aktivitas</label>
-                                          <select class="form-control" name="aktivitas_id">
-                                            @foreach ($aktivitas as $id => $name)
-                                              <option value="{{ $id }}">{{ $name }}</option>
-                                            @endforeach
-                                          </select>
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                          <button type="submit" class="btn btn-primary">Save changes</button>
-                                        </div>
-                            </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-              </div>
             </div>
             <div class="table-responsive pt-4">
               <!-- Projects table -->
@@ -321,7 +294,7 @@
                        {{$no++}}
                     </td>
                     <td>
-                        {{$panen->name}}
+                        {{$panen->nama}}
                     </td>
                     <td>
                         {{$panen->berat}} Kg
@@ -334,7 +307,7 @@
                 </tbody>
                 
               </table>
-              <div class="float-right">{{$detailpanens->withQueryString()->links()}}</div>
+              <div class="float-right"><div id="demo"></div></div>
             </div>
           </div>
         </div>
@@ -465,5 +438,16 @@
 
     }]
 });
+</script>
+<script src="{{ asset('/js/pagination.min.js')}}"></script>
+<script>
+  $('#demo').pagination({
+    dataSource: {!!json_encode($detailpanens)!!},
+    callback: function(data, pagination) {
+        // template method of yourself
+        var html = template(data);
+        dataContainer.html(html);
+    }
+})
 </script>
 @endsection

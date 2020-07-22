@@ -28,7 +28,7 @@ class KelompokController extends Controller
             ->paginate(5);
             
 
-        return view('/pj/listkelompok', compact('kelompoks'));
+        return view('pj.listkelompok', compact('kelompoks'));
     }
 
     /**
@@ -39,7 +39,7 @@ class KelompokController extends Controller
     public function create()
     {
         //
-        return view('/pj/tambahkelompok');
+        return view('pj.tambahkelompok');
     }
 
     /**
@@ -50,13 +50,13 @@ class KelompokController extends Controller
      */
     public function store(Request $request)
     { 
-        DB::table('kelompoks')->insert([
-            'name' => $request->name,
-            'address' => $request->address,
+        DB::table('kelompok')->insert([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
             'user_id' => $request->user_id  
         ]);
         
-        return redirect('/pj/tambahketua');
+        return redirect()->route('pj.tambahketua');
     }
 
     /**
@@ -77,14 +77,14 @@ class KelompokController extends Controller
         $kandangs = Kandang::where('kelompok_id', $id)->count();
 
         $panens = Panen::select(DB::raw('SUM(berat_panen) as total'))
-                ->join('kandangs','kandangs.id','=','panens.kandang_id')
-                ->where('kandangs.kelompok_id', $id)
+                ->join('kandang','kandang.id','=','panen.kandang_id')
+                ->where('kandang.kelompok_id', $id)
                 ->get();
         
-        $tables = Panen::select('kandangs.name as name','panens.berat_panen as berat','panens.created_at as created_at','users.name as peternak')
-                ->join('kandangs','kandangs.id','=','panens.kandang_id')
-                ->join('users','users.id','=','kandangs.user_id')
-                ->where('kandangs.kelompok_id',$id)
+        $tables = Panen::select('kandang.nama as nama','panen.berat_panen as berat','panen.created_at as created_at','users.nama as peternak')
+                ->join('kandang','kandang.id','=','panen.kandang_id')
+                ->join('users','users.id','=','kandang.user_id')
+                ->where('kandang.kelompok_id',$id)
                 ->paginate(5);
 
         $anggotas = User::all()
@@ -93,23 +93,59 @@ class KelompokController extends Controller
             ->count();
 
 
-        return view('/pj/kelompok', compact('kelompoks', 'ketuas', 'kandangs','anggotas','panens','tables'));
+        return view('pj.kelompok', compact('kelompoks', 'ketuas', 'kandangs','anggotas','panens','tables'));
     }
 
-    public function highlight()
+    public function highlight(Request $request)
     {
         $id = Auth::user()->id;
-        $datas = Panen::select('kandangs.kelompok_id as kelompok', 'kelompoks.name as name', 'kelompoks.address as address', DB::raw('SUM(berat_panen) as total'), 'panens.created_at as created_at')
-                ->join('kandangs','kandangs.id','=','panens.kandang_id')
-                ->join('kelompoks','kelompoks.id','=','kandangs.kelompok_id')
-                ->where('kelompoks.user_id', $id)
+        $datas = Panen::select('kandang.kelompok_id as kelompok', 'kelompok.nama as nama', 'kelompok.alamat as alamat', DB::raw('SUM(berat_panen) as total'), 'panen.created_at as created_at')
+                ->join('kandang','kandang.id','=','panen.kandang_id')
+                ->join('kelompok','kelompok.id','=','kandang.kelompok_id')
+                ->where('kelompok.user_id', $id)
                 ->groupBy('kelompok')
-                ->paginate(10);
+                ->paginate(10);       
         
-        $datas->setCollection($datas->sortByDesc('total'));
+        $datas->setCollection($datas->sortByDesc('total'));      
+      
+        $panen_tabel = Panen::select(DB::raw('SUM(berat_panen) as total'), DB::raw('YEAR(panen.created_at) as year'))
+            ->join('kandang','kandang.id','=','panen.kandang_id')
+            ->join('kelompok','kelompok.id','=','kandang.kelompok_id')
+            ->where('kelompok.user_id',$id)
+            ->groupBy('year')
+            ->get();       
+    
+        $categories = [];
+        $nilai = [];
 
-        
-        return view('/pj/highlight', compact('datas'));
+        foreach ($panen_tabel as $panen) {
+            $categories[] = $panen->year;
+            $nilai[] = (float)$panen->total;
+        }
+
+        $jml_kelompok = Kelompok::where('user_id', $id)->count();
+        $jml_peternak = User::select('users.nama as nama')
+                    ->join('kelompok','kelompok.id','=','users.kelompok_id')
+                    ->where('kelompok.user_id', $id)
+                    ->where('users.role_id', 4)
+                    ->count();
+        $jml_panens = Panen::select(DB::raw('SUM(berat_panen) as total'))
+                    ->join('kandang','kandang.id','=','panen.kandang_id')
+                    ->join('kelompok','kelompok.id','=','kandang.kelompok_id')
+                    ->where('kelompok.user_id', $id)
+                    ->groupBy('kelompok.user_id')
+                    ->get();
+
+        foreach ($jml_panens as $panen) {
+         $jml_panen = (float)$panen->total;
+                    }
+        $jml_kandang = Kandang::join('kelompok','kelompok.id','=','kandang.kelompok_id')
+                        ->where('kelompok.user_id', $id)
+                        ->count();
+
+        // return $categories;
+        return view('pj.highlight', compact('datas','categories','nilai','tanggal','tahun','panen','jml_kelompok','jml_peternak',
+                        'jml_panen','jml_kandang'));
 
         
     }
@@ -120,9 +156,9 @@ class KelompokController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id_kelompok)
     {
-        $kelompoks = Kelompok::find($id);
+        $kelompoks = Kelompok::find($id_kelompok);
 
         return view('pj.editkelompok', compact('kelompoks'));
     }
@@ -134,16 +170,17 @@ class KelompokController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id_kelompok)
     {
-        $input = Kelompok::find($id);
-        $input['name'] = $request->name;
-        $input['address'] = $request->address;
+        $input = Kelompok::find($id_kelompok);
+        $input['nama'] = $request->nama;
+        $input['alamat'] = $request->alamat;
+        $input['user_id'] = $request->user_id;
         $input->save();
 
         Alert::success('Kelompok Sudah Diedit', 'Edit Berhasil');
 
-        return redirect('/pj/daftarkelompok');
+        return redirect()->route('pj.daftarkelompok');
     }
 
     /**
@@ -170,6 +207,6 @@ class KelompokController extends Controller
 
         Alert::success('Kelompok Sudah Dihapus', 'Hapus Berhasil');
 
-        return redirect('pj/daftarkelompok');
+        return redirect()->route('pj.daftarkelompok');
     }
 }

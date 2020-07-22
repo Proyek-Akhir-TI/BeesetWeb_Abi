@@ -64,6 +64,6 @@ class KonfirmasiController extends Controller
         $judul = $input->nama;
         $notif->suhu2($token, $judul, $pesan);
 
-        return view('/ketua/listpeternak');
+        return redirect()->route('ketua.listpeternak');
     }
 }

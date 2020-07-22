@@ -28,6 +28,7 @@
 @endsection
 
 @section('content')
+@include('pj.editkelompok')
 	<div class="container-fluid mt-5">
       <div class="row">
         <div class="col-xl-12">
@@ -45,6 +46,7 @@
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">No</th>
+                    <th scope="col" style="display:none;">id</th>
                     <th scope="col">Nama Kelompok</th>
                     <th scope="col">Alamat</th>
                     <th scope="col">Action</th>
@@ -59,16 +61,19 @@
                     <td>
                       {{$no++}}
                     </td>
+                    <td style="display:none;">
+                      {{$kelompok->id}}
+                    </td>
                     <td> 
-                      {{$kelompok->name}}
+                      {{$kelompok->nama}}
                     </td>
                     <td>
-                      {{$kelompok->address}}
+                      {{$kelompok->alamat}}
                     </td>
                     <td>
-                    <a href="/pj/kelompok/explore/{{$kelompok->id}}"  class="btn btn-sm btn-primary">Explore</a>
-                    <a href="/pj/editkelompok/{{$kelompok->id}}" class="btn btn-sm btn-success">Edit</a>
-                    <a href="/pj/kelompok/delete/{{$kelompok->id}}" class="btn btn-sm btn-danger">Delete</a>
+                    <a href="{{route('pj.kelompok.explore',[$kelompok->id])}}"  class="btn btn-sm btn-primary">Explore</a>
+                    <button href="" onclick="myFunction()" class="btn btn-sm btn-success edit">Edit</button>
+                    <a href="{{route('pj.kelompok.delete',[$kelompok->id])}}" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                   </tr>
                 @endforeach
@@ -82,5 +87,31 @@
         </div>
       </div>
     </div>
+
 @endsection
 
+@section('javascript')
+  
+  <!-- ============================ Edit Data ========================== -->
+  <script>
+ 
+        function myFunction(){
+
+            var table = $('.table');
+ 
+             $tr = $(this).closest('tr');
+             if ($($tr).hasClass('child')) {
+                 $tr = $tr.prev('.parent');
+             }
+ 
+             var data = table.row($tr).data();
+             console.log(data);
+            //  
+             $('#editForm').attr('action', '/pj/updatekelompok/'+data[1]);
+             $('#editModal').modal('show');
+         };
+ 
+    
+     </script>
+<!-- ============================ End Edit Data ===================== -->
+@endsection

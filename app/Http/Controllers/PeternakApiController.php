@@ -9,6 +9,7 @@ use App\Panen;
 use App\Kelompok;
 use App\LokasiKandang;
 use App\AktivitasKandang;
+use Illuminate\Support\Facades\Storage;
 
 
 class PeternakApiController extends Controller
@@ -20,11 +21,7 @@ class PeternakApiController extends Controller
     	return response()->json($users);
     }
 
-    public function kandang(Request $request)
-    {
-    	$kandang = Kandang::where('user_id',$request->user()->id)->get();
-        return response()->json( ['kandang' => $kandang] ,200);
-    }
+    
 
     public function kelompok(){
         $kelompoks = Kelompok::where('id', '!=', 1)
@@ -34,7 +31,7 @@ class PeternakApiController extends Controller
     	return response()->json(["kel" => $kelompoks]);
     }
 
-    public function  inputaktivitas(){
+    public function info(){
             $curl = curl_init(); 
             curl_setopt($curl, CURLOPT_URL, 'https://api.thingspeak.com/channels/1085076/feeds.json?api_key=R28BW9NXV8RGGCQ6&results=1000'); 
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); 
@@ -153,9 +150,25 @@ class PeternakApiController extends Controller
             'berat_panen' => $request->field4,
             ]);
 
-        
-        $kandang_id = Panen::create($panen)->kandang_id;
+        if($request->field4 == 0 ){
+            $val = Panen::where('berat_panen', 0)
+                    ->where('kandang_id', $request->field1)
+                    ->first();
+            if($val->berat_panen == 0){
+                $id = $val->id;
+                $val->berat_panen = $request->field4;
+                $id->update($val->berat_panen);
 
+            }
+            else{
+                $kandang_id = Panen::create($panen)->kandang_id;
+            }     
+            
+        }
+        // else if($request->field4 <= 2){
+        //     $panen->berat_panen = $request->field4;
+        // }
+        
         $aktivitas = new AktivitasKandang();
         $aktivitas->kandang_id = $kandang_id;
         $aktivitas->aktivitas_id = 1;
@@ -207,6 +220,8 @@ class PeternakApiController extends Controller
 
         $kandang_id = Kandang::create($input)->id;
 
+        $data = Kandang::where('id', $kandang_id)->get();
+
         $panen = new Panen();
         $panen->kandang_id = $kandang_id;
         $panen->save();
@@ -215,28 +230,75 @@ class PeternakApiController extends Controller
         $lokasi->kandang_id = $kandang_id;
         $lokasi->save();
     
-        return response()->json(["status"=>"berhasil","kandang"=>$input,"panen"=>$panen],201);
+        return response()->json(["status"=>"berhasil","kandang"=>$data],201);
         }
-    
-        public function updateKandang(Request $request, $id)
-        {
+
+        public function kandang(Request $request)
+    {
+        // $kandang = Kandang::where('user_id', $request->user()->id)
+        //             ->join('kandang', 'kandang.id','=','lokasi_kandang.kandang_id') 
+        //             ->get();
+        // // $kandang = Kandang::find($request->user()->id);
+        $kandang = LokasiKandang::select('kandang.id as id', 'kandang.nama as nama', 'kandang.url as url','kandang.kelompok_id as kelompok_id','kandang.foto as foto', 'lokasi_kandang.latitude as latitude','lokasi_kandang.longitude as longitude')
+                    ->join('kandang', 'kandang.id','=','lokasi_kandang.kandang_id')
+                    ->where('kandang.user_id', $request->user()->id)
+                    ->get();
+
+        foreach($kandang as $val => $v ){
             
+            $hasil[] = [
+                "id" => $v->id,
+                "nama" => $v->nama,
+                "url" => $v->url,
+                "kelompok_id" => $v->kelompok_id,
+                "foto" => Storage::url('kandang/'. $v->foto),
+                "latitude" => $v->latitude,
+                "longitude" => $v->longitude,          
+            ];
+        }
+
+        // foreach($lokasi as $value => $va ){
+            
+        //     $lok[] = [
+        //         "kandang_id" => $va->kandang_id,
+        //         "latitude" => $va->latitude,
+        //         "longitude" => $va->longitude,        
+        //     ];
+        // }
+
+
+        
+        
+        return response()->json( ['kandang' => $hasil] ,200);
+    }
+    
+        public function updateKandang(Request $request)
+        {
+            $id = $request->id;
             $nama= $request->nama;
             $user_id = $request->user_id;
-            $kelompok_id = $request->kelompok_id;   
+            $kelompok_id = $request->kelompok_id;
             $new_photo = $request->file('foto');
-            if($new_photo){
-                if($input->foto && file_exists(storage_path('app/public/uploads' .$input->foto))){
-                \Storage::delete('public/uploads'. $input->foto);
+
+            $update = Kandang::where('id', $id);
+
+            if($update){
+                $update->nama = $nama;
+                $update->user_id = $user_id;
+                $update->kelompok_id = $kelompok_id;
+                if($new_photo){
+                    if($update->foto && file_exists(storage_path('app/public/kandang' .$update->foto))){
+                    \Storage::delete('public/kandang'. $update->foto);
+                    }
+                    $new_photo_path = $new_photo->storeAs(
+                        'public/kandang', 'kandang_photobaru'.time().'.'.$request->file('foto')->extension()
+                    );
+                    $update->foto = $new_photo_path;
+                }
+
+                $update->save();
             }
-            $new_photo_path = $new_photo->storeAs(
-                'public/uploads', 'kandang_photobaru'.time().'.'.$request->file('foto')->extension()
-            );
-            $input->photo = $new_photo_path;
-            }   
-            $input->save();
-            
-            return response()->json($input);
+            return response()->json($update);
         }
         
     public function getLokasiKandang(Request $request)
@@ -258,5 +320,12 @@ class PeternakApiController extends Controller
             return response()->json("Update Berhasil", 201);
         }
 
+    }
+
+    public function hapusKandang(Request $request){
+
+        Kandang::where('id', $request->id)->delete();
+
+        return response()->json("Hapus Berhasil");
     }
 }

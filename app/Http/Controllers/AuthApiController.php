@@ -24,7 +24,7 @@ class AuthApiController extends Controller
          ]);
 
          $image = $request->photo;  // your base64 encoded
-         $imageName =  $request->get('nama').time().'.jpeg';
+         $imageName =  $request->get('telpon').time().'.jpeg';
          \File::put(public_path('storage/uploads/') . $imageName, base64_decode($image));
 
         $url = Storage::url('uploads/'. $imageName);
@@ -34,7 +34,7 @@ class AuthApiController extends Controller
                 'email' => $request->get('email'),
                 'password' => bcrypt($request->get('password')) ,
                 'alamat' => $request->get('alamat'),
-                'telpon' => $request->get('telp'),
+                'telpon' => $request->get('telpon'),
                 'kelompok_id' => $request->get('kelompok_id'),
                 'photo' => $imageName,
                 'api_token' => Str::random(64),
@@ -116,17 +116,60 @@ class AuthApiController extends Controller
         }    
     }
 
+    public function update(Request $request)
+    {
+        $id = $request->id;
+        $nama = $request->nama;
+        $email = $request->email;
+        $password = $request->password;
+        $telpon = $request->telpon;
+        $alamat = $request->alamat;
+        $new_photo = $request->file('photo');
+
+        $peternak = User::where('id', $id)->first();
+
+        if($peternak){
+            $peternak->nama = $nama;
+            $peternak->email = $email;
+            $peternak->telpon = $telpon;
+            $peternak->alamat = $alamat;
+
+            if($password){
+                $peternak->password = Hash::make($password);
+            }
+            
+            if($new_photo){
+                if($peternak->photo && file_exists(storage_path('app/public/uploads' .$peternak->photo))){
+                    \Storage::delete('public/uploads'. $input->photo);
+                    }
+                $new_photo_path = $new_photo->storeAs(
+                        'public/uploads', 'peternak_photobaru'.time().'.'.$request->file('photo')->extension()
+                    );
+                $peternak->photo = $new_photo_path;
+            }
+
+            $peternak->save();
+
+        }
+    }
+
     public function firebase(Request $request){
         $id = $request->id; 
         $firebase = $request->firebase;
 
         $user = User::where('id', $id)->first();
 
-        if($firebase != $user->api_firebase){
+        if($firebase != $user['api_firebase']){
             $user->api_firebase = $firebase;
             $user->save();
         }
             
+    }
+
+    public function profile(Request $request)
+    {
+
+        return $request->user();
     }
 
 

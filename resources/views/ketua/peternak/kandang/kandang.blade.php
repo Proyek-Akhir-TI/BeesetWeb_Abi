@@ -129,6 +129,18 @@
                     </div>
                                  
             </div>
+            <div class="col-xl-3">
+                  <div class="card pt-5" style="height:295px">
+                        <div class="text-center text-warning" style="font-size:72pt;">{{$suhu}}&degC</div>
+                        <div class="text-center"><h2> Suhu Terkini </h2></div>
+                  </div>
+            </div>
+            <div class="col-xl-3">
+                  <div class="card pt-5" style="height:295px">
+                        <div class="text-center text-warning" style="font-size:72pt;">{{$kelembapan}} %</div>
+                        <div class="text-center"><h2> Kelembapan Terkini </h2></div>
+                  </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-xl-6">

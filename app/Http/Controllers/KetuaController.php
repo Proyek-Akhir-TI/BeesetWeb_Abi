@@ -33,14 +33,9 @@ class KetuaController extends Controller
     public function create()
     {
         $data = Auth::user()->id;
-        $roles = Role::pluck('name','id');
         $kelompoks = Kelompok::where('user_id', $data)
             ->orderBy('id', 'desc')->get();
-
-        return view('pj.tambahketua', [
-            'roles' => $roles, 
-            'kelompoks' => $kelompoks
-        ]);
+        return view('pj.tambahketua', compact('kelompoks'));
     }
 
     /**
@@ -59,7 +54,7 @@ class KetuaController extends Controller
         $input['name'] = $request->name;
         $input['email'] = $request->email;
         $input['password'] = Hash::make($request->password);
-        $input['role_id'] = $request->role_id;
+        $input['role_id'] = 3;
         $input['kelompok_id'] = $request->kelompok_id;
         $input['address'] = $request->address;
         $input['telp'] = $request->telp;
@@ -74,7 +69,7 @@ class KetuaController extends Controller
 
         // SweetAlert::message('Message','Kelompok Berhasil Dibuat');
 
-        return redirect('/pj/index');
+        return redirect()->route('pj.index');
         // return redirect('/pj/tambahkelompok');
 
     }
