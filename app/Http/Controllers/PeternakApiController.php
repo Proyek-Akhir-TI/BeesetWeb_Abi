@@ -9,20 +9,13 @@ use App\Panen;
 use App\Kelompok;
 use App\LokasiKandang;
 use App\AktivitasKandang;
+use App\Notifikasi;
+use App\Notif;
 use Illuminate\Support\Facades\Storage;
 
 
 class PeternakApiController extends Controller
 {
-    public function users(User $user)
-    {
-    	$users = $user->all();
-
-    	return response()->json($users);
-    }
-
-    
-
     public function kelompok(){
         $kelompoks = Kelompok::where('id', '!=', 1)
             ->where('id','!=', 2)
@@ -31,176 +24,146 @@ class PeternakApiController extends Controller
     	return response()->json(["kel" => $kelompoks]);
     }
 
-    public function info(){
-            $curl = curl_init(); 
-            curl_setopt($curl, CURLOPT_URL, 'https://api.thingspeak.com/channels/1085076/feeds.json?api_key=R28BW9NXV8RGGCQ6&results=1000'); 
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); 
-            $result = curl_exec($curl); 
-            curl_close($curl);      
-
-            $result = json_decode($result, true);
-            
-            dd($result);
-    }
-
-    public function notifSuhu()
-    {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS =>"{\r\n  \"to\": \"dMaMU3-cTA2eAlsX-Cmc_t:APA91bHNsLDKpQUBfHO3QuHZaPnUUBRDlyQAv9gDChJV7t5WFN2dYVE-lOC145D6hVJV8GxWplA4sMrhmra5al1HHGHb3UXmYe6pnY7JNApS4my6uCDqGVdqxfMY5nbhwPYA3Ms-Nwvj\",\r\n  \"notification\": {\r\n    \"body\": \"Suhu Kandang Panas\",\r\n    \"title\": \"Suhu Kandang BeeSet.\"\r\n  }\r\n}",
-            CURLOPT_HTTPHEADER => array("Authorization: key=AAAAIOJWNzc:APA91bEhCJVpG-1W2_VvnjYtcpehs6whqIYlLWYtY1A6RDgL5Vmrol9o-zovflnQry9ps7ajqk4RcC_lSC2E6_ffMMnir7MFXCFio2LtA7NKzkGURAcwjRkOGfDLHQ379LTnngJM6dQ3","Content-Type: application/json"
-        ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-       
-        $data = json_decode($response);
-        $sukses = $data->success;
-        if ($sukses == 1) {
-      
-        $pesan = "Sukses mengirim Notif";
-        }else {
-            $pesan = "Gagal Mengirim Notif";
-        }
-
-         return response()->json($pesan);
-    }
-    public function notifKelembapan()
-    {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS =>"{\r\n  \"to\": \"dMaMU3-cTA2eAlsX-Cmc_t:APA91bHNsLDKpQUBfHO3QuHZaPnUUBRDlyQAv9gDChJV7t5WFN2dYVE-lOC145D6hVJV8GxWplA4sMrhmra5al1HHGHb3UXmYe6pnY7JNApS4my6uCDqGVdqxfMY5nbhwPYA3Ms-Nwvj\",\r\n  \"notification\": {\r\n    \"body\": \"Suhu Kandang Panas\",\r\n    \"title\": \"Suhu Kandang BeeSet.\"\r\n  }\r\n}",
-            CURLOPT_HTTPHEADER => array("Authorization: key=AAAAIOJWNzc:APA91bEhCJVpG-1W2_VvnjYtcpehs6whqIYlLWYtY1A6RDgL5Vmrol9o-zovflnQry9ps7ajqk4RcC_lSC2E6_ffMMnir7MFXCFio2LtA7NKzkGURAcwjRkOGfDLHQ379LTnngJM6dQ3","Content-Type: application/json"
-        ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-       
-        $data = json_decode($response);
-        $sukses = $data->success;
-        if ($sukses == 1) {
-      
-        $pesan = "Sukses mengirim Notif";
-        }else {
-            $pesan = "Gagal Mengirim Notif";
-        }
-
-         return response()->json($pesan);
-    }
-    public function notifPanen()
-    {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS =>"{\r\n  \"to\": \"dMaMU3-cTA2eAlsX-Cmc_t:APA91bHNsLDKpQUBfHO3QuHZaPnUUBRDlyQAv9gDChJV7t5WFN2dYVE-lOC145D6hVJV8GxWplA4sMrhmra5al1HHGHb3UXmYe6pnY7JNApS4my6uCDqGVdqxfMY5nbhwPYA3Ms-Nwvj\",\r\n  \"notification\": {\r\n    \"body\": \"Suhu Kandang Panas\",\r\n    \"title\": \"Suhu Kandang BeeSet.\"\r\n  }\r\n}",
-            CURLOPT_HTTPHEADER => array("Authorization: key=AAAAIOJWNzc:APA91bEhCJVpG-1W2_VvnjYtcpehs6whqIYlLWYtY1A6RDgL5Vmrol9o-zovflnQry9ps7ajqk4RcC_lSC2E6_ffMMnir7MFXCFio2LtA7NKzkGURAcwjRkOGfDLHQ379LTnngJM6dQ3","Content-Type: application/json"
-        ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-       
-        $data = json_decode($response);
-        $sukses = $data->success;
-        if ($sukses == 1) {
-      
-        $pesan = "Sukses mengirim Notif";
-        }else {
-            $pesan = "Gagal Mengirim Notif";
-        }
-
-         return response()->json($pesan);
-    }
-
     public function getData(Request $request)
     {
         $panen = ([
             'kandang_id' => $request->field1,
             'berat_panen' => $request->field4,
             ]);
-
-        if($request->field4 == 0 ){
-            $val = Panen::where('berat_panen', 0)
-                    ->where('kandang_id', $request->field1)
-                    ->first();
-            if($val->berat_panen == 0){
-                $id = $val->id;
-                $val->berat_panen = $request->field4;
-                $id->update($val->berat_panen);
-
-            }
-            else{
-                $kandang_id = Panen::create($panen)->kandang_id;
-            }     
-            
-        }
-        // else if($request->field4 <= 2){
-        //     $panen->berat_panen = $request->field4;
-        // }
         
-        $aktivitas = new AktivitasKandang();
-        $aktivitas->kandang_id = $kandang_id;
-        $aktivitas->aktivitas_id = 1;
-        $aktivitas->save();
+        $val = Panen::where('berat_panen', 0)
+            ->where('kandang_id', $request->field1)
+            ->orderBy('id','desc')
+            ->first();
+        
+        $cek = Panen::where('kandang_id', $request->field1)
+            ->orderBy('id','desc')
+            ->first();
+        
+        $batas = $request->field4 > 2;
 
-        $latitude = $request->field3;
-        $longitude = $request->field2;
+        $cek2 = Panen::where('berat_panen', $batas)
+            ->where('kandang_id', $request->field1)
+            ->orderBy('id','desc')
+            ->first();
 
-        $input = LokasiKandang::where('kandang_id', $kandang_id)->first();
+        return $batas;
+        
+        // $val2 = Panen::where('berat_panen' <= 2)
+        //     ->where('kandang_id', $request->field1)
+        //     ->orderBy('id','desc')
+        //     ->first();
 
-        if($latitude == $input->latitude || $longitude == $input->longitude ) {
-            echo "0 0";
+        // $val3 = Panen::where('berat_panen' >= 2)
+        //     ->where('kandang_id', $request->field1)
+        //     ->orderBy('id','desc')
+        //     ->first();
+        
+        return $request->field4 <= 2;
+
+        // return $cek;
+
+        if($val){
+            $val->berat_panen = $request->field4;
+            $val->save();
+
+            return response()->json(["status"=>"update","panen"=>$panen]);
+        }        
+        if($cek2){
+            echo "Baa";  
+        } 
+        // $v = new Panen();
+        //         $v->kandang_id = $request->field1;
+        //         $v->berat_panen = 0; 
+        //         $v->save();
+    
+        //         echo "cek2 simpan baru";   
+        if($cek){
+                $cek->berat_panen = $request->field4;
+                $cek->save();
+
+                // if($cek->berat_panen == 2){
+                //     echo "Gak nyapo nyapo";
+                // }
+                // else{
+                //     $kandang_id = Panen::create($panen)->kandang_id;
+                //     return response()->json(["status"=>"buat","panen"=>$panen]);
+                // }
+
+
+                return response()->json(["status"=>"cek update","panen"=>$panen]);
         }
-        else if(Panen::create($panen)){
-            echo "1 0";
-        }
-        else{
-            $input->latitude = $latitude;
-            $input->longitude = $longitude;
-            $input->save();
-
-            $aktivitas2 = new AktivitasKandang();
-            $aktivitas2->kandang_id = $kandang_id;
-            $aktivitas2->aktivitas_id = 4;
-            $aktivitas2->save();
-
-            echo "1 1";
-        }
 
 
 
-        return response()->json($panen);
+
+
+        // else if($cek){
+        //     $cek->berat_panen = $request->field4;
+        //     $cek->save();
+
+        //     return response()->json(["status"=>"cek update","panen"=>$panen]);
+        // }
+
+       
+       
+        // else{
+        //     $kandang_id = Panen::create($panen)->kandang_id;
+
+        //     return response()->json(["status"=>"buat","panen"=>$panen]);
+        // }
+
+        // if($request->field4 == 0){
+            
+
+        //     return $val;
+            
+        //     if($val->berat_panen == 0){
+        //         $val->berat_panen = $request->field4;
+        //         $val->save();
+        //     }  
+        //     else{
+        //         $kandang_id = Panen::create($panen)->kandang_id;
+        //     }     
+            
+        // }
+        // else if($request->field4 <= 2){
+        //     $val->berat_panen = $request->field4;
+        //     $val->save();
+        // } 
+        
+        // $aktivitas = new AktivitasKandang();
+        // $aktivitas->kandang_id = $kandang_id;
+        // $aktivitas->aktivitas_id = 1;
+        // $aktivitas->save();
+
+        // $latitude = $request->field3;
+        // $longitude = $request->field2;
+
+        // $input = LokasiKandang::where('kandang_id', $kandang_id)->first();
+
+        // if($latitude == $input->latitude || $longitude == $input->longitude ) {
+        //     echo "0 0";
+        // }
+        // else if(Panen::create($panen)){
+        //     echo "1 0";
+        // }
+        // else{
+        //     $input->latitude = $latitude;
+        //     $input->longitude = $longitude;
+        //     $input->save();
+
+        //     $aktivitas2 = new AktivitasKandang();
+        //     $aktivitas2->kandang_id = $kandang_id;
+        //     $aktivitas2->aktivitas_id = 4;
+        //     $aktivitas2->save();
+
+        //     echo "1 1";
+        // }
+
+
+
+        // return response()->json($panen);
     }
 
 //Kandang
@@ -229,6 +192,13 @@ class PeternakApiController extends Controller
         $lokasi = new LokasiKandang();
         $lokasi->kandang_id = $kandang_id;
         $lokasi->save();
+
+        $notif = new Notifikasi();
+        $notif->kandang_id = $kandang_id;
+        $notif->berat_sarang = 2;
+        $notif->tanggal = date('Y-m-d H:i:s');
+        $notif->save();
+        
     
         return response()->json(["status"=>"berhasil","kandang"=>$data],201);
         }
@@ -243,6 +213,8 @@ class PeternakApiController extends Controller
                     ->join('kandang', 'kandang.id','=','lokasi_kandang.kandang_id')
                     ->where('kandang.user_id', $request->user()->id)
                     ->get();
+        
+        $hasil[]="";
 
         foreach($kandang as $val => $v ){
             
@@ -320,6 +292,50 @@ class PeternakApiController extends Controller
             return response()->json("Update Berhasil", 201);
         }
 
+    }
+
+    public function notif(Request $request)
+    {
+        $id = $request->field1;
+        $last = Notifikasi::where('kandang_id', $id)->orderBy('tanggal', 'desc')->first();
+        $ambil_token = Kandang::select('users.api_firebase as token')
+                                ->join('users','users.id','=','kandang.user_id')
+                                ->where('kandang.id', $id)
+                                ->first();
+                
+                $token = $ambil_token->token;
+                
+
+            if (date("Y-m-d H:I:s", strtotime($last->tanggal)) < date("Y-m-d H:I:s", strtotime('-30 minutes'))) {
+                $data = Notifikasi::where('kandang_id', $id)->first();
+                $data->tanggal = date('Y-m-d H:i:s');
+                $data->save();
+
+                $fcm = new Notif();
+
+                $pesan = '';
+                if ($request->suhu >= 32) {
+                    $pesan = $pesan." Suhu kandang Panas";
+                }
+
+                if ($request->lembab >= 60) {
+                    $pesan = $pesan." Suhu kandang terlalu lembab";
+                }
+
+                if ($request->berat == $last->berat_sarang) {
+                    $pesan = $pesan." Kandang Siap Panen";
+                    //tambahkan nama kandang kalo bisa
+                }
+
+                $judul = "Suhu Kandang";
+
+                $gas = $fcm->suhu2($token, $judul, $pesan);
+                
+                return "succes";
+
+            }
+    
+  
     }
 
     public function hapusKandang(Request $request){

@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/users', 'PeternakApiController@users');
 Route::post('/peternak/register', 'AuthApiController@register');
 Route::post('/peternak/login', 'AuthApiController@login');
 Route::get('/kelompok', 'PeternakApiController@kelompok');
@@ -33,5 +32,5 @@ Route::post('/peternak/hapuskandang', 'PeternakApiController@hapusKandang')->mid
 Route::post('/peternak/updatekandang', 'PeternakApiController@updateKandang')->middleware('auth:api');
 
 Route::get('peternak/kandang/data', 'PeternakApiController@getData');
-
 Route::post('peternak/kandang/lokasi', 'PeternakApiController@getLokasiKandang');
+Route::get('peternak/kandang/notif', 'PeternakApiController@notif');
