@@ -4,19 +4,6 @@
   <title>Beeset - Konfirmasi Peternak</title>
 @endsection
 @section('ul')
-<nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
-    <div class="scrollbar-inner">
-      <!-- Brand -->
-      <div class="sidenav-header  align-items-center">
-        <a class="navbar-brand" href="javascript:void(0)">
-          <img src="{{ asset('/img/brand/logo.png')}}"> 
-          <!-- <img src="/img/brand/blue.png" class="navbar-brand-img" alt="..."> -->
-        </a>
-      </div>
-      <div class="navbar-inner">
-        <!-- Collapse -->
-        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
-          <!-- Nav items -->
           <ul class="navbar-nav">
             <li class="nav-item">
               <a class="nav-link" href="{{route('ketua.index')}}">
@@ -41,7 +28,6 @@
 @section('content')
     <div class="container-fluid mt-5">
     @if($jumlah != 0)
-    <div class="row">
       <div class="row">
         <div class="col-xl-12">
           <div class="card">
@@ -54,7 +40,7 @@
             </div>
             <div class="table-responsive">
               <!-- Projects table -->
-              <table class="table align-items-center table-flush table-hover" >
+              <table class="table align-items-center table-flush table-hover" style="max-width: 100%;>
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">No</th>
@@ -102,7 +88,6 @@
           </div>
         </div>
       </div>
-    </div>
     @elseif($jumlah == 0)
     <div class="text-center mt-7">
           <h2>--Tidak Ada Peternak Yang Harus Dikonfirmasi--</h2>

@@ -5,19 +5,6 @@
 @endsection
 
 @section('ul')
-<nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
-    <div class="scrollbar-inner">
-      <!-- Brand -->
-      <div class="sidenav-header  align-items-center">
-        <a class="navbar-brand" href="javascript:void(0)">
-          <img src="{{ asset('/img/brand/logo.png')}}"> 
-          <!-- <img src="/img/brand/blue.png" class="navbar-brand-img" alt="..."> -->
-        </a>
-      </div>
-      <div class="navbar-inner">
-        <!-- Collapse -->
-        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
-          <!-- Nav items -->
           <ul class="navbar-nav">
             <li class="nav-item">
               <a class="nav-link" href="{{route('ketua.index')}}">
@@ -60,10 +47,18 @@
 @endsection
 
 @section('content')
-<div class="container-fluid mt-3">
-    <div class="row ml-1 mt-4 mb-4">
-        <h1>Performa Peternak</h1>
+<div class="header bg-warning pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-4 col-7">
+              <h1 class="text-white">Performa Peternak</h1>
+            </div>            
+          </div>
+        </div>
+      </div>
     </div>
+<div class="container-fluid mt--5">
         <div class="row">
         <div class="col-xl-5 order-xl-1">
                   <div class="card card-profile">
@@ -134,65 +129,9 @@
                   <h3 class="mb-0">Kandang</h3>
                 </div>
                 <div class="col text-right">
-                  <a href="" class="btn btn-sm btn-primary" data-target="#exampleModal" data-toggle="modal">Tambah Kandang</a>
+                  
                 </div>
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Tambah Kandang</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                            <form method="post" action="/ketua/peternak/kandang/unggah" role="form">
-                              {{ csrf_field() }}
-                              <div class="row">
-                                  <div class="col-xl-6">
-                                      <div id="map" style="width:100%; height:320px;"></div> 
-                                  </div>
-                                  <div class="col-xl-6">
-                                    <div class="form-group">
-                                          <label for="exampleInputEmail1">Name</label>
-                                          <input type="text" name="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter name">
-                                        </div>
-                                        <div class="form-group">
-                                          <input type="text" name="user_id" class="form-control" id="exampleInputPassword1" value="{{$users->id}}" hidden="">
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="exampleInputPassword1">URL</label>
-                                          <input type="text" name="tkUrl" class="form-control" id="exampleInputPassword1" placeholder="URL Thingspeak">
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="exampleInputPassword1">Location</label>
-                                          <input type="text" name="location" class="form-control" id="exampleInputPassword1" placeholder="Enter Location">
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="exampleInputPassword1">Latitude</label>
-                                          <input type="text" name="latitude" class="form-control" id="lat" placeholder="Enter Location">
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="exampleInputPassword1">Longitude</label>
-                                          <input type="text" name="longitude" class="form-control" id="leng" placeholder="Enter Location">
-                                        </div>
-                                        <div class="form-group">
-                                          <input type="number" name="status" class="form-control" value="1" readonly="" hidden>
-                                        </div>
-                                        <div class="form-group">
-                                          <input type="number" name="kelompok_id" class="form-control" value="{{ Auth::user()->kelompok_id }}" readonly="" hidden>
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                          <button type="submit" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                  </div>
-                              </div>
-                            </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                
               </div>
             </div>
             <div class="table-responsive">
@@ -254,7 +193,7 @@
                                 </div>
                               </div>
                               <div class="col-xl-2">
-                                <button type="submit" class="btn btn-primary">Filter  </button>
+                                  <button type="submit" class="btn btn-primary">Filter  </button>
                               </div>
                           </div>
                           </form>
@@ -305,9 +244,10 @@
                   </tr>
                 @endforeach
                 </tbody>
-                
               </table>
-              <div class="float-right"><div id="demo"></div></div>
+              <div class="float-right mb-3 mt-3"> 
+                <a class="btn btn-sm btn-primary" href="{{route('ketua.tinjauan',[$users->id])}}">Lebih Detail .. </a>
+              </div>
             </div>
           </div>
         </div>
@@ -400,6 +340,9 @@
 
 <script src="{{asset('/js/highcharts.js')}}"></script>
 <script>
+  Highcharts.setOptions({
+                    colors: ['#fb6340']
+                });
   Highcharts.chart('tryChart', {
     chart: {
         type: 'column'
@@ -438,16 +381,5 @@
 
     }]
 });
-</script>
-<script src="{{ asset('/js/pagination.min.js')}}"></script>
-<script>
-  $('#demo').pagination({
-    dataSource: {!!json_encode($detailpanens)!!},
-    callback: function(data, pagination) {
-        // template method of yourself
-        var html = template(data);
-        dataContainer.html(html);
-    }
-})
 </script>
 @endsection

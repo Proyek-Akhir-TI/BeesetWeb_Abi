@@ -30,7 +30,7 @@
 </head>
 
 <body class="bg-orange">
-    @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
+    @include('sweetalert::alert')
   <!-- Navbar -->
   <nav id="navbar-main" class="navbar navbar-horizontal navbar-transparent navbar-main navbar-expand-lg navbar-light">
     <div class="container">
@@ -44,7 +44,7 @@
         <div class="navbar-collapse-header">
           <div class="row">
             <div class="col-6 collapse-brand">
-              <a href="/pj/index">
+              <a href="#">
                 <img src="{{asset ('/img/brand/logo_putih.png') }}">
               </a>
             </div>
@@ -59,12 +59,12 @@
 
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a href="/administrator/kelompok" class="nav-link">
+            <a href="{{route('administrator.kelompok')}}" class="nav-link">
               <span class="nav-link-inner--text"><h3 class="text-white">Tambah Kelompok</h3></span>
             </a>
           </li>
           <li class="nav-item">
-            <a href="/administrator/tambahuser" class="nav-link">
+            <a href="{{route('administrator.tambahuser')}}" class="nav-link">
               <span class="nav-link-inner--text"><h3 class="text-white">Tambah User</h3></span>
             </a>
           </li>

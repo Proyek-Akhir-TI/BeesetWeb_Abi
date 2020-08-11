@@ -209,12 +209,15 @@
 @section('javascript')
 <script src="{{ asset('/js/highcharts.js')}}"></script>
 <script>
+  Highcharts.setOptions({
+                    colors: ['#fb6340']
+                });
   Highcharts.chart('chart', {
     chart: {
         type: 'column'
     },
     title: {
-        text: 'Grafik Panen Kelompok'
+        text: 'Grafik Panen Kelompok Per Tahun'
     },
     xAxis: {
         categories: {!!json_encode($categories)!!},

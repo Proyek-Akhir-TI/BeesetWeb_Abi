@@ -24,6 +24,7 @@ Route::get('/kelompok', 'PeternakApiController@kelompok');
 Route::post('/peternak/reset', 'AuthApiController@reset');
 Route::post('/peternak/firebase', 'AuthApiController@firebase');
 Route::get('/peternak/profile', 'AuthApiController@profile')->middleware('auth:api');
+Route::get('/peternak/update', 'AuthApiController@update')->middleware('auth:api');
 
 
 Route::get('/peternak/listkandang', 'PeternakApiController@kandang')->middleware('auth:api');
@@ -32,5 +33,5 @@ Route::post('/peternak/hapuskandang', 'PeternakApiController@hapusKandang')->mid
 Route::post('/peternak/updatekandang', 'PeternakApiController@updateKandang')->middleware('auth:api');
 
 Route::get('peternak/kandang/data', 'PeternakApiController@getData');
-Route::post('peternak/kandang/lokasi', 'PeternakApiController@getLokasiKandang');
+Route::get('peternak/kandang/aktivitas','PeternakApiController@getAktivitas');
 Route::get('peternak/kandang/notif', 'PeternakApiController@notif');

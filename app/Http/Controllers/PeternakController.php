@@ -7,7 +7,6 @@ use App\User;
 use App\Role;
 use App\Kelompok;
 use DB;
-use Alert;
 use Illuminate\Support\Facades\Auth;
 use App\Kandang;
 use App\JenisAktivitas;
@@ -16,6 +15,7 @@ use App\Panen;
 use Illuminate\Support\Facades\Gate; 
 use Storage;
 use Carbon\Carbon;
+use RealRashid\SweetAlert\Facades\Alert;
 
 
 
@@ -98,15 +98,24 @@ class PeternakController extends Controller
             'categories','data','tahun','categories2','data2','tanggal'));
     }
 
-    public function daftarPeternak(){
-        $data = Auth::user()->kelompok_id;
-        $user = User::where('kelompok_id',$data)
-            ->where('role_id',4)
-            ->where('status', 1)
-            ->paginate(10);
-                
-
-        // $user = User::all(); 
+    public function daftarPeternak(Request $request){
+        if($request->cari == ""){
+            $data = Auth::user()->kelompok_id;
+            $user = User::where('kelompok_id',$data)
+                ->where('role_id',4)
+                ->where('status', 1)
+                ->paginate(10);
+        }
+       
+        else{
+            $cari = $request->cari;
+            $data = Auth::user()->kelompok_id;
+            $user = User::where('kelompok_id',$data)
+                ->where('role_id',4)
+                ->where('status', 1)
+                ->where('nama',$cari)
+                ->paginate(10);
+        }
         return view('ketua.peternak.listpeternak', compact('user'));
     }
 
@@ -134,6 +143,8 @@ class PeternakController extends Controller
 
         return view('ketua.peternak.detailkonfirmasi', compact('peternaks'));
     }
+
+   
 
     public function edit($id)
     {
@@ -178,6 +189,8 @@ class PeternakController extends Controller
         $detailpanens = Panen::select('kandang.nama as nama','panen.berat_panen as berat','panen.created_at as created_at')
                 ->join('kandang','kandang.id','=','panen.kandang_id')
                 ->where('kandang.user_id',$id)
+                ->orderBy('panen.id', 'desc')
+                ->take(5)
                 ->get();
         
         // $kandang->setPageName('page');
@@ -207,6 +220,33 @@ class PeternakController extends Controller
 
         return view('ketua.peternak.peternak', compact('kandang','users','aktivitas','tampilAktivitas',
         'panens','categories', 'data','tahun','detailpanens','panenyuk','maps','jml_kandangs','jml_panen'));
+    }
+
+    public function tinjauan($id, Request $request){
+        $id_peternak = $id;
+
+        if($request->cari == ""){
+            $detailpanens = Panen::select('users.id as id','users.nama as peternak','kandang.nama as nama','panen.berat_panen as berat','panen.created_at as created_at')
+            ->join('kandang','kandang.id','=','panen.kandang_id')
+            ->join('users','users.id','=','kandang.user_id')
+            ->where('kandang.user_id',$id)
+            ->paginate(10);
+              
+        }
+       
+        else{
+            $cari = $request->cari;
+            $detailpanens = Panen::select('users.id as id','users.nama as peternak','kandang.nama as nama','panen.berat_panen as berat','panen.created_at as created_at')
+                ->join('kandang','kandang.id','=','panen.kandang_id')
+                ->join('users','users.id','=','kandang.user_id')
+                ->where('kandang.user_id',$id)
+                ->where('kandang.nama',$cari)
+                ->paginate(10);
+
+            
+        }
+        
+        return view('ketua.peternak.tinjauan',compact('detailpanens','nama_peternak','id_peternak'));
     }
 
 

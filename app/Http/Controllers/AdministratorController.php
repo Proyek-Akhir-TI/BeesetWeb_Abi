@@ -11,13 +11,14 @@ use Image;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AdministratorController extends Controller
 {
 	
 
     public function tambahUser(){
-    	$roles = Role::pluck('name','id');
+    	$roles = Role::pluck('nama','id');
         $kelompoks = Kelompok::all();
 
     	return view('administrator.tambahuser', compact('roles','kelompoks'));
@@ -30,13 +31,13 @@ class AdministratorController extends Controller
         ]);
 
     	$input = new User();
-        $input['name'] = $request->name;
+        $input['nama'] = $request->nama;
         $input['email'] = $request->email;
         $input['password'] = Hash::make($request->password);
         $input['role_id'] = $request->role_id;
         $input['kelompok_id'] = $request->kelompok_id;
-        $input['address'] = $request->address;
-        $input['telp'] = $request->telp;
+        $input['alamat'] = $request->alamat;
+        $input['telpon'] = $request->telpon;
         if($request->file('photo')){
             $image = $request->file('photo');
             $images = 'user_photo'.$request->telp.'.'.$request->file('photo')->extension();
@@ -44,11 +45,12 @@ class AdministratorController extends Controller
             $input['photo'] = $images;
             $images = $request->photo;
         }
+        $input['status'] = 1;
         $input->save();
 
-        // SweetAlert::message('Message','Kelompok Berhasil Dibuat');
+        Alert::success('User Berhasil Dibuat');
 
-        return redirect('/administrator/index');
+        return redirect()->route('administrator.tambahuser');
     }
 
     public function tambahKelompok(){
@@ -57,12 +59,14 @@ class AdministratorController extends Controller
     }
 
     public function buatKelompok(Request $request){
-    	DB::table('kelompoks')->insert([
-            'name' => $request->name,
-            'address' => $request->address,
+    	DB::table('kelompok')->insert([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
             'user_id' => $request->user_id
         ]);
+
+        Alert::success('Kelompok Berhasil Dibuat');
         
-        return redirect('/administrator/index');
+        return redirect()->route('administrator.kelompok');
     }
 }

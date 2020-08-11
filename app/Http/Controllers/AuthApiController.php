@@ -7,10 +7,10 @@ use App\User;
 use App\Kandang;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-//use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Auth;
+use Image;
 
 class AuthApiController extends Controller
 {
@@ -124,7 +124,7 @@ class AuthApiController extends Controller
         $password = $request->password;
         $telpon = $request->telpon;
         $alamat = $request->alamat;
-        $new_photo = $request->file('photo');
+        $new_photo = $request->photo;
 
         $peternak = User::where('id', $id)->first();
 
@@ -139,13 +139,12 @@ class AuthApiController extends Controller
             }
             
             if($new_photo){
-                if($peternak->photo && file_exists(storage_path('app/public/uploads' .$peternak->photo))){
-                    \Storage::delete('public/uploads'. $input->photo);
+                if($input->photo && file_exists(storage_path('app/public/uploads/' .$input->photo))){
+                    Storage::delete('public/uploads/'. $input->photo);
                     }
-                $new_photo_path = $new_photo->storeAs(
-                        'public/uploads', 'peternak_photobaru'.time().'.'.$request->file('photo')->extension()
-                    );
-                $peternak->photo = $new_photo_path;
+                $images = 'user_photobaru'.time().'.'.$request->file('photo')->extension();
+                Image::make($new_photo)->resize(300, 300)->save(storage_path('app/public/uploads/' . $images));
+                $input->photo = $images;
             }
 
             $peternak->save();

@@ -446,6 +446,9 @@
         <script src="{{asset('js/scripts.js')}}"></script>
         <script src="{{ asset('/js/highcharts.js')}}"></script>
         <script>
+                Highcharts.setOptions({
+                    colors: ['#fed136']
+                });
                 Highcharts.chart('Chart_2', {
                     chart: {
                         type: 'column'
@@ -484,6 +487,7 @@
 
                     }]
                 });
+                
         </script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC68gJT0BtgwM_Mc8jMmC7T4FuTQ6IhISc&callback=initMap" type="application/javascript"></script>
 

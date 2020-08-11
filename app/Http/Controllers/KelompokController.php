@@ -156,9 +156,9 @@ class KelompokController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id_kelompok)
+    public function edit($id)
     {
-        $kelompoks = Kelompok::find($id_kelompok);
+        $kelompoks = Kelompok::find($id);
 
         return view('pj.editkelompok', compact('kelompoks'));
     }
@@ -180,7 +180,7 @@ class KelompokController extends Controller
 
         Alert::success('Kelompok Sudah Diedit', 'Edit Berhasil');
 
-        return redirect()->route('pj.daftarkelompok');
+        return redirect()->route('pj.listkelompok');
     }
 
     /**
@@ -207,6 +207,6 @@ class KelompokController extends Controller
 
         Alert::success('Kelompok Sudah Dihapus', 'Hapus Berhasil');
 
-        return redirect()->route('pj.daftarkelompok');
+        return redirect()->route('pj.listkelompok');
     }
 }

@@ -21,9 +21,20 @@
 </head>
 
 <body>
-   @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
+   @include('sweetalert::alert')
   <!-- Sidenav -->
-
+  <nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+    <div class="scrollbar-inner">
+      <!-- Brand -->
+      <div class="sidenav-header  align-items-center">
+        <a class="navbar-brand" href="{{route('ketua.index')}}">
+          <img src="{{ asset('/img/brand/logo.png')}}"> 
+          <!-- <img src="/img/brand/blue.png" class="navbar-brand-img" alt="..."> -->
+        </a>
+      </div>
+      <div class="navbar-inner">
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
           @yield('ul')
         </div>
       </div>
@@ -76,6 +87,7 @@
                             @endif 
               @else
               <div class="dropdown-menu  dropdown-menu-right ">
+                
                 <a href="{{ route('logout') }}" class="dropdown-item"  onclick="event.preventDefault();
                  document.getElementById('logout-form').submit();">
                   <i class="ni ni-user-run"></i>

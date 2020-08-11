@@ -15,7 +15,7 @@
             <div class=" text-center mb-5">
                  <h1 class="text-warning">Tambah Kelompok</h1> 
             </div>
-            <form role="form" action="/administrator/buatkelompok" method="post">
+            <form role="form" action="{{route('administrator.buatkelompok')}}" method="post">
               {{ csrf_field() }}
                 <div class="form-group">
                   <label for="name" class="text-warning mb-3">Nama Kelompok</label>
@@ -23,7 +23,7 @@
                     <div class="input-group-prepend" style="border: 1px #fb6340 solid;">
                       <span class="input-group-text"><i class="ni ni-circle-08 text-warning"></i></span>
                     </div>
-                    <input id="name" type="text" class="form-control" style="border: 1px #fb6340 solid; border-left: 1px #fff solid; color: #000;" name="name" required autocomplete="name" autofocus>
+                    <input id="name" type="text" class="form-control" style="border: 1px #fb6340 solid; border-left: 1px #fff solid; color: #000;" name="nama" required autocomplete="name" autofocus>
                   </div>
                 </div>
                 <div class="form-group">
@@ -35,7 +35,7 @@
                     <div class="input-group-prepend" style="border: 1px #fb6340 solid;">
                       <span class="input-group-text"><i class="ni ni-pin-3 text-warning"></i></span>
                     </div>
-                    <textarea id="address" type="text" class="form-control" style="border: 1px #fb6340 solid; border-left: 1px #fff solid; color: #000;" name="address" required autocomplete="address" autofocus></textarea>
+                    <textarea id="address" type="text" class="form-control" style="border: 1px #fb6340 solid; border-left: 1px #fff solid; color: #000;" name="alamat" required autocomplete="address" autofocus></textarea>
                   </div>
                 </div>
                 <div class="text-center">

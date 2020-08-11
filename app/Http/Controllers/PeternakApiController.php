@@ -30,140 +30,69 @@ class PeternakApiController extends Controller
             'kandang_id' => $request->field1,
             'berat_panen' => $request->field4,
             ]);
-        
-        $val = Panen::where('berat_panen', 0)
-            ->where('kandang_id', $request->field1)
-            ->orderBy('id','desc')
-            ->first();
-        
+
         $cek = Panen::where('kandang_id', $request->field1)
             ->orderBy('id','desc')
             ->first();
-        
-        $batas = $request->field4 > 2;
 
-        $cek2 = Panen::where('berat_panen', $batas)
-            ->where('kandang_id', $request->field1)
+        if($cek->berat_panen > $request->field4){
+            $new = new Panen();
+            $new->kandang_id = $request->field1;
+            $new->berat_panen = $request->field4;
+            $new->save();
+
+            $aktivitas = new AktivitasKandang();
+            $aktivitas->kandang_id = $request->field1;
+            $aktivitas->aktivitas_id = 1;
+            $aktivitas->save();
+
+            // return response()->json(["status"=>"create","panen"=>$new]);
+        }
+        
+        if($request->field4 == 0){
+            $val = Panen::where('kandang_id', $request->field1)
             ->orderBy('id','desc')
             ->first();
 
-        return $batas;
-        
-        // $val2 = Panen::where('berat_panen' <= 2)
-        //     ->where('kandang_id', $request->field1)
-        //     ->orderBy('id','desc')
-        //     ->first();
-
-        // $val3 = Panen::where('berat_panen' >= 2)
-        //     ->where('kandang_id', $request->field1)
-        //     ->orderBy('id','desc')
-        //     ->first();
-        
-        return $request->field4 <= 2;
-
-        // return $cek;
-
-        if($val){
             $val->berat_panen = $request->field4;
             $val->save();
 
-            return response()->json(["status"=>"update","panen"=>$panen]);
-        }        
-        if($cek2){
-            echo "Baa";  
-        } 
-        // $v = new Panen();
-        //         $v->kandang_id = $request->field1;
-        //         $v->berat_panen = 0; 
-        //         $v->save();
-    
-        //         echo "cek2 simpan baru";   
-        if($cek){
-                $cek->berat_panen = $request->field4;
-                $cek->save();
-
-                // if($cek->berat_panen == 2){
-                //     echo "Gak nyapo nyapo";
-                // }
-                // else{
-                //     $kandang_id = Panen::create($panen)->kandang_id;
-                //     return response()->json(["status"=>"buat","panen"=>$panen]);
-                // }
-
-
-                return response()->json(["status"=>"cek update","panen"=>$panen]);
+            // return response()->json(["status"=>"update","panen"=>$panen]);
         }
 
+        if($request->field4 > 0){
+            $val = Panen::where('kandang_id', $request->field1)
+            ->orderBy('id','desc')
+            ->first();
 
+            $val->berat_panen = $request->field4;
+            $val->save();
 
-
-
-        // else if($cek){
-        //     $cek->berat_panen = $request->field4;
-        //     $cek->save();
-
-        //     return response()->json(["status"=>"cek update","panen"=>$panen]);
-        // }
-
-       
-       
-        // else{
-        //     $kandang_id = Panen::create($panen)->kandang_id;
-
-        //     return response()->json(["status"=>"buat","panen"=>$panen]);
-        // }
-
-        // if($request->field4 == 0){
-            
-
-        //     return $val;
-            
-        //     if($val->berat_panen == 0){
-        //         $val->berat_panen = $request->field4;
-        //         $val->save();
-        //     }  
-        //     else{
-        //         $kandang_id = Panen::create($panen)->kandang_id;
-        //     }     
-            
-        // }
-        // else if($request->field4 <= 2){
-        //     $val->berat_panen = $request->field4;
-        //     $val->save();
-        // } 
+            // return response()->json(["status"=>"update 2","panen"=>$panen]);
+        }        
         
-        // $aktivitas = new AktivitasKandang();
-        // $aktivitas->kandang_id = $kandang_id;
-        // $aktivitas->aktivitas_id = 1;
-        // $aktivitas->save();
+        $latitude = $request->field3;
+        $longitude = $request->field2;
 
-        // $latitude = $request->field3;
-        // $longitude = $request->field2;
+        $lokasi = LokasiKandang::where('kandang_id', $request->field1)->first();
 
-        // $input = LokasiKandang::where('kandang_id', $kandang_id)->first();
+        if($latitude == $lokasi->latitude || $lokasi == $lokasi->longitude ) {
+            return response()->json(["status"=>"Tidak Update","panen update"=>$panen]);
+        }
+        
+        else{
+            $lokasi->latitude = $latitude;
+            $lokasi->longitude = $longitude;
+            $lokasi->save();
 
-        // if($latitude == $input->latitude || $longitude == $input->longitude ) {
-        //     echo "0 0";
-        // }
-        // else if(Panen::create($panen)){
-        //     echo "1 0";
-        // }
-        // else{
-        //     $input->latitude = $latitude;
-        //     $input->longitude = $longitude;
-        //     $input->save();
+            $aktivitas2 = new AktivitasKandang();
+            $aktivitas2->kandang_id = $request->field1;
+            $aktivitas2->aktivitas_id = 4;
+            $aktivitas2->save();
 
-        //     $aktivitas2 = new AktivitasKandang();
-        //     $aktivitas2->kandang_id = $kandang_id;
-        //     $aktivitas2->aktivitas_id = 4;
-        //     $aktivitas2->save();
+            return response()->json(["status"=>"Update","lokasi"=>$lokasi,"panen"=>$panen]);
+        }
 
-        //     echo "1 1";
-        // }
-
-
-
-        // return response()->json($panen);
     }
 
 //Kandang
@@ -195,7 +124,7 @@ class PeternakApiController extends Controller
 
         $notif = new Notifikasi();
         $notif->kandang_id = $kandang_id;
-        $notif->berat_sarang = 2;
+        $notif->berat_sarang = 2000;
         $notif->tanggal = date('Y-m-d H:i:s');
         $notif->save();
         
@@ -204,11 +133,7 @@ class PeternakApiController extends Controller
         }
 
         public function kandang(Request $request)
-    {
-        // $kandang = Kandang::where('user_id', $request->user()->id)
-        //             ->join('kandang', 'kandang.id','=','lokasi_kandang.kandang_id') 
-        //             ->get();
-        // // $kandang = Kandang::find($request->user()->id);
+        {
         $kandang = LokasiKandang::select('kandang.id as id', 'kandang.nama as nama', 'kandang.url as url','kandang.kelompok_id as kelompok_id','kandang.foto as foto', 'lokasi_kandang.latitude as latitude','lokasi_kandang.longitude as longitude')
                     ->join('kandang', 'kandang.id','=','lokasi_kandang.kandang_id')
                     ->where('kandang.user_id', $request->user()->id)
@@ -228,18 +153,7 @@ class PeternakApiController extends Controller
                 "longitude" => $v->longitude,          
             ];
         }
-
-        // foreach($lokasi as $value => $va ){
-            
-        //     $lok[] = [
-        //         "kandang_id" => $va->kandang_id,
-        //         "latitude" => $va->latitude,
-        //         "longitude" => $va->longitude,        
-        //     ];
-        // }
-
-
-        
+       
         
         return response()->json( ['kandang' => $hasil] ,200);
     }
@@ -259,40 +173,19 @@ class PeternakApiController extends Controller
                 $update->user_id = $user_id;
                 $update->kelompok_id = $kelompok_id;
                 if($new_photo){
-                    if($update->foto && file_exists(storage_path('app/public/kandang' .$update->foto))){
-                    \Storage::delete('public/kandang'. $update->foto);
-                    }
-                    $new_photo_path = $new_photo->storeAs(
-                        'public/kandang', 'kandang_photobaru'.time().'.'.$request->file('foto')->extension()
-                    );
-                    $update->foto = $new_photo_path;
+                    if($input->foto && file_exists(storage_path('app/public/kandang/' .$input->foto))){
+                        Storage::delete('public/kandang/'. $input->foto);
+                        }
+                    $images = 'kandang_photobaru'.time().'.'.$request->file('photo')->extension();
+                    Image::make($new_photo)->resize(300, 300)->save(storage_path('app/public/kandang/' . $images));
+                    $input->foto = $images;
                 }
 
                 $update->save();
             }
             return response()->json($update);
         }
-        
-    public function getLokasiKandang(Request $request)
-    {
-        $kandang_id = $request->kandang_id;
-        $latitude = $request->latitude;
-        $longitude = $request->longitude;
 
-        $input = LokasiKandang::where('kandang_id', $kandang_id)->first();
-
-        if($latitude == $input->latitude || $longitude == $input->longitude ) {
-            return response()->json("Gagal Update", 422);
-        }
-        else{
-            $input->latitude = $request->latitude;
-            $input->longitude = $request->longitude;
-            $input->save();
-
-            return response()->json("Update Berhasil", 201);
-        }
-
-    }
 
     public function notif(Request $request)
     {
@@ -303,7 +196,9 @@ class PeternakApiController extends Controller
                                 ->where('kandang.id', $id)
                                 ->first();
                 
-                $token = $ambil_token->token;
+        $token = $ambil_token->token;
+
+        $patokan = $last->berat_sarang * 0.8;
                 
 
             if (date("Y-m-d H:I:s", strtotime($last->tanggal)) < date("Y-m-d H:I:s", strtotime('-30 minutes'))) {
@@ -322,7 +217,7 @@ class PeternakApiController extends Controller
                     $pesan = $pesan." Suhu kandang terlalu lembab";
                 }
 
-                if ($request->berat == $last->berat_sarang) {
+                if ($request->berat >= $patokan) {
                     $pesan = $pesan." Kandang Siap Panen";
                     //tambahkan nama kandang kalo bisa
                 }
@@ -343,5 +238,13 @@ class PeternakApiController extends Controller
         Kandang::where('id', $request->id)->delete();
 
         return response()->json("Hapus Berhasil");
+    }
+
+    public function getAktivitas(Request $request){
+     
+        $aktivitas = new AktivitasKandang();
+        $aktivitas->kandang_id = $request->field1;
+        $aktivitas->aktivitas_id = $request->field2;
+        
     }
 }

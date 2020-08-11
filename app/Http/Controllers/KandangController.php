@@ -19,14 +19,6 @@ use Illuminate\Support\Facades\Auth;
 class KandangController extends Controller
 {
 
-    public function storeAktivitas(Request $request)
-    {
-        $input = new AktivitasKandang();
-        $input['kandang_id'] = $request->kandang_id;
-        $input['aktivitas_id'] = $request->aktivitas_id;
-        $input->save();
-    }
-
     public function explore($id, Request $request){
         $kandangs = Kandang::find($id);
 
@@ -76,7 +68,7 @@ class KandangController extends Controller
         }
 
         $curl = curl_init(); 
-        curl_setopt($curl, CURLOPT_URL, 'https://api.thingspeak.com/channels/1085076/feeds.json?api_key=R28BW9NXV8RGGCQ6&results=1000'); 
+        curl_setopt($curl, CURLOPT_URL, $kandangs->url); 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); 
         $result = curl_exec($curl); 
         curl_close($curl);      

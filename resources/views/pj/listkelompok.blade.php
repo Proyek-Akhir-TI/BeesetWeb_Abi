@@ -7,19 +7,19 @@
 @section('ul')
 <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="/pj/index">
+              <a class="nav-link" href="{{route('pj.beranda')}}">
                 <i class="ni ni-tv-2 text-orange"></i>
                 <span class="nav-link-text">Beranda</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/pj/tambahkelompok">
+              <a class="nav-link" href="{{route('pj.tambahkelompok')}}">
                 <i class="ni ni-fat-add text-orange"></i>
                 <span class="nav-link-text">Tambah Kelompok</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="/pj/daftarkelompok">
+              <a class="nav-link active" href="{{route('pj.listkelompok')}}">
                 <i class="ni ni-align-center text-orange"></i>
                 <span class="nav-link-text">Daftar Kelompok</span>
               </a>
@@ -28,7 +28,6 @@
 @endsection
 
 @section('content')
-@include('pj.editkelompok')
 	<div class="container-fluid mt-5">
       <div class="row">
         <div class="col-xl-12">
@@ -72,7 +71,7 @@
                     </td>
                     <td>
                     <a href="{{route('pj.kelompok.explore',[$kelompok->id])}}"  class="btn btn-sm btn-primary">Explore</a>
-                    <button href="" onclick="myFunction()" class="btn btn-sm btn-success edit">Edit</button>
+                    <a href="{{route('pj.kelompok.edit',[$kelompok->id])}}"  class="btn btn-sm btn-success edit">Edit</a>
                     <a href="{{route('pj.kelompok.delete',[$kelompok->id])}}" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                   </tr>
@@ -92,26 +91,4 @@
 
 @section('javascript')
   
-  <!-- ============================ Edit Data ========================== -->
-  <script>
- 
-        function myFunction(){
-
-            var table = $('.table');
- 
-             $tr = $(this).closest('tr');
-             if ($($tr).hasClass('child')) {
-                 $tr = $tr.prev('.parent');
-             }
- 
-             var data = table.row($tr).data();
-             console.log(data);
-            //  
-             $('#editForm').attr('action', '/pj/updatekelompok/'+data[1]);
-             $('#editModal').modal('show');
-         };
- 
-    
-     </script>
-<!-- ============================ End Edit Data ===================== -->
 @endsection

@@ -21,7 +21,7 @@
 </head>
 
 <body>
-   @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
+   @include('sweetalert::alert')
   <!-- Sidenav -->
   <nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <div class="scrollbar-inner">
@@ -97,7 +97,7 @@
               </a>
             </li>
           </ul>
-          <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
+          <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">         
             <li class="nav-item dropdown">
               <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="media align-items-center">
@@ -116,12 +116,14 @@
                                 </li>
                             @endif 
               @else
-              <div class="dropdown-menu  dropdown-menu-right ">
+              
+                <div class="dropdown-divider"></div>
                 <a href="{{ route('logout') }}" class="dropdown-item"  onclick="event.preventDefault();
                  document.getElementById('logout-form').submit();">
                   <i class="ni ni-user-run"></i>
                   <span>Logout</span> 
                 </a>
+                
                 <form id="logout-form" action="{{ route('logout') }}" method="get" style="display: none;">
                       @csrf
                 </form>
