@@ -83,5 +83,32 @@ class Controller extends BaseController
         return view('landing', compact('data2','categories2','maps'));
 
     }
+
+    public function tampilReset(){
+        return view('auth.passwords.reset');
+    }
+
+    public function reset(Request $request){
+        $nama = $request->nama;
+        $email = $request->email;
+        $telpon = $request->telpon;
+
+        $user = User::where('nama', $nama)
+            ->where('email', $email)
+            ->where('telpon', $telpon)
+            ->first();
+
+        if($user){
+            $user['password'] = Hash::make($request->password);
+            $user->save();
+
+            Alert::success('Reset Password Berhasil');
+            return view('login');
+        }
+        else{
+            Alert::error('Reset Password Gagal');
+            return view('login');
+        }
+    }
     
 }

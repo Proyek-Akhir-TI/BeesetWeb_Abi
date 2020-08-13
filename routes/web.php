@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('landing');
 });
 
+Route::get('/telegram', function () {
+    return view('telegram');
+});
+
 Route::get('/foo', function () {
     Artisan::call('storage:link');
 });
@@ -27,7 +31,10 @@ Route::post('register','Controller@register')->middleware('guest')->name('regist
 Route::get('login','AuthController@login')->middleware('guest')->name('login');
 Route::post('storeLogin','AuthController@storeLogin')->middleware('guest')->name('storeLogin');
 Route::get('logout', 'AuthController@logout')->name('logout');
-Route::get('/ketua/edit/{id}', 'KetuaController@profil')->name('ketua.edit');  
+Route::get('/ketua/edit/{id}', 'KetuaController@profil')->name('ketua.edit');
+
+Route::get('/tampil-reset', 'Controller@tampilReset')->name('tampil-reset');
+Route::post('/reset', 'Controller@reset')->name('reset');
 
 
 Route::group(['middleware' => ['auth','pj-role']], function(){
@@ -45,8 +52,6 @@ Route::group(['middleware' => ['auth','pj-role']], function(){
     Route::get('/pj/profil/{id}','PjController@profil')->name('pj.profil');
     
 });
-
-
 
 Route::group(['middleware' => ['auth','ketua-role']], function(){
     Route::get('/ketua/index', 'KetuaController@profil')->name('ketua.index');
