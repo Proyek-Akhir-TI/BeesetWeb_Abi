@@ -32,26 +32,8 @@ class TelegramController extends Controller
             ->get();
 
            
-    if ($pesan == "lokasi") {
-        foreach($kandang as $val){
-            $balas =  $val->nama." "."https://www.google.com/maps/@".$val->latitude.",".$val->longitude."".",10.0z"; 
-            echo $balas;
-            $status = Telegram::sendMessage($id,$balas);
-            }
-        }
-    else if($pesan == "berat"){
-        foreach($berat as $val){
-            $balas = $val->kandang." Telah panen sebanyak ".(float)$val->total." Kg";
-            echo $pesan;
-            $status = Telegram::sendMessage($id,$balas);
-            }
-    }
-        
-            else{
-                echo $pesan;
-            }
-        
-        
+        return view('telegram', compact('pesan','kandang','berat','id'));
+   
        
     }
 
