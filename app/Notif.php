@@ -52,7 +52,7 @@ class Notif
         return $result;
     }
 
-    public function telegram()
+    public static function telegram()
     {
         $curl = curl_init();
 
@@ -76,7 +76,7 @@ class Notif
             $count = count($data['result']);
             if (isset($data['result'][$count-1]['message']['text'])) {
                 $text = $data['result'][$count-1]['message']['text'];
-                echo  $text;
+                return  $text;
             } else {
                 echo "NO";
             }
@@ -84,7 +84,7 @@ class Notif
             echo "Bot Error";
         }
     }
-    public function getID()
+    public static function getID()
     {
         $curl = curl_init();
 
@@ -112,7 +112,39 @@ class Notif
         }
     }
 
-    public function sendMessage($id, $pesan)
+    public static function getNama()
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.telegram.org/bot1368259338:AAGycYAzyo2CgURnrxt07FdriY4seAkYuwc/getUpdates",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+      ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $data = json_decode($response, true);
+        $status = $data['ok'];
+        if ($status) {
+            $count = count($data['result']);
+            $firstname = $data['result'][$count-1]['message']['chat']['first_name'];
+            $lastname = $data['result'][$count-1]['message']['chat']['last_name'];
+
+            $id = $data['result'][$count-1]['message']['chat']['id'];
+
+            return $firstname." ".$lastname;
+        } else {
+            return "No name";
+        }
+    }
+
+    public static function sendMessage($id, $pesan)
     {
         $curl = curl_init();
 

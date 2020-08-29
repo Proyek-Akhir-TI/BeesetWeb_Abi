@@ -8,7 +8,7 @@ class Kelompok extends Model
 {
     protected $table = 'kelompok';
 
-    protected $fillable = ['id','name','address','user_id'];
+    protected $fillable = ['id','nama','alamat','user_id'];
 
     public function user()
     {

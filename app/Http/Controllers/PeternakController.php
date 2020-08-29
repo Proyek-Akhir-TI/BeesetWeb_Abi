@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Role;
 use App\Kelompok;
+use App\Notif;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use App\Kandang;
@@ -253,6 +254,15 @@ class PeternakController extends Controller
     public function destroy($id)
     {
         $peternak = User::findOrFail($id);
+
+        $notif = new Notif();
+        $token = $peternak->api_firebase;
+
+        $pesan = 'Akun Beeset Anda Non Aktifkan';
+       
+        $judul = $pternak->nama;
+        $notif->suhu2($token, $judul, $pesan);
+
 
         if($peternak->photo)
         Storage::delete('public/uploads'.$peternak->photo);

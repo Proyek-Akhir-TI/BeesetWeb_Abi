@@ -17,9 +17,7 @@ Route::get('/', function () {
     return view('landing');
 });
 
-Route::get('/telegram', function () {
-    return view('telegram');
-});
+Route::get('/telegram','TelegramController@tele');
 
 Route::get('/foo', function () {
     Artisan::call('storage:link');
@@ -66,11 +64,13 @@ Route::group(['middleware' => ['auth','ketua-role']], function(){
     Route::get('/ketua/explore/lokasi/{id}', 'KandangController@lokasi')->name('ketua.explore.lokasi');
     Route::get('/ketua/hapus/{id}', 'PeternakController@destroy')->name('ketua.hapus');
     Route::get('/ketua/explore/kandang/{id}','KandangController@explore')->name('ketua.explore.kandang');
+    Route::get('/ketua/tolak/{id}','KonfirmasiController@tolak')->name('ketua.tolak');
 }); 
 
 Route::group(['middleware' => ['auth','super-role']], function(){
     Route::get('/administrator/tambahuser', 'AdministratorController@tambahUser')->name('administrator.tambahuser');
     Route::get('/administrator/kelompok', 'AdministratorController@tambahKelompok')->name('administrator.kelompok');
+    Route::get('/administrator/index', 'AdministratorController@pengguna')->name('administrator.index');
     Route::post('/administrator/buatuser', 'AdministratorController@buatUser')->name('administrator.buatuser');
     Route::post('/administrator/buatkelompok', 'AdministratorController@buatKelompok')->name('administrator.buatkelompok');
 }); 

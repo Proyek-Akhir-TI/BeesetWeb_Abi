@@ -124,7 +124,7 @@ class PeternakApiController extends Controller
 
         $notif = new Notifikasi();
         $notif->kandang_id = $kandang_id;
-        $notif->berat_sarang = 2000;
+        $notif->berat_sarang = 1000;
         $notif->tanggal = date('Y-m-d H:i:s');
         $notif->save();
         
@@ -247,4 +247,30 @@ class PeternakApiController extends Controller
         $aktivitas->aktivitas_id = $request->field2;
         
     }
+
+    public function setBerat(Request $request){
+
+        $id = $request->id;
+        $set = Notifikasi::where('kandang_id', $id)->first();
+
+        $set->berat_sarang = $request->berat_sarang;
+        $set->save();
+    }
+
+    public function setPanen(Request $request){
+        $id = $request->kandang_id;
+        $kandang = Panen::where('kandang_id', $id)->first();
+        
+        $kandang->status = $request->status;
+        $kandang->save();
+    
+        $pesan = [
+                      "message" => "Set Panen Berhasil",
+                      "error" => false,
+                      "Panen" => $kandang,
+                      
+                  ];
+    return response()->json($pesan);
+  }
 }
+

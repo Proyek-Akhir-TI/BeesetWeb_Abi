@@ -35,3 +35,4 @@ Route::post('/peternak/updatekandang', 'PeternakApiController@updateKandang')->m
 Route::get('peternak/kandang/data', 'PeternakApiController@getData');
 Route::get('peternak/kandang/aktivitas','PeternakApiController@getAktivitas');
 Route::get('peternak/kandang/notif', 'PeternakApiController@notif');
+Route::post('peternak/kandang/setberat', 'PeternakApiController@setBerat')->middleware('auth:api');

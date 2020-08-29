@@ -19,8 +19,15 @@ if ($pesan == "lokasi") {
         }
     else if($pesan == "berat"){
         foreach($berat as $val){
-            $balas = $val->kandang." Telah panen sebanyak ".(float)$val->total." Kg";
-            echo $pesan;
+            $balas = $val->kandang." Telah panen sebanyak ".$val->berat_panen." Kg"." Tanggal Panen ". $val->created_at;
+            echo $balas;
+            $status = Telegram::sendMessage($id,$balas);
+            }
+    }
+    else if($pesan == "total berat"){
+        foreach($akumulasi as $v){
+            $balas = $v->kandang." Telah panen sebanyak ".$v->total." Kg";
+            echo $balas;
             $status = Telegram::sendMessage($id,$balas);
             }
     }

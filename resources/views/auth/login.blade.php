@@ -39,7 +39,11 @@
               </form>
             </div>
           </div>
-          
+          <div class="row mt-3">
+            <div class="col-12">
+              <a href="{{route('tampil-reset')}}" class="text-white text-center"><small>Lupa password?</small></a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

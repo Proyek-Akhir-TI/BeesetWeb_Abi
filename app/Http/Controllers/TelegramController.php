@@ -25,14 +25,20 @@ class TelegramController extends Controller
             ->where('kandang.user_id', $id_user)
             ->get();
 
-        $berat = Panen::select('kandang.nama as kandang', DB::raw('SUM(berat_panen) as total'))
+            $berat = Panen::select('kandang.nama as kandang', 'panen.berat_panen','panen.created_at')
+            ->join('kandang','kandang.id','=','panen.kandang_id')
+            ->join('users','users.id','=','kandang.user_id')
+            ->where('kandang.user_id', $id_user)
+            ->get();
+
+            $akumulasi = Panen::select('kandang.nama as kandang',DB::raw('SUM(berat_panen) as total'))
             ->join('kandang','kandang.id','=','panen.kandang_id')
             ->join('users','users.id','=','kandang.user_id')
             ->where('kandang.user_id', $id_user)
             ->get();
 
            
-        return view('telegram', compact('pesan','kandang','berat','id'));
+        return view('telegram', compact('pesan','kandang','berat','id','akumulasi'));
    
        
     }

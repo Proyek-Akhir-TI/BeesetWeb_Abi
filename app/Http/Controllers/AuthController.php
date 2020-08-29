@@ -29,7 +29,7 @@ class AuthController extends Controller
             
             if(auth()->user()->role_id == 1){
                 Alert::success('Selamat datang Administrator');
-                return redirect()->route('administrator.kelompok');
+                return redirect()->route('administrator.index');
             }
             elseif (auth()->user()->role_id == 2) {
                 Alert::success('Selamat datang Penanggung Jawab');

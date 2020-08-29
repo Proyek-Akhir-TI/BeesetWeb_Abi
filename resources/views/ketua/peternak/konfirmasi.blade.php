@@ -75,7 +75,7 @@
                     <td>
                     <a href="{{route('ketua.detailkonfirmasi',[$peternak->id])}}"  class="btn btn-sm btn-primary">Detail</a>
                     <!-- <a href="/ketua/edit/{{$peternak->id}}" class="btn btn-sm btn-success">Edit</a> -->
-                    <a href="{{route('ketua.hapus',[$peternak->id])}}" class="btn btn-sm btn-danger">Hapus</a>
+                    <a href="{{route('ketua.tolak',[$peternak->id])}}" class="btn btn-sm btn-danger">Hapus</a>
                     </td>
                   </tr>
                 @endforeach

@@ -63,134 +63,58 @@
 @section('javascript') 
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC68gJT0BtgwM_Mc8jMmC7T4FuTQ6IhISc&callback=initialize" type="application/javascript"></script>
-<!-- 
-<script type="application/javascript">
-  google.maps.event.addDomListener(window, 'load', initialize);
-        function initialize() {
-          
-            //Cek Support Geolocation
-            if(navigator.geolocation){
-            //Mengambil Fungsi golocation
-            navigator.geolocation.getCurrentPosition(lokasi);
-            }
-            else{
-            swal("Maaf Browser tidak Support HTML 5");
-            }
-            //Variabel Marker
-            var marker;
-
-            function taruhMarker(peta, posisiTitik){
-                
-                if( marker ){
-                // pindahkan marker
-                marker.setPosition(posisiTitik);
-                } else {
-                // buat marker baru
-                marker = new google.maps.Marker({
-                    position: posisiTitik,
-                    map: peta,
-                    icon : 'https://img.icons8.com/plasticine/40/000000/marker.png',
-                });
-                }
-                
-            }
-            //Buat Peta
-            var peta = new google.maps.Map(document.getElementById("map"), {
-                    center: {lat: -8.408698, lng: 114.2339090},
-                    zoom: 9
-                });
-            
-            //Fungsi untuk geolocation
-            function lokasi(position){
-
-                //Mengirim data koordinat ke form input
-                document.getElementById("lat").value = position.coords.latitude;
-                document.getElementById("leng").value = position.coords.longitude;
-
-                //Current Location
-                var lat = position.coords.latitude;
-                var long = position.coords.longitude;
-                var latlong = new google.maps.LatLng(lat, long);
-                
-                //Current Marker 
-                var currentMarker = new google.maps.Marker({
-                        position: latlong, 
-                        icon : 'https://img.icons8.com/plasticine/40/000000/user-location.png',
-                        map: peta, 
-                        title: "Anda Disini"
-                    }); 
-                //Membuat Marker Map dengan Klik
-                var latLng = new google.maps.LatLng(-8.408698,114.2339090);
-                
-                var addMarkerClick = google.maps.event.addListener(peta,'click',function(event) {
-                    
-                    
-                    taruhMarker(this, event.latLng);
-                
-                    //Kirim data ke form input dari klik
-                    document.getElementById("lat").value = event.latLng.lat();
-                    document.getElementById("leng").value = event.latLng.lng(); 
-                    
-                });
-            }
-            
-
-
-      }
-
-</script> -->
 
 <!-- ============= Array ============= -->
 
-    <script>
-      var array =[];
-    </script>
+        <script>
+          var array =[];
+        </script>
 
-    @foreach ($maps as $map)
+        @foreach ($maps as $map)
 
-    <script type="text/javascript">
-        //Memasukkan data tabel ke array
-        array.push(['<?php echo $map->latitude?>','<?php echo $map->longitude?>','<?php echo $map->nama?>','<?php echo $map->peternak?>']);
-    </script> 
+        <script type="text/javascript">
+            //Memasukkan data tabel ke array
+            array.push(['<?php echo $map->latitude?>','<?php echo $map->longitude?>','<?php echo $map->nama?>','<?php echo $map->peternak?>']);
+        </script> 
 
-    @endforeach
+        @endforeach
   
 <!-- ============= Array ============= -->
 
-<script>
-     
-      function initialize() {
-        var bounds = new google.maps.LatLngBounds();
-        var peta = new google.maps.Map(document.getElementById("mapyuk"), {
-          center : {lat: -8.408698, lng: 114.2339090},
-          zoom : 9.5
-        });
-        var infoWindow = new google.maps.InfoWindow(), marker, i;
-        for (var i = 0; i < array.length; i++) {
-          
-          var position = new google.maps.LatLng(array[i][0],array[i][1]);
-          bounds.extend(position);
-          var marker = new google.maps.Marker({
-            position : position,
-            map : peta,
-            icon : 'https://img.icons8.com/plasticine/40/000000/marker.png',
+        <script>
             
-          });
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-              var infoWindowContent = 
-              '<div class="content"><p>'+
-              '<h2>'+array[i][2]+'</h2>'+
-              'Pemilik : '+array[i][3]+'<br/>'+
-              'Titik Koordinat : '+array[i][0]+', '+array[i][1]+'<br/>'+
-              '</p></div>';
-              infoWindow.setContent(infoWindowContent);
-              infoWindow.open(peta, marker);
-            }
-          })(marker, i));
-        }
-       
-      }
-      
-    </script>
+              function initialize() {
+                var bounds = new google.maps.LatLngBounds();
+                var peta = new google.maps.Map(document.getElementById("mapyuk"), {
+                  center : {lat: -8.408698, lng: 114.2339090},
+                  zoom : 9.5
+                });
+                var infoWindow = new google.maps.InfoWindow(), marker, i;
+                for (var i = 0; i < array.length; i++) {
+                  
+                  var position = new google.maps.LatLng(array[i][0],array[i][1]);
+                  bounds.extend(position);
+                  var marker = new google.maps.Marker({
+                    position : position,
+                    map : peta,
+                    icon : 'https://img.icons8.com/plasticine/40/000000/marker.png',
+                    
+                  });
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                      return function() {
+                        var infoWindowContent = 
+                        '<div class="content"><p>'+
+                        '<h2>'+array[i][2]+'</h2>'+
+                        'Pemilik : '+array[i][3]+'<br/>'+
+                        'Titik Koordinat : '+array[i][0]+', '+array[i][1]+'<br/>'+
+                        '</p></div>';
+                        infoWindow.setContent(infoWindowContent);
+                        infoWindow.open(peta, marker);
+                      }
+                    })(marker, i));
+                  }
+                
+                }
+                
+              </script>
 @endsection

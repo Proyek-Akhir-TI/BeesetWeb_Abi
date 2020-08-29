@@ -90,7 +90,7 @@
                        </div>
                        <div class="row">
                           <div class="col-xl-6">
-                          <input id="text" value="Kandang = {{$kandangs->nama}}, Pemilik = {{$kandangs->user->nama}}, Kelompok = {{$kandangs->user->kelompok->nama}}, Alamat = " type="text" hidden/><br />
+                          <input id="text" value="Kandang = {{$kandangs->nama}}, Pemilik = {{$kandangs->user->nama}}, Kelompok = {{$kandangs->user->kelompok->nama}}, Alamat Pemilik = {{$kandangs->user->alamat}} " type="text" hidden/><br />
                           <button id="btn-qrcode" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Qr Code</button>
                           </div>
                         </div>                                           

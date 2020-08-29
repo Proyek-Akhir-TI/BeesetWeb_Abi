@@ -10,6 +10,7 @@ use App\Kandang;
 use App\Panen;
 use Image;
 use DB;
+use Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
@@ -53,10 +54,26 @@ class KetuaController extends Controller
         $this->validate($request, [
             'email'  => 'required|unique:users',
         ]);
+        
+        $isi = array(
+            'Nama Pengguna' => $request->nama,
+            'Email' => $request->email,
+            'Password' => $request->password,
+            'Alamat' => $request->alamat,
+            'No. Telepon' => $request->telpon,
+
+        );
+        $to = explode(',',$isi['Email']);
+
+        Mail::send('isiemail', $isi, function($pesan) use($request){
+            $pesan->to($request->email)->subject('Pemberitahuan Akun Aktif Ketua Kelompok');
+            $pesan->from(env('MAIL_USERNAME','sipetani.it@gmail.com'),'Pemberitahuan Akun Aktif');
+        });
+
 
         $input = new User();
         $input['nama'] = $request->nama;
-        $input['email'] = $request->email;
+        $input['email'] = $email;
         $input['password'] = Hash::make($request->password);
         $input['role_id'] = 3;
         $input['kelompok_id'] = $request->kelompok_id;
@@ -70,9 +87,16 @@ class KetuaController extends Controller
             $images = $request->photo;
         }
         $input->save();
-
+ 
         Alert::success('Kelompok dan Ketua Berhasil Dibuat');
 
+        
+
+        // foreach($data['ccpeople'] as $people){
+        //     $cc = $people;
+        // }
+
+       
         return redirect()->route('pj.beranda');
 
     }

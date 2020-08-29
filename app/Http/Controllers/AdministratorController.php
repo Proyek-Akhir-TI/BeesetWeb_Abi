@@ -69,4 +69,10 @@ class AdministratorController extends Controller
         
         return redirect()->route('administrator.kelompok');
     }
+
+    public function pengguna(){
+        $user = User::all();
+
+        return view('administrator.index', compact('user'));
+    }
 }
