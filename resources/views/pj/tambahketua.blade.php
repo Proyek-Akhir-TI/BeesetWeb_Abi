@@ -51,6 +51,16 @@
               <div class=" text-center mb-5">
                  <h1 class="text-warning">Tambah Ketua Kelompok</h1> 
             </div>
+            {{-- menampilkan error validasi --}}
+                            @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
             <form role="form" action="{{route('pj.uploadketua')}}" method="post" enctype="multipart/form-data">
               {{ csrf_field() }}
                 <div class="form-group">
@@ -58,7 +68,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-circle-08 text-warning"></i></span>
                     </div>
-                    <input id="nama" placeholder="Nama" type="text" class="form-control text-darker" name="nama" required autofocus>
+                    <input id="nama" placeholder="Nama" type="text" class="form-control text-darker" name="nama" value="{{ old('nama') }}" required autofocus>
                     </div>
                 </div>
 
@@ -67,7 +77,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-email-83 text-warning"></i></span>
                     </div>
-                    <input id="email" placeholder="Email" type="email" class="form-control text-darker" name="email" required>
+                    <input id="email" placeholder="Email" type="email" class="form-control text-darker" name="email" value="{{ old('email') }}"  required>
                   </div>
                 </div>
                 <div class="row">
@@ -77,7 +87,7 @@
                               <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="ni ni-lock-circle-open text-warning"></i></span>
                               </div>
-                              <input id="password" placeholder="Password" type="password" class="form-control text-darker" name="password" required >
+                              <input id="password" placeholder="Password" type="password" class="form-control text-darker" name="password" value="{{ old('password') }}" required >
                             </div>
                           </div>
                   </div>
@@ -130,8 +140,8 @@
                   </div>
                 </div>
                 <div class="form-group">
-                    <label for="photo" class="text-warning"> Foto </label>
-                    <input id="photo" type="file" class="form-control-file" name="photo" onchange="readURL(this);" required autocomplete="photo" >
+                    <label for="photo" class="text-warning"> Foto (Maksimal 500Kb)</label>
+                    <input id="photo" type="file" class="form-control-file" name="photo" onchange="readURL(this);" value="{{ old('photo') }}" required autocomplete="photo" >
                 </div>
 
                 <div class="text-center">

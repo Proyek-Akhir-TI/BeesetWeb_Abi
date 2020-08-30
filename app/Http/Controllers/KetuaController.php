@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ErrorFormRequest; 
 use App\User;
 use App\Role;
 use App\Kelompok;
@@ -49,31 +50,32 @@ class KetuaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ErrorFormRequest $request)
     {   
         $this->validate($request, [
-            'email'  => 'required|unique:users',
+            'nama' => 'unique:users',
+            'email'  => 'unique:users',
+            'password' => 'min:6|confirmed',
+            'photo' => 'max:500',
         ]);
         
-        $isi = array(
-            'Nama Pengguna' => $request->nama,
-            'Email' => $request->email,
-            'Password' => $request->password,
-            'Alamat' => $request->alamat,
-            'No. Telepon' => $request->telpon,
+        // $isi = array(
+        //     'Nama Pengguna' => $request->nama,
+        //     'Email' => $request->email,
+        //     'Password' => $request->password,
+        //     'Alamat' => $request->alamat,
+        //     'No. Telepon' => $request->telpon,
 
-        );
-        $to = explode(',',$isi['Email']);
+        // );
+        // $to = explode(',',$isi['Email']);
 
-        Mail::send('isiemail', $isi, function($pesan) use($request){
-            $pesan->to($request->email)->subject('Pemberitahuan Akun Aktif Ketua Kelompok');
-            $pesan->from(env('MAIL_USERNAME','sipetani.it@gmail.com'),'Pemberitahuan Akun Aktif');
-        });
-
-
+        // Mail::send('isiemail', $isi, function($pesan) use($request){
+        //     $pesan->to($request->email)->subject('Pemberitahuan Akun Aktif Ketua Kelompok');
+        //     $pesan->from(env('MAIL_USERNAME','sipetani.it@gmail.com'),'Pemberitahuan Akun Aktif');
+        // });
         $input = new User();
         $input['nama'] = $request->nama;
-        $input['email'] = $email;
+        $input['email'] = $request->email;
         $input['password'] = Hash::make($request->password);
         $input['role_id'] = 3;
         $input['kelompok_id'] = $request->kelompok_id;
@@ -89,15 +91,9 @@ class KetuaController extends Controller
         $input->save();
  
         Alert::success('Kelompok dan Ketua Berhasil Dibuat');
-
-        
-
-        // foreach($data['ccpeople'] as $people){
-        //     $cc = $people;
-        // }
-
        
         return redirect()->route('pj.beranda');
+        
 
     }
 
