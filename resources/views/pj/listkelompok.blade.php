@@ -72,7 +72,28 @@
                     <td>
                     <a href="{{route('pj.kelompok.explore',[$kelompok->id])}}"  class="btn btn-sm btn-primary">Explore</a>
                     <a href="{{route('pj.kelompok.edit',[$kelompok->id])}}"  class="btn btn-sm btn-success edit">Edit</a>
-                    <a href="{{route('pj.kelompok.delete',[$kelompok->id])}}" class="btn btn-sm btn-danger">Delete</a>
+                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#hapusModal">Hapus</button>
+                    
+                    <div class="modal fade" id="hapusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Hapus Kelompok</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Menghapus kelompok akan menghapus semua data kelompok <br>beserta data peternaknya
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a href="{{route('pj.kelompok.delete',[$kelompok->id])}}" type="button" class="btn btn-danger">Hapus</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     </td>
                   </tr>
                 @endforeach
