@@ -121,6 +121,7 @@
   <script src="{{ asset('/js/argon.js?v=1.2.0') }}"></script>
  <script src="{{ asset('/js/sweetalert.min.js') }}"></script>
  <script src="{{ asset('/js/print.js') }}"></script>
+ 
   @yield('javascript')
 </body>
 

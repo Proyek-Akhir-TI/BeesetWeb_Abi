@@ -60,7 +60,7 @@
                 </tbody>
               </table>
               <div class="float-right mb-3 mt-3 mr-3">
-                  {{$user->links()}}
+                  
               </div>
             </div>
           </div>

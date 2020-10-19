@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\LokasiKandang;
 use App\Panen;
-use DB;
+use DB; 
 use Telegram;
 
 class TelegramController extends Controller

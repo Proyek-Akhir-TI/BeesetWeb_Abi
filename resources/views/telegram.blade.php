@@ -6,7 +6,7 @@
 <body>
 <div class="text-center"> Telegram Bot
 </div>
-@php
+@php 
     
 
 
